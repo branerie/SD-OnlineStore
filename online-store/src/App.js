@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import './App.css'
+import UserContext from './Context'
+import Navigation from './navigation'
+import getCookie from './utils/cookie'
 
 function App() {
+  const [user, setUser] = useState({})
+
+  useEffect(async () => {
+    const token = getCookie('x-auth-cookie')
+
+    const response = await fetch('http://localhost:3001/api/user/verify', {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': token || ''
+      }
+    })
+
+    const userInfo = await response.json()
+    console.log(userInfo);
+
+    setUser(userInfo)
+
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <UserContext.Provider value={user}>
+      <Navigation />
+    </UserContext.Provider>
+  )
 }
 
-export default App;
+export default App

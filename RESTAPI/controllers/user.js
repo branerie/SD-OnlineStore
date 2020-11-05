@@ -81,4 +81,23 @@ router.post('/logout', async (req, res) => {
     }
 })
 
+router.get('/verify' , async (req, res) => {
+    const currentToken = req.headers.authorization
+
+    if (currentToken) {
+        try {
+            const userInfo = await verifyToken(currentToken)
+            return res.send({ userId: userInfo.id, isAdmin: userInfo.isAdmin || false })
+        }catch(error) {
+            if (isMongoError(error)) {
+                return res.status(403).send(error.message)
+            }
+
+            return res.status(500).send(error.message)
+        }
+    }
+
+    return res.send({ userId: null, isAdmin: false })
+})
+
 module.exports = router
