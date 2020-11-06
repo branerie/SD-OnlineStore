@@ -3,6 +3,17 @@ const Product = require('../models/product')
 const { restrictToAdmin } = require('../utils/authenticate')
 const { isMongoError } = require('../utils/utils')
 
+router.get('/ranges', restrictToAdmin , async (req, res) => {
+    try {
+        const products = await Product.find({}, ['categories', 'brand',  'price', '_id'])
+
+        return res.send(products)
+
+} catch(error) {
+
+}
+})
+
 router.post('/', restrictToAdmin, async (req, res) => {
     const {
         sizes,
@@ -34,33 +45,6 @@ router.post('/', restrictToAdmin, async (req, res) => {
         return res.status(500).send(error.message)
     }
 
-})
-
-router.get('/:id', async (req, res) => {
-    const id = req.params.id
-    try {
-        const currentProduct = await Product.findById(id)
-        return res.send({
-            sizes: currentProduct.sizes,
-            price: currentProduct.price,
-            discount: currentProduct.discount,
-            brand: currentProduct.brand,
-            description: currentProduct.description,
-            images: currentProduct.images,
-            isMale: currentProduct.isMale,
-            categories: currentProduct.categories
-        })
-    } catch(error) {
-        if (isMongoError(error)) { 
-            return res.status(403).send(error.message)
-        }
-
-        if (error.name === 'CastError') {
-            return res.status(403).send(`Product with id ${id} does not exist.`)
-        }
-
-        return res.status(500).send(error.message)
-    }
 })
 
 router.put('/:id', restrictToAdmin, async (req , res) => {
@@ -107,6 +91,33 @@ router.delete('/:id', restrictToAdmin, async (req, res) => {
         }
 
         res.status(500).send(error.message)
+    }
+})
+
+router.get('/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        const currentProduct = await Product.findById(id)
+        return res.send({
+            sizes: currentProduct.sizes,
+            price: currentProduct.price,
+            discount: currentProduct.discount,
+            brand: currentProduct.brand,
+            description: currentProduct.description,
+            images: currentProduct.images,
+            isMale: currentProduct.isMale,
+            categories: currentProduct.categories
+        })
+    } catch(error) {
+        if (isMongoError(error)) { 
+            return res.status(403).send(error.message)
+        }
+
+        if (error.name === 'CastError') {
+            return res.status(403).send(`Product with id ${id} does not exist.`)
+        }
+
+        return res.status(500).send(error.message)
     }
 })
 

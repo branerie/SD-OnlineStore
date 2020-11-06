@@ -50,6 +50,7 @@ const productSchema = new mongoose.Schema({
     }],
     isMale: {
         type: Boolean,
+        default: false
     },
     categories:[{
         type: String,

@@ -88,12 +88,12 @@ router.get('/verify' , async (req, res) => {
         try {
             const userInfo = await verifyToken(currentToken)
             return res.send({ userId: userInfo.id, isAdmin: userInfo.isAdmin || false })
-        }catch(error) {
-            if (isMongoError(error)) {
-                return res.status(403).send(error.message)
-            }
-
-            return res.status(500).send(error.message)
+        } catch(error) {
+            return res.status(403).send({
+                userId: null,
+                isAdmin: false,
+                errorMesage: error.message
+            })
         }
     }
 

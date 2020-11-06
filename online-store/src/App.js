@@ -5,24 +5,28 @@ import Navigation from './navigation'
 import getCookie from './utils/cookie'
 
 function App() {
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({ userId: null, isAdmin: false })
 
-  useEffect(async () => {
+
+
+  useEffect(() => {
     const token = getCookie('x-auth-cookie')
-
-    const response = await fetch('http://localhost:3001/api/user/verify', {
+    
+    fetch('http://localhost:3001/api/user/verify', {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
         'Authorization': token || ''
       }
     })
+    .then(response => response.json())
+    .then(userInfo => {
+      if (userInfo.errorMessage) {
+          console.error(userInfo.errorMessage)
+      }
 
-    const userInfo = await response.json()
-    console.log(userInfo);
-
-    setUser(userInfo)
-
+      setUser({ userId: userInfo.userId, isAdmin: userInfo.isAdmin })
+    })
   }, [])
 
   return (
