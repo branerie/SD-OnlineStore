@@ -1,40 +1,72 @@
 const router = require('express').Router()
 const Product = require('../models/product')
 const { restrictToAdmin } = require('../utils/authenticate')
+const getDbProductsFilter = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
 
-router.get('/ranges', restrictToAdmin , async (req, res) => {
+router.get('/ranges', restrictToAdmin, async (req, res) => {
+    const dbRequestFilter = getDbProductsFilter(req.query)
+
     try {
         let productRanges = await Product.aggregate([
             {
+                $match: dbRequestFilter
+            },
+            {
                 $group: {
                     _id: 0,
-                    'brand': { $addToSet: '$brand'},
-                    'categories': { $addToSet: '$categories'},
+                    'brand': { $addToSet: '$brand' },
+                    'categories': { $addToSet: '$categories' },
                     'minPrice': { $min: '$price' },
                     'maxPrice': { $max: '$price' },
                     'minCount': { $min: '$sizes.count' },
-                    'maxCount': { $max: '$sizes.count' }
+                    'maxCount': { $max: '$sizes.count' },
+                    'allSizes': { $addToSet: '$sizes.sizeName' }
                 }
             }
         ])
 
         productRanges = productRanges[0]
-        delete productRanges._id
 
-        productRanges.categories = productRanges.categories.reduce((acc, pc) => {
-            acc.push(...pc)
-            return acc
-        }, [])
+        productRanges.gender = ['M', 'F']
+
+        productRanges.categories = productRanges.categories.flat()
 
         productRanges.minCount = Math.min(...productRanges.minCount)
         productRanges.maxCount = Math.max(...productRanges.maxCount)
 
+        let minSize = Number.MAX_VALUE
+        let maxSize = 0
+        const sizes = new Set()
+        for (const size of productRanges.allSizes.flat()) {
+            let sizeNumber = Number(size)
+
+            if (isNaN(sizeNumber)) {
+                sizes.add(size)
+            } else {
+                if (sizeNumber < minSize) {
+                    minSize = sizeNumber
+                } else if (sizeNumber > maxSize) {
+                    maxSize = sizeNumber
+                }
+            }
+        }
+
+        productRanges.sizes = Array.from(sizes)
+
+        if (minSize !== maxSize) {
+            productRanges.minSize = minSize
+            productRanges.maxSize = maxSize
+        }
+
+        delete productRanges._id
+        delete productRanges.allSizes
+
         return res.send(productRanges)
 
-} catch(error) {
-    return res.send(error.message)
-}
+    } catch (error) {
+        return res.send(error.message)
+    }
 })
 
 router.post('/', restrictToAdmin, async (req, res) => {
@@ -70,20 +102,20 @@ router.post('/', restrictToAdmin, async (req, res) => {
 
 })
 
-router.put('/:id', restrictToAdmin, async (req , res) => {
+router.put('/:id', restrictToAdmin, async (req, res) => {
     try {
         const id = req.params.id
         const productProps = Object.entries(req.body)
-                                   .filter(kvp => Product.schema.obj.hasOwnProperty(kvp[0]))
-                                   
-        const updateProductObject = productProps.reduce((acc, kvp) => { 
+            .filter(kvp => Product.schema.obj.hasOwnProperty(kvp[0]))
+
+        const updateProductObject = productProps.reduce((acc, kvp) => {
             acc[kvp[0]] = kvp[1]
             return acc
         }, {})
-    
-    
+
+
         await Product.findByIdAndUpdate(id, { $set: updateProductObject })
-    
+
         return res.send(`Product with id ${id} successfully updated.`)
     } catch (error) {
         if (isMongoError(error)) {
@@ -131,8 +163,8 @@ router.get('/:id', async (req, res) => {
             isMale: currentProduct.isMale,
             categories: currentProduct.categories
         })
-    } catch(error) {
-        if (isMongoError(error)) { 
+    } catch (error) {
+        if (isMongoError(error)) {
             return res.status(403).send(error.message)
         }
 
