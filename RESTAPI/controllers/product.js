@@ -5,12 +5,35 @@ const { isMongoError } = require('../utils/utils')
 
 router.get('/ranges', restrictToAdmin , async (req, res) => {
     try {
-        const products = await Product.find({}, ['categories', 'brand',  'price', '_id'])
+        let productRanges = await Product.aggregate([
+            {
+                $group: {
+                    _id: 0,
+                    'brand': { $addToSet: '$brand'},
+                    'categories': { $addToSet: '$categories'},
+                    'minPrice': { $min: '$price' },
+                    'maxPrice': { $max: '$price' },
+                    'minCount': { $min: '$sizes.count' },
+                    'maxCount': { $max: '$sizes.count' }
+                }
+            }
+        ])
 
-        return res.send(products)
+        productRanges = productRanges[0]
+        delete productRanges._id
+
+        productRanges.categories = productRanges.categories.reduce((acc, pc) => {
+            acc.push(...pc)
+            return acc
+        }, [])
+
+        productRanges.minCount = Math.min(...productRanges.minCount)
+        productRanges.maxCount = Math.max(...productRanges.maxCount)
+
+        return res.send(productRanges)
 
 } catch(error) {
-
+    return res.send(error.message)
 }
 })
 

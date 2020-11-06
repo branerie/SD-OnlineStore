@@ -11,7 +11,7 @@ mongoose.connect(process.env.DB_CONNECTION, {
     useFindAndModify: false,
     useCreateIndex: true
 } , (err) => {
-    if (err){
+    if (err) {
         console.error(err)
         throw err
     }
