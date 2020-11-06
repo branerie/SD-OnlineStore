@@ -1,0 +1,24 @@
+.container {
+    width: 100%;
+    height: auto;
+    border: 1px solid #234465;
+    margin-bottom: 3%;
+    border-radius: 4px;
+    background-color: bisque;
+  }
+
+.price {
+    word-wrap: break-word;
+    padding: 0.5%;
+    font-style: italic;
+    display: inline-block;
+}
+
+.discount {
+    word-wrap: break-word;
+    padding: 0.5%;
+    font-style: italic;
+    display: inline-block;
+    text-size-adjust: 15;
+    color: red;
+}

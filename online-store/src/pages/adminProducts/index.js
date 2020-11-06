@@ -1,19 +1,15 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import AdminAside from '../../components/adminAside/adminAside'
+import GetProductDb from '../../components/adminProduct'
 
 const AdminProductsPage = () => {
-    return (
-        <div>
-            <aside>
-                <div>
-                <h3>Brand</h3>
-                
-                </div>
-            </aside>
-            
-            
-        </div>
-    )
+  return (
+    <div>
+      <AdminAside />
+      <GetProductDb />
+    </div>
+  )
+  
 }
 
 export default AdminProductsPage

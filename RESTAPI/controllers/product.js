@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const { default: ProductCard } = require('../../online-store/src/components/productCard')
 const Product = require('../models/product')
 const { restrictToAdmin } = require('../utils/authenticate')
 const { isMongoError } = require('../utils/utils')
@@ -9,12 +10,14 @@ router.get('/ranges', restrictToAdmin , async (req, res) => {
             {
                 $group: {
                     _id: 0,
-                    'brand': { $addToSet: '$brand'},
+                    'brands': { $addToSet: '$brand'},
                     'categories': { $addToSet: '$categories'},
                     'minPrice': { $min: '$price' },
                     'maxPrice': { $max: '$price' },
                     'minCount': { $min: '$sizes.count' },
-                    'maxCount': { $max: '$sizes.count' }
+                    'maxCount': { $max: '$sizes.count' },
+                    'sizes': { $addToSet: '$sizes.sizeName' }
+
                 }
             }
         ])
@@ -141,6 +144,18 @@ router.get('/:id', async (req, res) => {
         }
 
         return res.status(500).send(error.message)
+    }
+})
+
+router.get('/products', async(req, res) => {
+    try {
+        const allProducts = await Product.find({})
+        return res.send({allProducts})
+    }catch(error){
+        if (isMongoError(error)) { 
+            return res.status(403).send(error.message)
+        }
+    return res.status(500).send(error.message)
     }
 })
 
