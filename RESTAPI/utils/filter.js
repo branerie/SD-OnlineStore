@@ -16,8 +16,13 @@ function getDbProductsFilter(query) {
                 $in: query[property].split(',')
             }
         } else if (propType === 'rng') {
-            const [minValue, maxValue] = query[property].split(',')
-                                                        .map(Number)
+            let [minValue, maxValue] = query[property].split(',')
+                                                      .map(Number)
+
+            // min and max value have been switched
+            if (maxValue < minValue) {
+                [minValue, maxValue] = [maxValue, minValue]
+            }
 
             filter[propValue] = {
                 $gte: minValue,

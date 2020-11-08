@@ -1,26 +1,31 @@
-import React ,{useEffect , useState , useCallback } from 'react'
+import React, { useEffect , useState , useCallback } from 'react'
 import ProductCard from '../productCard'
-import getProductFromDb  from '../../utils/product'
+import { getProductFromDb }  from '../../utils/product'
 import style from './index.module.css'
 
 const GetProductDb = () => {
-    const [productDb , setProductDb] = useState({})
+    const [productDb , setProductDb] = useState(null)
 
-    const currnetProductDb = useCallback(async () => {
+    const currentProductDb = useCallback(async () => {
         const productInfo = await getProductFromDb()
+
         setProductDb(productInfo)
     }, [setProductDb])
 
     useEffect(() => {
-        currnetProductDb()
-    },[])
+        currentProductDb()
+    },[currentProductDb])
 
  function renderProduct() {
-     productDb.map(product => {
-         return (
-             <ProductCard key={product.id} {...product} />
-         )
-     }) 
+        if (!productDb) {
+            return <div>Loading...</div>
+        }
+
+        productDb.map(product => {
+            return (
+                <ProductCard key={product.id} {...product} />
+            )
+        }) 
     }
 
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminAside from '../../components/adminAside/adminAside'
+import AdminAside from '../../components/adminAside'
 import GetProductDb from '../../components/adminProduct'
 
 const AdminProductsPage = () => {

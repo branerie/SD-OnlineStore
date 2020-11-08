@@ -1,11 +1,10 @@
 const router = require('express').Router()
-const { default: ProductCard } = require('../../online-store/src/components/productCard')
 const Product = require('../models/product')
 const { restrictToAdmin } = require('../utils/authenticate')
 const getDbProductsFilter = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
 
-router.get('/ranges', restrictToAdmin, async (req, res) => {
+router.get('/ranges', async (req, res) => {
     const dbRequestFilter = getDbProductsFilter(req.query)
 
     try {
@@ -27,8 +26,11 @@ router.get('/ranges', restrictToAdmin, async (req, res) => {
             }
         ])
 
-        productRanges = productRanges[0]
+        if (productRanges.length === 0) {
+            return res.send([])
+        }
 
+        productRanges = productRanges[0]
         productRanges.gender = ['M', 'F']
 
         productRanges.categories = productRanges.categories.flat()
@@ -54,6 +56,14 @@ router.get('/ranges', restrictToAdmin, async (req, res) => {
         }
 
         productRanges.sizes = Array.from(sizes)
+                                   .sort((a, b) => {
+                                       if (a[a.length - 1] !== b[b.length - 1]) {
+                                           return b[b.length - 1].localeCompare(a[a.length - 1])
+                                       }
+
+                                       return a.slice(0, a.length - 1)
+                                               .localeCompare(b.slice(0, b.length - 1))
+                                   })
 
         if (minSize !== maxSize) {
             productRanges.minSize = minSize
@@ -177,15 +187,15 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.get('/products', async(req, res) => {
+router.get('/products', async (req, res) => {
     try {
         const allProducts = await Product.find({})
-        return res.send({allProducts})
-    }catch(error){
-        if (isMongoError(error)) { 
+        return res.send({ allProducts })
+    } catch (error) {
+        if (isMongoError(error)) {
             return res.status(403).send(error.message)
         }
-    return res.status(500).send(error.message)
+        return res.status(500).send(error.message)
     }
 })
 
