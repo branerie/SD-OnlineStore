@@ -1,10 +1,10 @@
 import React, { useEffect , useState , useCallback } from 'react'
 import styles from './index.module.css'
 
-import ProductCard from '../productCard'
+import AdminProductCard from '../adminProductCard'
 import { getProductFromDb }  from '../../utils/product'
 
-const GetProductDb = () => {
+const ProductCardsList = () => {
     const [productDb , setProductDb] = useState(null)
 
     const currentProductDb = useCallback(async () => {
@@ -24,7 +24,7 @@ const GetProductDb = () => {
 
         return productDb.map(product => {
             return (
-                <ProductCard key={product.id} {...product} />
+                <AdminProductCard {...product} />
             )
         }) 
     }
@@ -37,4 +37,4 @@ const GetProductDb = () => {
     )
 }
 
-export default GetProductDb
+export default ProductCardsList
