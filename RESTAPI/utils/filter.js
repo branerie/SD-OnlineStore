@@ -1,4 +1,11 @@
 const Product = require('../models/product')
+const productFields = Object.keys(Product.schema.paths)
+
+const isProductSchemaField = (fieldName) => {
+    return productFields.some(objKey => objKey.split('.')[0] === fieldName)
+}
+
+const isBoolean = (value) => /true|false/.test(value)
 
 function getDbProductsFilter(query) {
     const filter = {}
@@ -7,7 +14,7 @@ function getDbProductsFilter(query) {
 
         // database schema does not contain this property
         // therefore, we don't try to filter by it
-        if (!propValue || !Product.schema.paths.hasOwnProperty(propValue)) {
+        if (!propValue || !isProductSchemaField(propValue)) {
             continue
         }
 
@@ -27,6 +34,10 @@ function getDbProductsFilter(query) {
             filter[propValue] = {
                 $gte: minValue,
                 $lte: maxValue
+            }
+        } else if (propType === 'is' && isBoolean(query[property])) {
+            filter[propValue] = {
+                $exists: query[property] === 'true'
             }
         }
     }

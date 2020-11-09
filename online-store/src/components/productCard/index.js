@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
 import image from '../../images/1111.jpg'
 import UserContext from '../../Context'
@@ -11,7 +11,6 @@ const ProductCard = (props) => {
         setIsEditing(!isEditing)
     }
 
-   
     return (
         <div className={styles.container}>
             <img alt='product' className={styles.img} src={image} />

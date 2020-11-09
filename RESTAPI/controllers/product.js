@@ -3,6 +3,7 @@ const Product = require('../models/product')
 const { restrictToAdmin } = require('../utils/authenticate')
 const getDbProductsFilter = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
+const { getSizeRange, sortSizes } = require('../utils/product')
 
 router.get('/ranges', async (req, res) => {
     const dbRequestFilter = getDbProductsFilter(req.query)
@@ -17,6 +18,7 @@ router.get('/ranges', async (req, res) => {
                     _id: 0,
                     'brand': { $addToSet: '$brand' },
                     'categories': { $addToSet: '$categories' },
+                    'gender': { $addToSet: '$gender' },
                     'minPrice': { $min: '$price' },
                     'maxPrice': { $max: '$price' },
                     'minCount': { $min: '$sizes.count' },
@@ -31,15 +33,12 @@ router.get('/ranges', async (req, res) => {
         }
 
         productRanges = productRanges[0]
-        productRanges.gender = ['M', 'F']
 
         productRanges.categories = productRanges.categories.flat()
 
         productRanges.minCount = Math.min(...productRanges.minCount)
         productRanges.maxCount = Math.max(...productRanges.maxCount)
 
-        let minSize = Number.MAX_VALUE
-        let maxSize = 0
         const sizes = new Set()
         for (const size of productRanges.allSizes.flat()) {
             let sizeNumber = Number(size)
@@ -47,30 +46,12 @@ router.get('/ranges', async (req, res) => {
             if (isNaN(sizeNumber)) {
                 sizes.add(size)
             } else {
-                if (sizeNumber < minSize) {
-                    minSize = sizeNumber
-                } 
-                
-                if (sizeNumber > maxSize) {
-                    maxSize = sizeNumber
-                }
+                sizes.add(getSizeRange(sizeNumber))
             }
         }
 
         productRanges.sizes = Array.from(sizes)
-                                   .sort((a, b) => {
-                                       if (a[a.length - 1] !== b[b.length - 1]) {
-                                           return b[b.length - 1].localeCompare(a[a.length - 1])
-                                       }
-
-                                       return a.slice(0, a.length - 1)
-                                               .localeCompare(b.slice(0, b.length - 1))
-                                   })
-
-        if (minSize !== maxSize) {
-            productRanges.minSize = minSize
-            productRanges.maxSize = maxSize
-        }
+                                   .sort(sortSizes)
 
         delete productRanges._id
         delete productRanges.allSizes
@@ -94,7 +75,7 @@ router.get('/products', async (req, res) => {
             brand: p.brand,
             description: p.description,
             images: p.images,
-            isMale: p.isMale,
+            gender: p.gender,
             categories: p.categories,
             discountPrice: p.discountPrice
         }})
@@ -119,7 +100,7 @@ router.get('/:id', async (req, res) => {
             brand: currentProduct.brand,
             description: currentProduct.description,
             images: currentProduct.images,
-            isMale: currentProduct.isMale,
+            gender: currentProduct.gender,
             categories: currentProduct.categories
         })
     } catch (error) {
@@ -144,7 +125,7 @@ router.post('/', restrictToAdmin, async (req, res) => {
         brand,
         description,
         images,
-        isMale,
+        gender,
         categories
     } = req.body
     try {
@@ -155,7 +136,7 @@ router.post('/', restrictToAdmin, async (req, res) => {
             brand,
             description,
             images,
-            isMale,
+            gender,
             categories
         })
         res.send({ status: 'Success', id: createdProduct._id })

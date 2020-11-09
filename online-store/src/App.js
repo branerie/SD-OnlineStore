@@ -6,8 +6,7 @@ import getCookie from './utils/cookie'
 
 function App() {
   const [user, setUser] = useState({ userId: null, isAdmin: false })
-
-
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const token = getCookie('x-auth-cookie')
@@ -26,8 +25,14 @@ function App() {
       }
 
       setUser({ userId: userInfo.userId, isAdmin: userInfo.isAdmin })
+      
+      setIsLoading(false)
     })
   }, [])
+
+  if (isLoading) {
+    return null
+  }
 
   return (
     <UserContext.Provider value={user}>

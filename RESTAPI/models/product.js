@@ -7,12 +7,12 @@ const DESCRIPTION_MAX_LENGTH = 1000
 
 const productSchema = new mongoose.Schema({
     sizes: [{
-      sizeName:{
+      sizeName: {
         type: String,
         required: true,
         match: [/^[A-Z0-9]{1,3}$/ , `Size can only contain capital letters and digits and must be between ${SIZE_MIN_LENGTH} and ${SIZE_MAX_LENGTH} symbols`],
       },
-      count:{
+      count: {
           type: Number,
           required: true,
           min: [0 , 'Negative product count is not allowed.']          
@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
         required: true,
         min: [0 , 'Negative price is not allowed.']
     },
-    discount:{
+    discount: {
         percent: {
             type: Number,
             min: [0, 'Negative discount is not allowed.'],
@@ -48,16 +48,14 @@ const productSchema = new mongoose.Schema({
         required: true,
         match: [/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/ , 'Invalid image URL' ]
     }],
-    isMale: {
-        type: Boolean,
-        default: false
+    gender: {
+        type: String,
+        enum: ['M', 'F']
     },
-    categories:[{
+    categories: [{
         type: String,
         enum: ['Shoes', 'Bags','T-shirts','Bathing suits', 'Dresses']
     }]
-
-
 })
 
 productSchema.pre('validate', function(next) {
@@ -82,6 +80,10 @@ productSchema.pre('validate', function(next) {
 
 productSchema.virtual('discountPrice').get(function() {
     return this.price * (1 - this.discount.percent)
+})
+
+productSchema.virtual('discounted').get(function() {
+    return this.discount == true
 })
 
 module.exports = mongoose.model('Product' , productSchema)
