@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import AsideCard from '../asideCard'
+import styles from './index.module.css'
+import AsideCard from '../productsCheckboxFilter'
 import  { getProductRanges }  from '../../utils/product'
 
 const AdminAside = () => {
@@ -15,11 +16,13 @@ const AdminAside = () => {
     },[getProductPropsRange])
 
     if (!productProps) {
-        return
+        return (
+            <div>Loading...</div>
+        )
     }
 
     return (
-        <div>
+        <div className={styles.container}>
             <AsideCard title='Categories' values={productProps.categories} />
             <AsideCard title='Brands' values={productProps.brand} />
             <AsideCard title='Sizes' values={productProps.sizes} />

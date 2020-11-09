@@ -13,7 +13,7 @@ const getProductRanges = async () => {
 }
 
 const getProductFromDb = async () => {
-    const promise = await fetch('http://localhost:3001/api/product/ranges', {
+    const promise = await fetch('http://localhost:3001/api/product/products', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

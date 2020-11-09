@@ -11,7 +11,7 @@
     word-wrap: break-word;
     padding: 0.5%;
     font-style: italic;
-    display: inline-block;
+  
 }
 
 .discount {
@@ -21,4 +21,9 @@
     display: inline-block;
     text-size-adjust: 15;
     color: red;
+}
+
+.img {
+    width: 100px;
+    height: 80px;
 }

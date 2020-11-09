@@ -1,7 +1,8 @@
 import React, { useEffect , useState , useCallback } from 'react'
+import styles from './index.module.css'
+
 import ProductCard from '../productCard'
 import { getProductFromDb }  from '../../utils/product'
-import style from './index.module.css'
 
 const GetProductDb = () => {
     const [productDb , setProductDb] = useState(null)
@@ -21,7 +22,7 @@ const GetProductDb = () => {
             return <div>Loading...</div>
         }
 
-        productDb.map(product => {
+        return productDb.map(product => {
             return (
                 <ProductCard key={product.id} {...product} />
             )
@@ -30,7 +31,7 @@ const GetProductDb = () => {
 
 
     return (
-        <div className={style['product-wrapper']}>
+        <div className={styles.container}>
             {renderProduct()}
         </div>
     )

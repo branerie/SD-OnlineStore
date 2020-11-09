@@ -49,7 +49,9 @@ router.get('/ranges', async (req, res) => {
             } else {
                 if (sizeNumber < minSize) {
                     minSize = sizeNumber
-                } else if (sizeNumber > maxSize) {
+                } 
+                
+                if (sizeNumber > maxSize) {
                     maxSize = sizeNumber
                 }
             }
@@ -79,6 +81,60 @@ router.get('/ranges', async (req, res) => {
         return res.send(error.message)
     }
 })
+
+router.get('/products', async (req, res) => {
+    try {
+        const fullProducts = await Product.find({})
+        const products = fullProducts.map(p => {
+            return {
+            id: p._id,
+            sizes: p.sizes,
+            price: p.price,
+            discount: p.discount,
+            brand: p.brand,
+            description: p.description,
+            images: p.images,
+            isMale: p.isMale,
+            categories: p.categories,
+            discountPrice: p.discountPrice
+        }})
+
+        return res.send(products)
+    } catch (error) {
+        if (isMongoError(error)) {
+            return res.status(403).send(error.message)
+        }
+        return res.status(500).send(error.message)
+    }
+})
+
+router.get('/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        const currentProduct = await Product.findById(id)
+        return res.send({
+            sizes: currentProduct.sizes,
+            price: currentProduct.price,
+            discount: currentProduct.discount,
+            brand: currentProduct.brand,
+            description: currentProduct.description,
+            images: currentProduct.images,
+            isMale: currentProduct.isMale,
+            categories: currentProduct.categories
+        })
+    } catch (error) {
+        if (isMongoError(error)) {
+            return res.status(403).send(error.message)
+        }
+
+        if (error.name === 'CastError') {
+            return res.status(403).send(`Product with id ${id} does not exist.`)
+        }
+
+        return res.status(500).send(error.message)
+    }
+})
+
 
 router.post('/', restrictToAdmin, async (req, res) => {
     const {
@@ -157,45 +213,6 @@ router.delete('/:id', restrictToAdmin, async (req, res) => {
         }
 
         res.status(500).send(error.message)
-    }
-})
-
-router.get('/:id', async (req, res) => {
-    const id = req.params.id
-    try {
-        const currentProduct = await Product.findById(id)
-        return res.send({
-            sizes: currentProduct.sizes,
-            price: currentProduct.price,
-            discount: currentProduct.discount,
-            brand: currentProduct.brand,
-            description: currentProduct.description,
-            images: currentProduct.images,
-            isMale: currentProduct.isMale,
-            categories: currentProduct.categories
-        })
-    } catch (error) {
-        if (isMongoError(error)) {
-            return res.status(403).send(error.message)
-        }
-
-        if (error.name === 'CastError') {
-            return res.status(403).send(`Product with id ${id} does not exist.`)
-        }
-
-        return res.status(500).send(error.message)
-    }
-})
-
-router.get('/products', async (req, res) => {
-    try {
-        const allProducts = await Product.find({})
-        return res.send({ allProducts })
-    } catch (error) {
-        if (isMongoError(error)) {
-            return res.status(403).send(error.message)
-        }
-        return res.status(500).send(error.message)
     }
 })
 

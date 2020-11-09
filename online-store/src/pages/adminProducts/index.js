@@ -1,12 +1,13 @@
 import React from 'react'
-import AdminAside from '../../components/adminAside'
-import GetProductDb from '../../components/adminProduct'
+import styles from './index.module.css'
+import AdminAside from '../../components/asideProductsFilter'
+import ProductCardsList from '../../components/productCardsList'
 
 const AdminProductsPage = () => {
   return (
-    <div>
+    <div className={styles.container}>
       <AdminAside />
-      <GetProductDb />
+      <ProductCardsList />
     </div>
   )
   
