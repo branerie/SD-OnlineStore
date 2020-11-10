@@ -21,32 +21,40 @@ const productSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true,
-        min: [0 , 'Negative price is not allowed.']
+        min: [0, 'Negative price is not allowed.']
     },
     discount: {
         percent: {
+            validate:{
+                validator: preValidateDiscountPercent,
+                message: (props) => props.message
+                },
             type: Number,
             min: [0, 'Negative discount is not allowed.'],
-            max: [1 , 'Cannot have more than 100% discount']
+            max: [1, 'Cannot have more than 100% discount']
         },
         endDate: {
+            validate:{
+                validator: preValidateDiscountEndDate,
+                message: (props) => props.message
+                },
             type: Date,
         }
     },
     brand: {
         type: String,
         required: true,
-        maxlength: [BRAND_MAX_LENGTH , `Please rename your brand. Maximum ${BRAND_MAX_LENGTH} symbols allowed.`]
+        maxlength: [BRAND_MAX_LENGTH, `Please rename your brand. Maximum ${BRAND_MAX_LENGTH} symbols allowed.`]
     },
     description: {
         type: String,
         required: true,
-        max: [DESCRIPTION_MAX_LENGTH , `Description cannot be longer than ${DESCRIPTION_MAX_LENGTH} symbols.`]
+        max: [DESCRIPTION_MAX_LENGTH, `Description cannot be longer than ${DESCRIPTION_MAX_LENGTH} symbols.`]
     },
     images: [{
         type: String,
         required: true,
-        match: [/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/ , 'Invalid image URL' ]
+        match: [/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, 'Invalid image URL']
     }],
     gender: {
         type: String,
@@ -54,36 +62,34 @@ const productSchema = new mongoose.Schema({
     },
     categories: [{
         type: String,
-        enum: ['Shoes', 'Bags','T-shirts','Bathing suits', 'Dresses']
+        enum: ['Shoes', 'Bags', 'T-shirts', 'Bathing suits', 'Dresses']
     }]
 })
 
-productSchema.pre('validate', function(next) {
-    if (!this.discount.$isEmpty()) {
-        if (!this.discount.percent || !this.discount.endDate) {
-            throw new SyntaxError('Discount must have properties "percent" and "endDate"')
-        }
+function preValidateDiscountPercent(percent) {
 
-        if (isNaN(Number(this.discount.percent)) || this.discount.percent > 100) {
-            throw new SyntaxError('Discount percentage must be a number between 0 and 100.')
-        }
-
-        if (this.discount.endDate < new Date()) {
-            throw new SyntaxError('Cannot have a discount expiration date in the past.')
-        }
-
-        this.discount.percent /= 100
+    if (isNaN(Number(percent)) || percent > 100) {
+        return {'message':'Discount percentage must be a number between 0 and 100.'}
     }
 
-    next()
-})
+    percent /= 100
+}
 
-productSchema.virtual('discountPrice').get(function() {
+function preValidateDiscountEndDate(endDate) {
+
+    if (endDate < new Date()) {
+        return {'message':'Cannot have a discount expiration date in the past.'}
+    }
+
+}
+
+
+productSchema.virtual('discountPrice').get(function () {
     return this.price * (1 - this.discount.percent)
 })
 
-productSchema.virtual('discounted').get(function() {
+productSchema.virtual('discounted').get(function () {
     return this.discount == true
 })
 
-module.exports = mongoose.model('Product' , productSchema)
+module.exports = mongoose.model('Product', productSchema)

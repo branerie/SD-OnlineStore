@@ -2,22 +2,46 @@ import React, { useState } from 'react'
 import styles from './index.module.css'
 import image from '../../images/1111.jpg'
 import Input from '../input'
+import getCookie from '../../utils/cookie'
 
 const InputProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
     const [price, setPrice] = useState(props.price)
-    const [size, setSize] = useState(props.sizes.sizeName)
-    const [count, setCount] = useState(props.sizes.count)
+    const [sizes, setSize] = useState(getSizeAmounts())
+    const [count, setCount] = useState(props.sizes.map((e) =>e.count + ' , '))
     const [discountPercent, setDiscountPercent] = useState(props.discount.percent)
     const [discountEndDate, setDiscountEndDate] = useState(props.discount.endDate)
     const [description, setDescription] = useState(props.description)
     const [gender, setGender] = useState(props.gender)
-    const [categories , setCategories] = useState(props.categories)
+    const [categories , setCategories] = useState(props.categories.map((e) => e + ' , '))
+    const id = props.id
+   
+
+    function getSizeAmounts(){
+       return props.sizes.map(ps => `${ps.sizeName} - ${ps.count}`).join(' ,')
+        }
 
 const handleSubmit = async (event) => {
+    event.preventDefault()
 
-
+    await fetch(`http://localhost:3001/api/product/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({ 
+        'price': price,
+        'discount':{'percent': discountPercent, 'endDate': discountEndDate},
+        'brand': brand,
+        'description': description,
+        'gender': gender
+       
+    }),
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getCookie('x-auth-cookie')
+        }    
+    })    
 }
+console.log(count);
+console.log(categories);
     return (
 
         <form className={styles.container} onSubmit={handleSubmit}>
@@ -30,28 +54,14 @@ const handleSubmit = async (event) => {
                 onChange={e => setBrand(e.target.value)}
                 maxLength='30'                 
             />
-              <Input
-                type='text'
-                label='Size'
-                id='size'
-                value={size}
-                onChange={e => setSize(e.target.value)}                 
-            />
-              <Input
-                type='number'
-                label='Count'
-                id='count'
-                value={count}
-                onChange={e => setCount(e.target.value)}                 
-            />
             <Input
                 type='number'
                 label='Price'
                 id='price'
                 value={price}
                 onChange={e => setPrice(e.target.value)}
-            /><span>Negative price is not allowed.</span>
-            <Input 
+            />
+             <Input 
                 type='number'
                 label='Discount in %'
                 id='discount'
@@ -72,7 +82,7 @@ const handleSubmit = async (event) => {
                 value={description}
                 onChange={e => setDescription(e.target.value)}
             />
-            <div onChange={setGender}>
+            <div onChange={(e) => setGender(e.target.value) }>
                 <label>
                 <input type="radio" value="M" name="gender"/> Male
                 </label>
@@ -83,17 +93,14 @@ const handleSubmit = async (event) => {
                 <input type="radio" value="unspecified" name="gender" checked/> Unspecified
                 </label>
             </div>
-            <Input 
-                type='text'
-                label='Product Categories'
-                id='categories'
-                value={categories}
-                onChange={e => setCategories(e.target.value)}
-            />
+            <p>Amount : {sizes}</p>
+            <p>Categories: {categories}</p>     
             <button type='submit'>SAVE</button>
 
         </form>
     )
 }
+
+
 
 export default InputProductCard

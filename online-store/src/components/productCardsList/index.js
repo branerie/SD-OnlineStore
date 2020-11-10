@@ -1,6 +1,5 @@
 import React, { useEffect , useState , useCallback } from 'react'
 import styles from './index.module.css'
-
 import AdminProductCard from '../adminProductCard'
 import { getProductFromDb }  from '../../utils/product'
 

@@ -4,6 +4,7 @@ import UserContext from '../../Context'
 import ProductCard from '../productCard'
 import InputProductCard from '../inputProductCard'
 
+
 const AdminProductCard = (props) => {
     const [isEditing, setIsEditing] = useState(false)
     const user = useContext(UserContext)
@@ -12,7 +13,7 @@ const AdminProductCard = (props) => {
         setIsEditing(!isEditing)
        
     }
-
+  
 
     return (
         <div className={styles.container}>
@@ -23,6 +24,8 @@ const AdminProductCard = (props) => {
                     <div className={styles.adminButtons}>
                         <button onClick={changeEditingState}>Edit</button>
                         <button>Delete</button>
+                        
+                        
                     </div> : null}
             
         </div>
