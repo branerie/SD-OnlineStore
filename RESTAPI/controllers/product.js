@@ -85,6 +85,7 @@ router.get('/products', async (req, res) => {
         if (isMongoError(error)) {
             return res.status(403).send(error.message)
         }
+        
         return res.status(500).send(error.message)
     }
 })

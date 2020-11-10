@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const SIZE_MIN_LENGTH = 1
-const SIZE_MAX_LENGTH = 3
+const SIZE_MAX_LENGTH = 4
 const BRAND_MAX_LENGTH = 30
 const DESCRIPTION_MAX_LENGTH = 1000
 
@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema({
       sizeName: {
         type: String,
         required: true,
-        match: [/^[A-Z0-9]{1,3}$/ , `Size can only contain capital letters and digits and must be between ${SIZE_MIN_LENGTH} and ${SIZE_MAX_LENGTH} symbols`],
+        match: [/^[A-Z0-9]{1,4}$/ , `Size can only contain capital letters and digits and must be between ${SIZE_MIN_LENGTH} and ${SIZE_MAX_LENGTH} symbols`],
       },
       count: {
           type: Number,

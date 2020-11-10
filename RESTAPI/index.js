@@ -4,7 +4,9 @@ dotenv.config()
 const express = require('express')
 const configExpress = require('./config/express')
 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+mongoose.set('runValidators', true)
+
 mongoose.connect(process.env.DB_CONNECTION, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
