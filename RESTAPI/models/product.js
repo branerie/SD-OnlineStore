@@ -7,16 +7,16 @@ const DESCRIPTION_MAX_LENGTH = 1000
 
 const productSchema = new mongoose.Schema({
     sizes: [{
-      sizeName: {
-        type: String,
-        required: true,
-        match: [/^[A-Z0-9]{1,4}$/ , `Size can only contain capital letters and digits and must be between ${SIZE_MIN_LENGTH} and ${SIZE_MAX_LENGTH} symbols`],
-      },
-      count: {
-          type: Number,
-          required: true,
-          min: [0 , 'Negative product count is not allowed.']          
-      }
+        sizeName: {
+            type: String,
+            required: true,
+            match: [/^[A-Z0-9]{1,4}$/, `Size can only contain capital letters and digits and must be between ${SIZE_MIN_LENGTH} and ${SIZE_MAX_LENGTH} symbols`],
+        },
+        count: {
+            type: Number,
+            required: true,
+            min: [0, 'Negative product count is not allowed.']
+        }
     }],
     price: {
         type: Number,
@@ -25,19 +25,15 @@ const productSchema = new mongoose.Schema({
     },
     discount: {
         percent: {
-            validate:{
-                validator: preValidateDiscountPercent,
-                message: (props) => props.message
-                },
             type: Number,
             min: [0, 'Negative discount is not allowed.'],
             max: [1, 'Cannot have more than 100% discount']
         },
         endDate: {
-            validate:{
-                validator: preValidateDiscountEndDate,
-                message: (props) => props.message
-                },
+            validate: {
+                validator: (value) => value > new Date(),
+                message: () => 'Cannot set a discount expiration date in the past.'
+            },
             type: Date,
         }
     },
@@ -66,30 +62,44 @@ const productSchema = new mongoose.Schema({
     }]
 })
 
-function preValidateDiscountPercent(percent) {
-
-    if (isNaN(Number(percent)) || percent > 100) {
-        return {'message':'Discount percentage must be a number between 0 and 100.'}
-    }
-
-    percent /= 100
-}
-
-function preValidateDiscountEndDate(endDate) {
-
-    if (endDate < new Date()) {
-        return {'message':'Cannot have a discount expiration date in the past.'}
-    }
-
-}
-
+productSchema.pre('validate', preprocessDiscountOnCreate)
+productSchema.pre('findOneAndUpdate', preprocessDiscountOnUpdate)
+productSchema.pre('update', preprocessDiscountOnUpdate)
 
 productSchema.virtual('discountPrice').get(function () {
     return this.price * (1 - this.discount.percent)
 })
 
-productSchema.virtual('discounted').get(function () {
-    return this.discount == true
-})
+function preprocessDiscountOnCreate(next) {
+    if (this.discount) {
+        if (!this.discount.hasOwnProperty('percent') ||
+            !this.discount.hasOwnProperty('endDate')) {
+
+            throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
+        }
+
+        this.discount.percent /= 100
+    }
+
+    next()
+}
+
+function preprocessDiscountOnUpdate(next) {
+    const update = this.getUpdate()
+
+    if (update.hasOwnProperty('$set') &&
+        update.$set.hasOwnProperty('discount') && 
+        update.$set.discount.hasOwnProperty('percent')) {
+
+        const discount = update.$set.discount
+        if (!discount.hasOwnProperty('endDate') || !discount.endDate) {
+            throw new SyntaxError('Product discount must have an end date.')
+        }
+        
+        update.$set.discount.percent /= 100
+    }
+
+    next()
+}
 
 module.exports = mongoose.model('Product', productSchema)

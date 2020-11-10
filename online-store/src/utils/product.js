@@ -19,7 +19,8 @@ const getProductFromDb = async () => {
             'Content-Type': 'application/json'
         }
     })
-    const products= await promise.json()
+    
+    const products = await promise.json()
 
     return products
 }

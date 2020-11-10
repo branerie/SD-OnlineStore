@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const Product = require('../models/product')
-const { restrictToAdmin } = require('../utils/authenticate')
 const getDbProductsFilter = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
 const { getSizeRange, sortSizes } = require('../utils/product')
@@ -71,7 +70,10 @@ router.get('/products', async (req, res) => {
             id: p._id,
             sizes: p.sizes,
             price: p.price,
-            discount: p.discount,
+            discount: p.discount.$isEmpty() ? null : {
+                percent: p.discount.percent * 100,
+                endDate: p.discount.endDate.toISOString().slice(0, 10)
+            },
             brand: p.brand,
             description: p.description,
             images: p.images,
@@ -85,7 +87,7 @@ router.get('/products', async (req, res) => {
         if (isMongoError(error)) {
             return res.status(403).send(error.message)
         }
-        
+
         return res.status(500).send(error.message)
     }
 })
@@ -114,87 +116,6 @@ router.get('/:id', async (req, res) => {
         }
 
         return res.status(500).send(error.message)
-    }
-})
-
-
-router.post('/', restrictToAdmin, async (req, res) => {
-    const {
-        sizes,
-        price,
-        discount,
-        brand,
-        description,
-        images,
-        gender,
-        categories
-    } = req.body
-    try {
-        const createdProduct = await Product.create({
-            sizes,
-            price,
-            discount,
-            brand,
-            description,
-            images,
-            gender,
-            categories
-        })
-        res.send({ status: 'Success', id: createdProduct._id })
-    } catch (error) {
-        if (isMongoError(error)) {
-            return res.status(403).send(error.message)
-        }
-
-        return res.status(500).send(error.message)
-    }
-
-})
-
-router.put('/:id', restrictToAdmin, async (req, res) => {
-    try {
-        const id = req.params.id
-        const productProps = Object.entries(req.body)
-            .filter(kvp => Product.schema.obj.hasOwnProperty(kvp[0]))
-
-        const updateProductObject = productProps.reduce((acc, kvp) => {
-            acc[kvp[0]] = kvp[1]
-            return acc
-        }, {})
-
-
-        await Product.findByIdAndUpdate(id, { $set: updateProductObject })
-
-        return res.send(`Product with id ${id} successfully updated.`)
-    } catch (error) {
-        if (isMongoError(error)) {
-            return res.status(403).send(error.message)
-        }
-
-        if (error.name === 'CastError') {
-            return res.status(403).send(`Product with id ${id} does not exist.`)
-        }
-
-        return res.status(500).send(error.message)
-    }
-})
-
-router.delete('/:id', restrictToAdmin, async (req, res) => {
-    try {
-        const id = req.params.id
-        await Product.findByIdAndDelete(id)
-
-        return res.send({ success: true, removedId: id })
-    } catch (error) {
-        if (isMongoError(error)) {
-            res.status(403).send(error.message)
-        }
-
-        if (error.name === 'CastError') {
-            return res.status(403).send(`Product with id ${id} does not exist.`)
-        }
-
-        res.status(500).send(error.message)
     }
 })
 

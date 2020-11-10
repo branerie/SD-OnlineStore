@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const Input = ({label, id, value, onChange, type, maxLength}) => {
+const Input = ({label, id, value, onChange, onBlur, type, maxLength}) => {
     return (
         <div>
-            <label htmlFor={id}>{label}:</label>
-            <input type={type} id={id} value={value} onChange={onChange} maxLength={maxLength} />
+            <label htmlFor={id}>{label}:
+            <input type={type}
+                    id={id}
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    maxLength={maxLength} />
+        </label>
         </div>
     )
 }
