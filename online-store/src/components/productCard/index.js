@@ -9,7 +9,8 @@ const ProductCard = (props) => {
             <img alt='product' className={styles.img} src={image} />
             <p className={styles.brand}>{props.brand}</p>
             <p className={styles.price}>{props.price}</p>
-            <p className={styles.discount}>{props.discountPrice}</p>
+            <p className={styles.discount}>
+                { props.discountPrice ? props.discountPrice.toFixed(2) : null}</p>
         </div>
     )
 }

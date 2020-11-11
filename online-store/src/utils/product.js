@@ -1,5 +1,30 @@
 import getCookie from "./cookie"
 
+const getCategoricalFilterQueries = (categoricalFilters) => {
+    const propNames = Object.keys(categoricalFilters)
+    const queryStrings = propNames.map(propName => {
+        return `cat_${propName}=${categoricalFilters[propName].join(',')}`
+    })
+    
+    return queryStrings
+}
+
+const getRangeFilterQueries = (rangeFilters) => {
+    const propNames = Object.keys(rangeFilters)
+    const queryStrings = propNames.map(propName => {
+        return `rng_${propName}=${rangeFilters[propName].min},${rangeFilters[propName].max}`
+    })
+
+    return queryStrings
+}
+
+const getBoolFilterQueries = (boolFilters) => {
+    const propNames = Object.keys(boolFilters)
+    const queryStrings = propNames.map(propName => {
+        return `is_${propName}=${boolFilters[propName]}`
+    })
+}
+
 const getProductRanges = async () => {
     const promise = await fetch('http://localhost:3001/api/product/ranges', {
         method: 'GET',
@@ -12,8 +37,17 @@ const getProductRanges = async () => {
     return products
 }
 
-const getProductFromDb = async () => {
-    const promise = await fetch('http://localhost:3001/api/product/products', {
+const getProductsPage = async (categoricalFilters, rangeFilters, boolFilters, page) => {
+    const queryStringArray = [
+        ...getCategoricalFilterQueries(categoricalFilters),
+        ...getRangeFilterQueries(rangeFilters),
+        ...getBoolFilterQueries(boolFilters),
+        `page=${page}`
+    ]
+
+    const queryString = queryStringArray.join('&')
+    
+    const promise = await fetch(`http://localhost:3001/api/product/products?${queryString}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -27,5 +61,5 @@ const getProductFromDb = async () => {
 
 export {
     getProductRanges,
-    getProductFromDb
+    getProductsPage
 }

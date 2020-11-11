@@ -56,15 +56,24 @@ router.get('/ranges', async (req, res) => {
         delete productRanges.allSizes
 
         return res.send(productRanges)
-
     } catch (error) {
-        return res.send(error.message)
+        if (isMongoError(error)) {
+            return res.status(403).send({ error: error.message })
+        }
+
+        return res.status(500).send({ error: error.message })
     }
 })
 
 router.get('/products', async (req, res) => {
     try {
+        const pageLength = 3
+        const page = Math.max(0, req.query.page)
+
         const fullProducts = await Product.find({})
+                                          .skip(page * pageLength)
+                                          .limit(pageLength)
+
         const products = fullProducts.map(p => {
             return {
             id: p._id,
@@ -85,10 +94,10 @@ router.get('/products', async (req, res) => {
         return res.send(products)
     } catch (error) {
         if (isMongoError(error)) {
-            return res.status(403).send(error.message)
+            return res.status(403).send({ error: error.message })
         }
 
-        return res.status(500).send(error.message)
+        return res.status(500).send({ error: error.message })
     }
 })
 
@@ -108,14 +117,14 @@ router.get('/:id', async (req, res) => {
         })
     } catch (error) {
         if (isMongoError(error)) {
-            return res.status(403).send(error.message)
+            return res.status(403).send({ error: error.message })
         }
 
         if (error.name === 'CastError') {
-            return res.status(403).send(`Product with id ${id} does not exist.`)
+            return res.status(403).send({ error: `Product with id ${id} does not exist.` })
         }
 
-        return res.status(500).send(error.message)
+        return res.status(500).send({ error: error.message })
     }
 })
 

@@ -1,5 +1,7 @@
 const { verifyToken } = require('./jwt')
 
+const ADMIN_RESTRICT_ERROR = { error: 'You must be logged in as an administrator.' }
+
 async function restrictToAdmin(req, res, next) {
     try {
         const token = req.headers.authorization
@@ -7,9 +9,11 @@ async function restrictToAdmin(req, res, next) {
 
         if (userData.isAdmin) {
             next()
+        } else {
+            res.status(403).send(ADMIN_RESTRICT_ERROR)
         }
     } catch {
-        return res.status(403).send('You must be logged in as an administrator.')
+        return res.status(403).send(ADMIN_RESTRICT_ERROR)
     }
 }
 

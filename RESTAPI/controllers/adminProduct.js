@@ -3,7 +3,9 @@ const { restrictToAdmin } = require('../utils/authenticate')
 const Product = require('../models/product')
 const { isMongoError } = require('../utils/utils')
 
-router.post('/', restrictToAdmin, async (req, res) => {
+router.use('/', restrictToAdmin)
+
+router.post('/', async (req, res) => {
     const {
         sizes,
         price,
@@ -36,7 +38,7 @@ router.post('/', restrictToAdmin, async (req, res) => {
 
 })
 
-router.put('/:id', restrictToAdmin, async (req, res) => {
+router.put('/:id', async (req, res) => {
     const id = req.params.id
     
     try {
@@ -65,7 +67,7 @@ router.put('/:id', restrictToAdmin, async (req, res) => {
     }
 })
 
-router.delete('/:id', restrictToAdmin, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const id = req.params.id
         await Product.findByIdAndDelete(id)
@@ -84,7 +86,7 @@ router.delete('/:id', restrictToAdmin, async (req, res) => {
     }
 })
 
-router.patch('/:id/categories', restrictToAdmin, async (req, res) => {
+router.patch('/:id/categories', async (req, res) => {
     try {
         const productId = req.params.id
         const product = await Product.findById(productId)

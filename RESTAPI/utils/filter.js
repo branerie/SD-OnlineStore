@@ -5,7 +5,7 @@ const isProductSchemaField = (fieldName) => {
     return productFields.some(objKey => objKey.split('.')[0] === fieldName)
 }
 
-const isBoolean = (value) => /true|false/.test(value)
+const isBoolean = (value) => /true|false/.test(value.toLowerCase())
 
 function getDbProductsFilter(query) {
     const filter = {}
