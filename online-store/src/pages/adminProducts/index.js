@@ -21,8 +21,8 @@ const AdminProductsPage = () => {
     getProductPropsRange()
   }, [getProductPropsRange])
 
-  const currentProductDb = useCallback(async (filters, page) => {
-    const productInfo = await getProductsPage(filters, page)
+  const currentProductDb = useCallback(async (catFilters, rangeFilters, boolFilters, page) => {
+    const productInfo = await getProductsPage(catFilters, rangeFilters, boolFilters, page)
 
     setProductPage(productInfo)
   }, [setProductPage])
@@ -63,7 +63,7 @@ const AdminProductsPage = () => {
   }
 
   const handleBoolFilterChange = (event) => {
-    
+
   }
 
   const handleProductCardsChange = (event) => {
