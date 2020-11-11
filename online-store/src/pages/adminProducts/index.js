@@ -9,7 +9,7 @@ const AdminProductsPage = () => {
   const [productPage, setProductPage] = useState(null)
   const [page, setPage] = useState(0)
   const [categoricalFilters, setCategoricalFilters] = useState({})
-  const [rangeFilters, setRangelFilters] = useState({})
+  const [rangeFilters, setRangeFilters] = useState({})
   const [boolFilters, setBoolFilters] = useState({})
 
   const getProductPropsRange = useCallback(async () => {
@@ -58,8 +58,15 @@ const AdminProductsPage = () => {
     setCategoricalFilters(newActiveFilters)
   }
 
-  const handleRangeFilterChange = (event) => {
+  const handleRangeFilterChange = (propName, minValue, maxValue) => {
+    const newActiveFilters = {...rangeFilters}
 
+    newActiveFilters[propName] = {
+      min: minValue,
+      max: maxValue
+    }
+
+    setRangeFilters(newActiveFilters)
   }
 
   const handleBoolFilterChange = (event) => {

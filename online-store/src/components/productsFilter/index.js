@@ -2,8 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react'
 import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
 import { getProductRanges } from '../../utils/product'
+import ProductsRangeFilter from '../productsRangeFilter'
 
-const AdminAside = (props) => {
+const ProductsFilter = (props) => {
     // const [productProps, setProductProps] = useState(null)
 
     // const getProductPropsRange = useCallback(async () => {
@@ -46,6 +47,12 @@ const AdminAside = (props) => {
                         propName='sizes'
                         values={productProps.sizes}
                         onChange={props.onCatChange} />
+                <ProductsRangeFilter
+                        title='Price'
+                        propName='price'
+                        min={productProps.minPrice}
+                        max={productProps.maxPrice}
+                        onChange={props.onRangeChange} />
             </div>
             <div>
                 {props.children}
@@ -54,4 +61,4 @@ const AdminAside = (props) => {
     )
 }
 
-export default AdminAside
+export default ProductsFilter
