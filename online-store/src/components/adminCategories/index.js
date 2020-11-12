@@ -12,35 +12,14 @@ const AdminCategories = (props) => {
         return props.categories.map(eachCategory => `${eachCategory}`).join(', ')
     }
 
-    const addCategories = async (event) => {
-        event.preventDefault()
-
-        const response = await fetch(`http://localhost:3001/api/admin/product/${id}/categories`, {
-            method: "PATCH",
-            body: JSON.stringify({
-                'operations': [{
-                    'action': 'add',
-                    'value': category
-                }]
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
-            }
-        })
-
-        const updatedCategories = await response.json()
-        setCategories(updatedCategories.categories.join(', '))
-    }
-
-    const removeCategories = async (event) => {
+    const editCategories = async (event, action) => {
         event.preventDefault()
 
         const response = await fetch(`http://localhost:3001/api/admin/product/${id}/categories`, {
             method: 'PATCH',
             body: JSON.stringify({
                 'operations': [{
-                    'action': 'delete',
+                    'action': action,
                     'value': category
                 }]
             }),
@@ -56,7 +35,7 @@ const AdminCategories = (props) => {
 
 
     return (
-        <form className={styles.container} onSubmit={addCategories}>
+        <form className={styles.container} onSubmit={e => editCategories(e, 'add')}>
             <div>Product is set in categories: <span>{categories}</span></div>
             <Input
                 type='text'
@@ -68,7 +47,7 @@ const AdminCategories = (props) => {
                 size='35'
             />
             <button className={styles.button} type='submit'>Add categories</button>
-            <button className={styles.button} onClick={removeCategories}>Remove categories</button>
+            <button className={styles.button} onClick={(e) => editCategories(e, 'delete')}>Remove categories</button>
         </form>
     )
 }
