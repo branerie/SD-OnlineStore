@@ -24,6 +24,7 @@ const AdminProductCardsList = (props) => {
         if (!productPage) {
             return <div>Loading product cards...</div>
         }
+        console.log(productPage)
 
         return productPage.map(product => {
             return (

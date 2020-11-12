@@ -19,8 +19,14 @@ function getDbProductsFilter(query) {
         }
 
         if (propType === 'cat') {
-            filter[propValue] = {
-                $in: query[property].split(',')
+            if (propValue === 'sizes') {
+                filter['sizes.sizeName'] = {
+                    $in: query[property].split(',')
+                }
+            } else {
+                filter[propValue] = {
+                    $in: query[property].split(',')
+                }
             }
         } else if (propType === 'rng') {
             let [minValue, maxValue] = query[property].split(',')

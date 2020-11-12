@@ -19,9 +19,8 @@ const getRangeFilterQueries = (rangeFilters) => {
 }
 
 const getBoolFilterQueries = (boolFilters) => {
-    const propNames = Object.keys(boolFilters)
-    const queryStrings = propNames.map(propName => {
-        return `is_${propName}=${boolFilters[propName]}`
+    const queryStrings = boolFilters.map(propName => {
+        return `is_${propName}=${true}`
     })
 
     return queryStrings
@@ -40,9 +39,6 @@ const getProductRanges = async () => {
 }
 
 const getProductsPage = async (categoricalFilters, rangeFilters, boolFilters, page) => {
-    console.log(categoricalFilters)
-    console.log(rangeFilters)
-    console.log(boolFilters)
     const queryStringArray = [
         ...getCategoricalFilterQueries(categoricalFilters),
         ...getRangeFilterQueries(rangeFilters),

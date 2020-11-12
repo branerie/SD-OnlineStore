@@ -10,7 +10,7 @@ const AdminProductsPage = () => {
   const [page, setPage] = useState(0)
   const [categoricalFilters, setCategoricalFilters] = useState({})
   const [rangeFilters, setRangeFilters] = useState({})
-  const [boolFilters, setBoolFilters] = useState({})
+  const [boolFilters, setBoolFilters] = useState([])
 
   const getProductPropsRange = useCallback(async () => {
     const productPropRanges = await getProductRanges()
@@ -21,38 +21,23 @@ const AdminProductsPage = () => {
     getProductPropsRange()
   }, [getProductPropsRange])
 
-  const currentProductDb = useCallback(async (catFilters, rangeFilters, boolFilters, page) => {
+  const getCurrentProductsPage = useCallback(async (catFilters, rangeFilters, boolFilters, page) => {
     const productInfo = await getProductsPage(catFilters, rangeFilters, boolFilters, page)
 
     setProductPage(productInfo)
   }, [setProductPage])
 
   useEffect(() => {
-    currentProductDb(categoricalFilters, rangeFilters, boolFilters, page)
-  }, [currentProductDb, page, categoricalFilters, rangeFilters, boolFilters])
+    getCurrentProductsPage(categoricalFilters, rangeFilters, boolFilters, page)
+  }, [getCurrentProductsPage, page, categoricalFilters, rangeFilters, boolFilters])
 
-  const handleCatFilterChange = (event) => {
-    const propName = event.target.attributes['data-prop-name'].value
-    const propValue = event.target.value
-    const isChecked = event.target.checked
-
+  const handleCatFilterChange = (propName, values) => {
     const newActiveFilters = {...categoricalFilters}
 
-    const propFilters = newActiveFilters[propName]
-    if (isChecked) {
-      if (!propFilters) {
-        newActiveFilters[propName] = [ propValue ]
-      } else {
-        propFilters.push(propValue)
-      }
+    if (values.length > 0) {
+      newActiveFilters[propName] = values
     } else {
-      if (propFilters) {
-        newActiveFilters[propName] = propFilters.filter(f => f !== propValue)
-
-        if (propFilters.length === 0) {
-          newActiveFilters[propName] = null
-        }
-      }
+      delete newActiveFilters[propName]
     }
 
     setCategoricalFilters(newActiveFilters)
@@ -69,8 +54,15 @@ const AdminProductsPage = () => {
     setRangeFilters(newActiveFilters)
   }
 
-  const handleBoolFilterChange = (event) => {
+  const handleBoolFilterChange = (propName, isActivated) => {
+    let newActiveFilters = [...boolFilters]
+    if (isActivated) {
+      newActiveFilters.push(propName)
+    } else {
+      newActiveFilters = newActiveFilters.filter(pn => pn !== propName)
+    }
 
+    setBoolFilters(newActiveFilters)
   }
 
   const handleProductCardsChange = (event) => {

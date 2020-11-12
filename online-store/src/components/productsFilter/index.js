@@ -3,25 +3,9 @@ import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
 import { getProductRanges } from '../../utils/product'
 import ProductsRangeFilter from '../productsRangeFilter'
+import ProductsBoolFilter from '../productsBoolFilter'
 
 const ProductsFilter = (props) => {
-    // const [productProps, setProductProps] = useState(null)
-
-    // const getProductPropsRange = useCallback(async () => {
-    //     const productPropRanges = await getProductRanges()
-    //     setProductProps(productPropRanges)
-    // }, [setProductProps])
-
-    // useEffect(() => {
-    //     getProductPropsRange()
-    // }, [getProductPropsRange])
-
-    // if (!productProps) {
-    //     return (
-    //         <div>Loading...</div>
-    //     )
-    // }
-
     const productProps = props.productProps
     if (!productProps) {
         return (
@@ -53,6 +37,10 @@ const ProductsFilter = (props) => {
                         min={productProps.minPrice}
                         max={productProps.maxPrice}
                         onChange={props.onRangeChange} />
+                <ProductsBoolFilter
+                        title='Discount'
+                        propName='discount'
+                        onChange={props.onBoolChange} />
             </div>
             <div>
                 {props.children}

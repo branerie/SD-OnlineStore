@@ -69,8 +69,9 @@ router.get('/products', async (req, res) => {
     try {
         const pageLength = 3
         const page = Math.max(0, req.query.page)
+        const productFilters = getDbProductsFilter(req.query)
 
-        const fullProducts = await Product.find({})
+        const fullProducts = await Product.find(productFilters)
                                           .skip(page * pageLength)
                                           .limit(pageLength)
 
