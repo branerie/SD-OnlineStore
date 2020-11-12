@@ -4,12 +4,13 @@ import image from '../../images/1111.jpg'
 import Input from '../input'
 import getCookie from '../../utils/cookie'
 import AdminCategories from '../adminCategories'
+import AdminSizes from '../adminSizes'
 
 const InputProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
     const [price, setPrice] = useState(props.price)
-    const [sizes, setSize] = useState(getSizeAmounts())
-    const [count, setCount] = useState(props.sizes.join(', '))
+    // const [sizes, setSize] = useState(getSizeAmounts())
+    // const [count, setCount] = useState(props.sizes.join(', '))
     const [discountPercent, setDiscountPercent] = useState(props.discount
         ? props.discount.percent
         : null)
@@ -21,9 +22,9 @@ const InputProductCard = (props) => {
     const [gender, setGender] = useState(props.gender)
     const id = props.id
    
-    function getSizeAmounts() {
-        return props.sizes.map(ps => `${ps.sizeName} - ${ps.count}`).join(', ')
-    }
+    // function getSizeAmounts() {
+    //     return props.sizes.map(ps => `${ps.sizeName} - ${ps.count}`).join(', ')
+    // }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -102,9 +103,10 @@ const InputProductCard = (props) => {
                     Unspecified
                 </label>
             </div>
-            <p>Amount : {sizes}</p>
-            <AdminCategories categories={props.categories} id={id}/>
             <button type='submit'>SAVE</button>
+            <AdminSizes sizes={props.sizes} />
+            <AdminCategories categories={props.categories} id={id}/>
+            
 
         </form>
     )
