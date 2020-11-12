@@ -102,31 +102,26 @@ router.patch('/:id/categories', async (req, res) => {
                 return res.status(400).send({ error: 'Operation must contain "value" and "action" fields.' })
             }
 
-            let mongooseOperation = null
             if (action === 'add') {
                 if (product.categories.includes(value)) {
                     return res.status(400).send({ error: `Product with id ${productId} already has category ${value}.` })
                 }
 
-                mongooseOperation = '$push'
+                await product.categories.push(value)
             } else if (action === 'delete') {
                 if (!product.categories.includes(value)) {
                     return res.status(400).send({ error: `Product with id ${productId} does not have category ${value}.` })
                 }
 
-                mongooseOperation = '$pull'
+                await product.categories.pull(value)
             } else {
                 return res.status(400).send({ error: 'Invalid action applied to product categories. Valid actions are "add" and "delete".' })
             }
 
-            await product.updateOne({
-                [mongooseOperation]: { categories: value }
-            })
-
             await product.save()
         }
 
-        return res.send({ productId: productId, message: 'Success!' })
+        return res.send({ productId: productId, categories: Array.from(product.categories) })
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })
@@ -157,13 +152,13 @@ router.patch('/:id/sizes', async (req, res) => {
             }
 
             if (action === 'delete') {
-                await product.update({
-                    $pull: {
-                        sizes: {
-                            sizeName: value.sizeName
-                        }
-                    }
-                })
+                const sizeToDelete = product.sizes.find(ps => ps.sizeName === value.sizeName)
+                if (sizeToDelete) {
+                    await product.sizes.pull(sizeToDelete)
+                    await product.save()
+                }
+
+                return res.send({ productId: productId, sizes: Array.from(product.sizes) })
             }
 
             if (!value.hasOwnProperty('count')) {
@@ -184,13 +179,9 @@ router.patch('/:id/sizes', async (req, res) => {
                     })
                 }
 
-                await product.updateOne({
-                    $push: {
-                        sizes: {
-                            sizeName: value.sizeName,
-                            count: value.count
-                        }
-                    }
+                await product.sizes.push({
+                    sizeName: value.sizeName,
+                    count: value.count
                 })
             } else if (action === 'edit') {
                 if (!productSize) {
@@ -200,13 +191,14 @@ router.patch('/:id/sizes', async (req, res) => {
                 }
 
                 productSize.count = value.count
-                await product.save()
             } else {
                 return res.status(400).send({ error: 'Invalid action applied to product sizes. Valid actions are "add", "edit" and "delete".' })
             }
+
+            await product.save()
         }
 
-        return res.send({ productId: productId, message: 'Success!' })
+        return res.send({ productId: productId, sizes: Array.from(product.sizes) })
     } catch (error) {
         return res.status(500).send({ error: error.message })
     }
