@@ -3,6 +3,7 @@ import styles from './index.module.css'
 import image from '../../images/1111.jpg'
 import Input from '../input'
 import getCookie from '../../utils/cookie'
+import AdminCategories from '../adminCategories'
 
 const InputProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
@@ -18,10 +19,8 @@ const InputProductCard = (props) => {
         : null)
     const [description, setDescription] = useState(props.description)
     const [gender, setGender] = useState(props.gender)
-    const [categories, setCategories] = useState(props.categories.join(', '))
     const id = props.id
-
-
+   
     function getSizeAmounts() {
         return props.sizes.map(ps => `${ps.sizeName} - ${ps.count}`).join(', ')
     }
@@ -37,7 +36,6 @@ const InputProductCard = (props) => {
                 'brand': brand,
                 'description': description,
                 'gender': gender
-
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -105,7 +103,7 @@ const InputProductCard = (props) => {
                 </label>
             </div>
             <p>Amount : {sizes}</p>
-            <p>Categories: {categories}</p>
+            <AdminCategories categories={props.categories} id={id}/>
             <button type='submit'>SAVE</button>
 
         </form>

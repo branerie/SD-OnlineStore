@@ -67,7 +67,7 @@ router.get('/ranges', async (req, res) => {
 
 router.get('/products', async (req, res) => {
     try {
-        const pageLength = 3
+        const pageLength = 10
         const page = Math.max(0, req.query.page)
 
         const fullProducts = await Product.find({})
