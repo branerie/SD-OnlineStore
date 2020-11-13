@@ -3,83 +3,101 @@ import styles from './index.module.css'
 import AdminProductCardsList from '../../components/adminProductCardsList'
 import ProductsFilter from '../../components/productsFilter'
 import { getProductRanges, getProductsPage } from '../../utils/product'
+import Pagination from '../../components/pagination'
+
+const PAGE_LENGTH = 3
 
 const AdminProductsPage = () => {
-  const [productProps, setProductProps] = useState(null)
-  const [productPage, setProductPage] = useState(null)
-  const [page, setPage] = useState(0)
-  const [categoricalFilters, setCategoricalFilters] = useState({})
-  const [rangeFilters, setRangeFilters] = useState({})
-  const [boolFilters, setBoolFilters] = useState([])
+	const [productProps, setProductProps] = useState(null)
+	const [productPage, setProductPage] = useState(null)
+	const [page, setPage] = useState(0)
+	const [totalCount, setTotalCount] = useState(0)
+	const [categoricalFilters, setCategoricalFilters] = useState({})
+	const [rangeFilters, setRangeFilters] = useState({})
+	const [boolFilters, setBoolFilters] = useState([])
 
-  const getProductPropsRange = useCallback(async () => {
-    const productPropRanges = await getProductRanges()
-    setProductProps(productPropRanges)
-  }, [setProductProps])
+	const getProductPropsRange = useCallback(async () => {
+		const productPropRanges = await getProductRanges()
+		setProductProps(productPropRanges)
+	}, [setProductProps])
 
-  useEffect(() => {
-    getProductPropsRange()
-  }, [getProductPropsRange])
+	const getCurrentProductsPage = useCallback(async (catFilters, rangeFilters, boolFilters, page) => {
+		const { total, productInfo } = await getProductsPage(
+			catFilters,
+			rangeFilters,
+			boolFilters,
+			page,
+			PAGE_LENGTH)
 
-  const getCurrentProductsPage = useCallback(async (catFilters, rangeFilters, boolFilters, page) => {
-    const productInfo = await getProductsPage(catFilters, rangeFilters, boolFilters, page)
+		setProductPage(productInfo)
+		setTotalCount(total)
+	}, [setProductPage, setTotalCount])
 
-    setProductPage(productInfo)
-  }, [setProductPage])
+	useEffect(() => {
+		getProductPropsRange()
+	}, [getProductPropsRange])
 
-  useEffect(() => {
-    getCurrentProductsPage(categoricalFilters, rangeFilters, boolFilters, page)
-  }, [getCurrentProductsPage, page, categoricalFilters, rangeFilters, boolFilters])
+	useEffect(() => {
+		getCurrentProductsPage(categoricalFilters, rangeFilters, boolFilters, page)
+	}, [getCurrentProductsPage, page, categoricalFilters, rangeFilters, boolFilters])
 
-  const handleCatFilterChange = (propName, values) => {
-    const newActiveFilters = {...categoricalFilters}
+	useEffect(() => setPage(0), [categoricalFilters, rangeFilters, boolFilters])
 
-    if (values.length > 0) {
-      newActiveFilters[propName] = values
-    } else {
-      delete newActiveFilters[propName]
-    }
+	const handleCatFilterChange = (propName, values) => {
+		const newActiveFilters = { ...categoricalFilters }
 
-    setCategoricalFilters(newActiveFilters)
-  }
+		if (values.length > 0) {
+			newActiveFilters[propName] = values
+		} else {
+			delete newActiveFilters[propName]
+		}
 
-  const handleRangeFilterChange = (propName, minValue, maxValue) => {
-    const newActiveFilters = {...rangeFilters}
+		setCategoricalFilters(newActiveFilters)
+	}
 
-    newActiveFilters[propName] = {
-      min: minValue,
-      max: maxValue
-    }
+	const handleRangeFilterChange = (propName, newValue) => {
+		const newActiveFilters = { ...rangeFilters }
 
-    setRangeFilters(newActiveFilters)
-  }
+		newActiveFilters[propName] = newValue
 
-  const handleBoolFilterChange = (propName, isActivated) => {
-    let newActiveFilters = [...boolFilters]
-    if (isActivated) {
-      newActiveFilters.push(propName)
-    } else {
-      newActiveFilters = newActiveFilters.filter(pn => pn !== propName)
-    }
+		setRangeFilters(newActiveFilters)
+	}
 
-    setBoolFilters(newActiveFilters)
-  }
+	const handleBoolFilterChange = (propName, isActivated) => {
+		let newActiveFilters = [...boolFilters]
 
-  const handleProductCardsChange = (event) => {
+		if (isActivated) {
+			newActiveFilters.push(propName)
+		} else {
+			newActiveFilters = newActiveFilters.filter(pn => pn !== propName)
+		}
 
-  }
+		setBoolFilters(newActiveFilters)
+	}
 
-  return (
-    <div className={styles.container}>
-      <ProductsFilter
-          productProps={productProps}
-          onCatChange={handleCatFilterChange}
-          onRangeChange={handleRangeFilterChange}
-          onBoolChange={handleBoolFilterChange} />
-      <AdminProductCardsList page={page} productPage={productPage} onChange={handleProductCardsChange} />
-    </div>
-  )
+	const handlePageChange = (newPage) => {
+		setPage(newPage)
+	}
 
+	console.log(3)
+
+	return (
+		<div className={styles.container}>
+			<ProductsFilter
+				productProps={productProps}
+				onCatChange={handleCatFilterChange}
+				onRangeChange={handleRangeFilterChange}
+				onBoolChange={handleBoolFilterChange} />
+			<main className={styles.cards}>
+				<AdminProductCardsList page={page} productPage={productPage} />
+				<Pagination
+					page={page}
+					totalCount={totalCount}
+					pageLength={PAGE_LENGTH}
+					onChange={handlePageChange} />
+			</main>
+		</div>
+	)
 }
 
 export default AdminProductsPage

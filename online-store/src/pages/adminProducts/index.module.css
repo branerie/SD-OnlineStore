@@ -1,3 +1,7 @@
 .container {
     display: flex;
 }
+
+.cards {
+    flex-grow: 3;
+}

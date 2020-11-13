@@ -15,7 +15,7 @@ const ProductsRangeFilter = (props) => {
                 min="0"
                 max={props.max}
                 onChange={e => setMinValue(e.target.value)} 
-                onBlur={() => props.onChange(props.propName, minValue, maxValue)} />
+                onBlur={() => props.onChange(props.propName, { min: minValue, max: maxValue })} />
             <input
                 type="number"
                 name={`max${capitalizedPropName}`}
@@ -23,7 +23,7 @@ const ProductsRangeFilter = (props) => {
                 min="0"
                 max={props.max}
                 onChange={e => setMaxValue(e.target.value)}
-                onBlur={() => props.onChange(props.propName, minValue, maxValue)} />
+                onBlur={() => props.onChange(props.propName, { min: minValue, max: maxValue })} />
         </div>
     )
 }

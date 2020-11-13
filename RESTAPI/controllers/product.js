@@ -33,7 +33,7 @@ router.get('/ranges', async (req, res) => {
 
         productRanges = productRanges[0]
 
-        productRanges.categories = productRanges.categories.flat()
+        productRanges.categories = [...new Set(productRanges.categories.flat())]
 
         productRanges.minCount = Math.min(...productRanges.minCount)
         productRanges.maxCount = Math.max(...productRanges.maxCount)
@@ -67,10 +67,11 @@ router.get('/ranges', async (req, res) => {
 
 router.get('/products', async (req, res) => {
     try {
-        const pageLength = 3
         const page = Math.max(0, req.query.page)
+        const pageLength = Math.max(1, req.query.pageLength)
         const productFilters = getDbProductsFilter(req.query)
 
+        const totalCount = await Product.find(productFilters).count()
         const fullProducts = await Product.find(productFilters)
                                           .skip(page * pageLength)
                                           .limit(pageLength)
@@ -92,7 +93,7 @@ router.get('/products', async (req, res) => {
             discountPrice: p.discountPrice
         }})
 
-        return res.send(products)
+        return res.send({ total: totalCount, productInfo: products })
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })

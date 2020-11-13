@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React from 'react'
 import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
-import { getProductRanges } from '../../utils/product'
 import ProductsRangeFilter from '../productsRangeFilter'
 import ProductsBoolFilter from '../productsBoolFilter'
 

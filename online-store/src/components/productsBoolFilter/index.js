@@ -4,9 +4,10 @@ const ProductsBoolFilter = (props) => {
     const [value, setValue] = useState(false)
 
     const handleChange = (event) => {
-        const newValue = event.target.checked
-        props.onChange(props.propName, newValue)
-        setValue(newValue)
+        const isActivated = event.target.checked
+
+        props.onChange(props.propName, isActivated)
+        setValue(isActivated)
     }
 
     return (

@@ -5,6 +5,27 @@ const isProductSchemaField = (fieldName) => {
     return productFields.some(objKey => objKey.split('.')[0] === fieldName)
 }
 
+const parseSizeFilters = (queryValues) => {
+    const range = (start, stop, step = 1) =>
+                    Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
+
+    const sizeSet = []
+    for (let queryValue of queryValues.split(',')) {
+        const sizeRange = queryValue.split(' - ')
+
+        if(sizeRange.length === 1) {
+            sizeSet.push(queryValue)
+        } else if (sizeRange.length === 2) {
+            const [minValue, maxValue] = sizeRange.map(Number)
+            sizeSet.push(...range(minValue, maxValue + 1))
+        }
+    }
+
+    return {
+        $in: sizeSet
+    }
+}
+
 const isBoolean = (value) => /true|false/.test(value.toLowerCase())
 
 function getDbProductsFilter(query) {
@@ -20,9 +41,7 @@ function getDbProductsFilter(query) {
 
         if (propType === 'cat') {
             if (propValue === 'sizes') {
-                filter['sizes.sizeName'] = {
-                    $in: query[property].split(',')
-                }
+                filter['sizes.sizeName'] = parseSizeFilters(query[property])
             } else {
                 filter[propValue] = {
                     $in: query[property].split(',')

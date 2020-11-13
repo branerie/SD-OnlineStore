@@ -14,15 +14,16 @@ const ProductsCheckboxFilter = (props) => {
         props.onChange(props.propName, newValues)
         setValues(newValues)
     }
+    
+    console.log(1)
 
     return (
         <div>
             <h3>{props.title}</h3>
             {props.values.map(value => {
                 return (
-                    <div>
+                    <div key={value}>
                         <input
-                            key={value}
                             type="checkbox"
                             value={value}
                             name={props.propName}

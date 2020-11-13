@@ -1,8 +1,4 @@
 const getSizeRange = (size) => {
-    if (size >= 46) {
-        return '46+'
-    }
-
     const rangeCeiling = Math.ceil(size / 5) * 5
     return `${rangeCeiling - 4} - ${rangeCeiling}`
 }
