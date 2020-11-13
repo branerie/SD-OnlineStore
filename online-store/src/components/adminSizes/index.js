@@ -1,63 +1,91 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import Input from '../input'
 
-const AdminSizes = (props) => {
+const DEFAULT_INPUT_FIELD = {'sizeName': '---' , 'count': 0}
+
+const AdminSizes = (props) => {    
     const [sizes, setSizes] = useState(props.sizes)
     const [currentProductSize, setCurrentProductSize] = useState(sizes)
-    const [count, setCount] = useState(0)
-    const modifiedSizes = []
+    const [inputField , setInputField] = useState(DEFAULT_INPUT_FIELD)
+    const [modifiedSizes, setModifiedSizes] = useState([])
     const productId = props.id
 
-    
+    const editSize = useCallback((modifiedSize ,action) => {
+        const editedSizeObjectValue = {'sizeName' : modifiedSize.sizeName , 'count': modifiedSize.count}
+        const sendedObjectToDB = {'value': editedSizeObjectValue, 'action': action}
 
-    function renderSizes(){
+        const newModifiedSizes = [...modifiedSizes]
+        newModifiedSizes.push(sendedObjectToDB)
+        setModifiedSizes(newModifiedSizes)
+
+        setInputField(DEFAULT_INPUT_FIELD)
+        modifiedSize.action = action       
+
+        const changedIndex = currentProductSize.findIndex(size => size.sizeName === modifiedSize.sizeName )
+        const newProductSize = [...currentProductSize]
+        newProductSize[changedIndex] = modifiedSize
+        setCurrentProductSize(newProductSize)
+
+        console.log(modifiedSizes);
+
+    },[currentProductSize,modifiedSizes])
+   
+  const renderSizes = useCallback(  function(){
         return (
             currentProductSize.map(productSize => {
                 return <div>
                  <div>{productSize.sizeName} - {productSize.count}</div>
-                <button onClick={e => editField(e, this.productSize )}>< i class="far fa-edit" /></button>
-                {/* <button onClick={}>< i class="fas fa-eraser" /></button> */}
+                 <div>
+                <button type='button' onClick={() => setInputField(productSize)}>EDIT</button>
+                </div>
+                <button type='button' onClick={() => editSize(productSize, 'delete')}>Remove</button>
                 </div>
             })
         )
-    }
+    },[currentProductSize,editSize])
 
-    const editField = (event , productSize) => {
-        event.preventDefault()
+    useEffect(() => {
+        renderSizes()
+     },[renderSizes])
+ 
+
+    
+useEffect(() =>{
+    setCurrentProductSize(sizes)
+},[sizes])
+
+    const editField = () => {
+    
         return (
                     <div className={styles.inputField}>
-                        <p>{productSize.sizeName}</p>
+                        <div>{inputField.sizeName}</div>
                         <Input
                             type='number'
                             label='Count'
                             id='count'
-                            value={productSize.count}
-                            onChange={e => setCount(e.target.value)}
-                            onBlur={() =>{
-                                const formattedCount = parseFloat(count).toFixed(0)
-                                setCount(formattedCount)
-                            }}
+                            value={inputField.count}
+                            onChange={e => handleInputChange(e.target.value)}
+                            step= '1'
                         />
-                        <button onClick={editSize(productSize , 'edit')} >Submit</button>
+                        <button onClick={()=>editSize(inputField ,'edit')} >Submit</button>
                     </div>
         )
     }
 
-    const editSize = (productSize, action) => {
-
-        //have to change currentProductSize
-        //have to put current editProduct in modifiedSize
-        //...
-
+    const handleInputChange = (value) => {
+        const newInputField = {...inputField}
+        newInputField.count = value
+        setInputField(newInputField)
     }
+
 
 
     const handleSumnit = async (event, action) => {
         event.preventDefault()
 
-        const response = await fetch(`http://localhost:3001/api/admin/product/${productId}/categories`, {
+        const response = await fetch(`http://localhost:3001/api/admin/product/${productId}/sizes`, {
             method: 'PATCH',
             body: JSON.stringify({
                 'operations': modifiedSizes
@@ -67,6 +95,8 @@ const AdminSizes = (props) => {
                 'Authorization': getCookie('x-auth-cookie')
             }
         })
+
+        setModifiedSizes([])
 
         const updatedSizes = await response.json()
         setSizes(updatedSizes.sizes)
@@ -78,9 +108,11 @@ const AdminSizes = (props) => {
                 <div className={styles.field}>
                     <div className={styles.table}>                    
                         <h3>Available sizes</h3>
-                            {renderSizes}                              
+                            {renderSizes()}                              
                     </div>
-                    {editField}                
+                    <div>
+                        {editField()}                
+                    </div>
                 </div>                
                 <button type='submit'>SAVE</button>
             </form>
