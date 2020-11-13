@@ -30,6 +30,11 @@ const AdminCategories = (props) => {
         })
 
         const updatedCategories = await response.json()
+        if (updatedCategories.error) {
+            //TODO: Display error to client
+            return
+        }
+
         setCategories(updatedCategories.categories.join(', '))
     }
 

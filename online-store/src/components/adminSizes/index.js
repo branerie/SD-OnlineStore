@@ -99,6 +99,12 @@ useEffect(() =>{
         setModifiedSizes([])
 
         const updatedSizes = await response.json()
+
+        if (updatedSizes.error) {
+            //TODO: Display error to client
+            return
+        }
+
         setSizes(updatedSizes.sizes)
     }
 
