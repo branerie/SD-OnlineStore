@@ -10,6 +10,8 @@ const AdminSizes = (props) => {
     const [currentProductSize, setCurrentProductSize] = useState(sizes)
     const [inputField , setInputField] = useState(DEFAULT_INPUT_FIELD)
     const [modifiedSizes, setModifiedSizes] = useState([])
+    const [addSizeName, setAddSizeName] = useState('')
+    const [addSizeCount, setAddSizeCount] = useState(0)
     const productId = props.id
 
     const editSize = useCallback((modifiedSize ,action) => {
@@ -28,20 +30,24 @@ const AdminSizes = (props) => {
         newProductSize[changedIndex] = modifiedSize
         setCurrentProductSize(newProductSize)
 
-        console.log(modifiedSizes);
-
     },[currentProductSize,modifiedSizes])
    
   const renderSizes = useCallback(  function(){
         return (
             currentProductSize.map(productSize => {
-                return <div>
-                 <div>{productSize.sizeName} - {productSize.count}</div>
-                 <div>
-                <button type='button' onClick={() => setInputField(productSize)}>EDIT</button>
-                </div>
-                <button type='button' onClick={() => editSize(productSize, 'delete')}>Remove</button>
-                </div>
+                return (  
+                    <div className={styles.eachSize}>
+                        {productSize.action ?
+                            ( <div className={styles.editFirsLineName}>{productSize.sizeName} - {productSize.count}</div> )
+                            : <div >{productSize.sizeName} - {productSize.count}</div>
+                        }
+                        
+                        <div className={styles.buttons}>
+                            <button type='button' onClick={() => setInputField(productSize)}>EDIT</button>
+                            <button type='button' onClick={() => editSize(productSize, 'delete')}>Remove</button>
+                        </div>
+                    </div>
+                )
             })
         )
     },[currentProductSize,editSize])
@@ -59,19 +65,47 @@ useEffect(() =>{
     const editField = () => {
     
         return (
-                    <div className={styles.inputField}>
-                        <div>{inputField.sizeName}</div>
-                        <Input
-                            type='number'
-                            label='Count'
-                            id='count'
-                            value={inputField.count}
-                            onChange={e => handleInputChange(e.target.value)}
-                            step= '1'
+            <div className={styles.linefield}>
+                <div className={styles.editLinefield}>
+                    <div className={styles.nameField}>Name of Size : {inputField.sizeName}</div>
+                    <Input
+                        type='number'
+                        label='Count'
+                        id='count'
+                        value={inputField.count}
+                        onChange={e => handleInputChange(e.target.value)}
+                        step= '1'
+                    />
+                    <button onClick={()=>editSize(inputField ,'edit')} >Submit</button>
+                </div>
+                <div className={styles.addField} >
+                    <div className={styles.nameField} >Add sizes:</div>
+                    <Input
+                        type='text'
+                        label='Add size name'
+                        id='sizeName'
+                        placeholder='XS, S, M, L, XL, XXL'
+                        onChange={e => setAddSizeName(e.target.value)}
                         />
-                        <button onClick={()=>editSize(inputField ,'edit')} >Submit</button>
-                    </div>
+                    <Input
+                        type='number'
+                        label='Add amount'
+                        id='amount'
+                        placeholder='100, 200, 250 ...'
+                        onChange={e => setAddSizeCount(e.target.value)}
+                        step= '1'
+                    />
+                    <button onClick={() => addSize('add')} >Submit</button>
+                </div>
+            </div>
         )
+    }
+
+    const addSize = (action) => {
+        const addNewSize = {'sizeName' : addSizeName, 'count': addSizeCount}
+        const sendNewSize = {'value': addNewSize, 'action': action}
+
+        modifiedSizes.push(sendNewSize)
     }
 
     const handleInputChange = (value) => {
@@ -109,19 +143,18 @@ useEffect(() =>{
     }
 
     return (
-        
-            <form className={styles.container} onSubmit={handleSumnit}>
-                <div className={styles.field}>
-                    <div className={styles.table}>                    
-                        <h3>Available sizes</h3>
-                            {renderSizes()}                              
-                    </div>
-                    <div>
-                        {editField()}                
-                    </div>
-                </div>                
+       <div className={styles.container}>
+            <form className={styles.form} onSubmit={handleSumnit}>
+                <div>                   
+                    <h3>Available sizes</h3>
+                </div>
+                <div className={styles.table}>
+                {renderSizes()}
+                </div>
                 <button type='submit'>SAVE</button>
             </form>
+            {editField()} 
+        </div>
     )
 }
 

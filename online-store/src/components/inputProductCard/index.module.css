@@ -4,7 +4,7 @@
     border: 1px solid #234465;
     margin-bottom: 3%;
     border-radius: 4px;
-    background-color: bisque;
+    display: flex;
   }
 
 .price {
@@ -26,4 +26,11 @@
 .img {
     width: 100px;
     height: 80px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(152, 195, 236);
+    flex: 1;
 }

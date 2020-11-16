@@ -2,8 +2,7 @@
     width: 100%;
     height: auto;
     border: 1px solid #234465;
-    margin-bottom: 3%;
     border-radius: 4px;
-    background-color: bisque;
-    
+    background-color: rgb(243, 154, 221);
+    flex: 1;
   }

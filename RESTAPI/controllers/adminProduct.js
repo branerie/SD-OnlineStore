@@ -157,8 +157,8 @@ router.patch('/:id/sizes', async (req, res) => {
                     await product.sizes.pull(sizeToDelete)
                     await product.save()
                 }
-
-                return res.send({ productId: productId, sizes: Array.from(product.sizes) })
+                
+                continue
             }
 
             if (!value.hasOwnProperty('count')) {
@@ -190,7 +190,7 @@ router.patch('/:id/sizes', async (req, res) => {
                     })
                 }
 
-                productSize.count = value.count
+                productSize.count = value.count            
             } else {
                 return res.status(400).send({ error: 'Invalid action applied to product sizes. Valid actions are "add", "edit" and "delete".' })
             }

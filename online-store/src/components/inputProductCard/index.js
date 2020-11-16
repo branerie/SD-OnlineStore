@@ -39,8 +39,8 @@ const InputProductCard = (props) => {
     }
 
     return (
-        <div>
-            <form className={styles.container} onSubmit={handleSubmit}>
+        <div className={styles.container}>
+            <form className={styles.form} onSubmit={handleSubmit}>
                 <img alt='product' className={styles.img} src={image} />
                 <Input
                     type='text'
