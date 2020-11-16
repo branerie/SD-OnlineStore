@@ -3,6 +3,7 @@ import styles from './index.module.css'
 import image from '../../images/1111.jpg'
 import Input from '../input'
 import getCookie from '../../utils/cookie'
+import InputImages from '../inputImage'
 
 const InputProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
@@ -47,7 +48,7 @@ const InputProductCard = (props) => {
     }
 
     return (
-
+        <div>
         <form className={styles.container} onSubmit={handleSubmit}>
             <img alt='product' className={styles.img} src={image} />
             <Input
@@ -106,9 +107,12 @@ const InputProductCard = (props) => {
             </div>
             <p>Amount : {sizes}</p>
             <p>Categories: {categories}</p>
-            <button type='submit'>SAVE</button>
+            
 
+            <button type='submit'>SAVE</button>
         </form>
+        <InputImages />
+        </div>
     )
 }
 

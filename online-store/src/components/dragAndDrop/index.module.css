@@ -1,0 +1,32 @@
+.container {
+    min-width: 10rem;
+    min-height: 10rem;
+    border: 2px solid black;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-card {
+    display: inline-block;
+    /* margin: 5px; */
+}
+
+.image {
+    width: 125px;
+    height: 125px;
+}
+
+.remove-btn {
+    position: relative;
+    left: 126px;
+    bottom: 110px;
+}
+
+.placeholder {
+    position: relative;
+    top: 50%;
+    text-align: center;
+    opacity: 0.5;
+}
