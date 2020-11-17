@@ -6,7 +6,7 @@ import getCookie from '../../utils/cookie'
 import AdminCategories from '../adminCategories'
 import AdminSizes from '../adminSizes'
 
-const InputProductCard = (props) => {
+const ModifyProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
     const [price, setPrice] = useState(props.price)
     const [discountPercent, setDiscountPercent] = useState(props.discount
@@ -104,4 +104,4 @@ const InputProductCard = (props) => {
     )
 }
 
-export default InputProductCard
+export default ModifyProductCard

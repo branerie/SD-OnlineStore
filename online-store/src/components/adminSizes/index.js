@@ -145,8 +145,8 @@ useEffect(() =>{
     return (
        <div className={styles.container}>
             <form className={styles.form} onSubmit={handleSumnit}>
-                <div>                   
-                    <h3>Available sizes</h3>
+                <div className={styles.availableSizes}>                   
+                    <div className={styles.h3}>Available sizes</div>
                 </div>
                 <div className={styles.table}>
                 {renderSizes()}

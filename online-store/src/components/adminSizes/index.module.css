@@ -56,3 +56,14 @@
 .scratchLine {
   text-decoration: line-through
 }
+
+.availableSizes {
+  display: flex;
+  justify-content: center;
+}
+
+.h3 {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 900;
+}
