@@ -47,10 +47,11 @@ router.put('/:id', async (req, res) => {
 
         const updateProductObject = productProps.reduce((acc, kvp) => {
             const [key, value] = kvp
-
-            if (typeof(value) === 'object' &&
-                Object.values(value).some(op => op === null)) {
-                    return acc
+            const isObjectWithEmptyProperties =
+                typeof(value) === 'object' && Object.values(value).some(op => op === null)
+                
+            if (isObjectWithEmptyProperties) {
+                return acc
             }
 
             acc[key] = value
