@@ -1,0 +1,15 @@
+.image-card {
+    display: inline-block;
+    /* margin: 5px; */
+}
+
+.image {
+    width: 125px;
+    height: 125px;
+}
+
+.remove-btn {
+    position: relative;
+    left: 126px;
+    bottom: 110px;
+}

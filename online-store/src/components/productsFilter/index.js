@@ -1,26 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React from 'react'
 import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
-import { getProductRanges } from '../../utils/product'
+import ProductsRangeFilter from '../productsRangeFilter'
+import ProductsBoolFilter from '../productsBoolFilter'
 
-const AdminAside = (props) => {
-    // const [productProps, setProductProps] = useState(null)
-
-    // const getProductPropsRange = useCallback(async () => {
-    //     const productPropRanges = await getProductRanges()
-    //     setProductProps(productPropRanges)
-    // }, [setProductProps])
-
-    // useEffect(() => {
-    //     getProductPropsRange()
-    // }, [getProductPropsRange])
-
-    // if (!productProps) {
-    //     return (
-    //         <div>Loading...</div>
-    //     )
-    // }
-
+const ProductsFilter = (props) => {
     const productProps = props.productProps
     if (!productProps) {
         return (
@@ -46,6 +30,16 @@ const AdminAside = (props) => {
                         propName='sizes'
                         values={productProps.sizes}
                         onChange={props.onCatChange} />
+                <ProductsRangeFilter
+                        title='Price'
+                        propName='price'
+                        min={productProps.minPrice}
+                        max={productProps.maxPrice}
+                        onChange={props.onRangeChange} />
+                <ProductsBoolFilter
+                        title='Discount'
+                        propName='discount'
+                        onChange={props.onBoolChange} />
             </div>
             <div>
                 {props.children}
@@ -54,4 +48,4 @@ const AdminAside = (props) => {
     )
 }
 
-export default AdminAside
+export default ProductsFilter
