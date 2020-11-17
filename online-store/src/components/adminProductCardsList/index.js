@@ -2,9 +2,7 @@ import React from 'react'
 import styles from './index.module.css'
 import AdminProductCard from '../adminProductCard'
 
-const AdminProductCardsList = (props) => {
-    const productPage = props.productPage
-
+const AdminProductCardsList = ({ productPage, onProductDelete }) => {
     function renderProduct() {
         if (!productPage) {
             return <div>Loading product cards...</div>
@@ -12,7 +10,10 @@ const AdminProductCardsList = (props) => {
 
         return productPage.map(product => {
             return (
-                <AdminProductCard key={product.id} {...product} />
+                <AdminProductCard
+                    key={product.id}
+                    {...product}
+                    onProductDelete={onProductDelete} />
             )
         })
     }

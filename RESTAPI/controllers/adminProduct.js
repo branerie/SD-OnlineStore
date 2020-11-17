@@ -46,7 +46,14 @@ router.put('/:id', async (req, res) => {
             .filter(kvp => Product.schema.obj.hasOwnProperty(kvp[0]))
 
         const updateProductObject = productProps.reduce((acc, kvp) => {
-            acc[kvp[0]] = kvp[1]
+            const [key, value] = kvp
+
+            if (typeof(value) === 'object' &&
+                Object.values(value).some(op => op === null)) {
+                    return acc
+            }
+
+            acc[key] = value
             return acc
         }, {})
 

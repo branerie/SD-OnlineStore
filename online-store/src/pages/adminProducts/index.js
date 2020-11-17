@@ -35,7 +35,7 @@ const AdminProductsPage = () => {
 
 	useEffect(() => {
 		getProductPropsRange()
-	}, [getProductPropsRange])
+	}, [getProductPropsRange, setProductPage])
 
 	useEffect(() => {
 		getCurrentProductsPage(categoricalFilters, rangeFilters, boolFilters, page)
@@ -79,6 +79,11 @@ const AdminProductsPage = () => {
 		setPage(newPage)
 	}
 
+	const handleProductDelete = (productId) => {
+		const newProductsList = productPage.filter(p => p.id !== productId)
+		setProductPage(newProductsList)
+	}
+
 	console.log(3)
 
 	return (
@@ -90,7 +95,10 @@ const AdminProductsPage = () => {
 					onRangeChange={handleRangeFilterChange}
 					onBoolChange={handleBoolFilterChange} />
 				<main className={styles.cards}>
-					<AdminProductCardsList page={page} productPage={productPage} />
+					<AdminProductCardsList
+						page={page}
+						productPage={productPage}
+						onProductDelete={handleProductDelete} />
 					<Pagination
 						page={page}
 						totalCount={totalCount}
