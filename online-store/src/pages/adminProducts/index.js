@@ -82,21 +82,23 @@ const AdminProductsPage = () => {
 	console.log(3)
 
 	return (
-		<div className={styles.container}>
-			<ProductsFilter
-				productProps={productProps}
-				onCatChange={handleCatFilterChange}
-				onRangeChange={handleRangeFilterChange}
-				onBoolChange={handleBoolFilterChange} />
-			<main className={styles.cards}>
-				<AdminProductCardsList page={page} productPage={productPage} />
-				<Pagination
-					page={page}
-					totalCount={totalCount}
-					pageLength={PAGE_LENGTH}
-					onChange={handlePageChange} />
-			</main>
-		</div>
+		<>
+			<div className={styles.container}>
+				<ProductsFilter
+					productProps={productProps}
+					onCatChange={handleCatFilterChange}
+					onRangeChange={handleRangeFilterChange}
+					onBoolChange={handleBoolFilterChange} />
+				<main className={styles.cards}>
+					<AdminProductCardsList page={page} productPage={productPage} />
+					<Pagination
+						page={page}
+						totalCount={totalCount}
+						pageLength={PAGE_LENGTH}
+						onChange={handlePageChange} />
+				</main>
+			</div>
+		</>
 	)
 }
 

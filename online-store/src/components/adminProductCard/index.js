@@ -12,13 +12,14 @@ const AdminProductCard = (props) => {
     const changeEditingState = () => {
         setIsEditing(!isEditing)
        
-    }
-  
+    }  
 
     return (
         <div className={styles.container}>
             
-                {isEditing ? <InputProductCard key={props.id} {...props} /> : <ProductCard key={props.id} {...props} /> }
+                {isEditing 
+                    ? <InputProductCard key={props.id} {...props} /> 
+                    : <ProductCard key={props.id} {...props} /> }
 
                 {user.isAdmin ?
                     <div className={styles.adminButtons}>

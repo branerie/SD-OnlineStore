@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styles from './index.module.css'
+import getCookie from '../../utils/cookie'
 import image from '../../images/1111.jpg'
 import Input from '../input'
-import getCookie from '../../utils/cookie'
-import InputImages from '../inputImage'
+import DragAndDrop from '../dragAndDrop'
 
 const InputProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
@@ -111,7 +111,7 @@ const InputProductCard = (props) => {
 
             <button type='submit'>SAVE</button>
         </form>
-        <InputImages />
+        <DragAndDrop />
         </div>
     )
 }
