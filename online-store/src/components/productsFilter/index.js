@@ -3,6 +3,7 @@ import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
 import ProductsRangeFilter from '../productsRangeFilter'
 import ProductsBoolFilter from '../productsBoolFilter'
+import { Link } from 'react-router-dom'
 
 const ProductsFilter = (props) => {
     const productProps = props.productProps
@@ -15,6 +16,7 @@ const ProductsFilter = (props) => {
     return (
         <aside>
             <div className={styles.container}>
+                <Link to="/admin/products/add" className={styles.addProduct} >Add Product</Link>
                 <ProductsCheckboxFilter
                         title='Categories'
                         propName='categories'

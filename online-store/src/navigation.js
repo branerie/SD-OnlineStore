@@ -6,9 +6,9 @@ import {
     Redirect
 } from 'react-router-dom'
 import UserContext from './Context'
-
 import HomePage from './pages/home'
 import AdminProductsPage from './pages/adminProducts'
+import AddProductCard from './pages/addProduct'
 
 const Navigation = () => {
     const { isAdmin } = useContext(UserContext)
@@ -17,6 +17,9 @@ const Navigation = () => {
         <BrowserRouter>
             <Switch>
             <Route exact path='/' component={HomePage} />
+            <Route path='/admin/products/add'>
+                {isAdmin ? (<AddProductCard />) : (<Redirect to='/login' />) }
+            </Route>
             <Route path='/admin/products'>
                 {isAdmin ? (<AdminProductsPage />) : (<Redirect to='/login' />) }
             </Route>

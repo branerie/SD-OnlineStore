@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid blue;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 25px;
+    background-color: bisque;
+    margin: 25px auto;
+    width: 500px;
+    height: 500px;
+    align-items: center;
+
+}
+
+.main {
+    display: flex;
+    flex-grow: 10;
+}
+
+.button {
+    flex-grow: 1;
+}

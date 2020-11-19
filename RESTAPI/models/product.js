@@ -71,17 +71,21 @@ productSchema.virtual('discountPrice').get(function () {
 })
 
 function preprocessDiscountOnCreate(next) {
-    if (this.discount) {
-        if (!this.discount.hasOwnProperty('percent') ||
-            !this.discount.hasOwnProperty('endDate')) {
+    if (this.discount.$isEmpty()){
+        return next()
+    }
+    
+    if (this.discount.hasOwnProperty('endDate') &&
+        this.discount.hasOwnProperty('percent')) {
 
-            throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
-        }
-
-        this.discount.percent /= 100
+        if (this.discount.percent && this.discount.endDate) {
+            this.discount.percent /= 100
+            return next() 
+        }                   
     }
 
-    next()
+    throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
+
 }
 
 function preprocessDiscountOnUpdate(next) {
