@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import ProductsContext from '../../ProductsContext'
 import styles from './index.module.css'
 
 const Pagination = (props) => {
-    const totalPages = Math.ceil(props.totalCount / props.pageLength)
+    const productsContext = useContext(ProductsContext)
+
+    const totalPages = Math.ceil(productsContext.totalCount / props.pageLength)
 
     if (totalPages < 2) {
         return null
@@ -14,7 +17,8 @@ const Pagination = (props) => {
         <div>
             {displayedPageNumbers.map(displayedPageNumber => {
                 const actualPageNumber = displayedPageNumber - 1
-                const isSamePage = actualPageNumber === props.page
+                
+                const isSamePage = actualPageNumber === productsContext.page
 
                 if (isSamePage) {
                     return <button key={actualPageNumber}
@@ -24,7 +28,7 @@ const Pagination = (props) => {
                 }
                 
                 return <button key={actualPageNumber}
-                               onClick={() => props.onChange(actualPageNumber)}
+                               onClick={() => productsContext.handlePageChange(actualPageNumber)}
                                className={styles['page-link']} >
                             {displayedPageNumber}
                        </button>

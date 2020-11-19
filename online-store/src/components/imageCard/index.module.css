@@ -1,15 +1,17 @@
 .image-card {
-    display: inline-block;
-    /* margin: 5px; */
+    max-width: 100px;
+    max-height: 100px;
+    margin: 10px;
+    position: relative;
 }
 
 .image {
-    width: 125px;
-    height: 125px;
+    width: 100px;
+    height: 100px;
 }
 
 .remove-btn {
-    position: relative;
-    left: 126px;
-    bottom: 110px;
+    position: absolute;
+    left: 73px;
+    bottom: 79px;
 }

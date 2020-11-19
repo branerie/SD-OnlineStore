@@ -1,7 +1,12 @@
 const router = require('express').Router()
-const { restrictToAdmin } = require('../utils/authenticate')
+const cloudinary = require('cloudinary').v2
+
 const Product = require('../models/product')
+
+const { restrictToAdmin } = require('../utils/authenticate')
 const { isMongoError } = require('../utils/utils')
+
+const PRODUCT_NOT_FOUND_ERROR = 'Product with id {id} does not exist.'
 
 router.use('/', restrictToAdmin)
 
@@ -27,7 +32,8 @@ router.post('/', async (req, res) => {
             gender,
             categories
         })
-        res.send({ status: 'Success', id: createdProduct._id })
+
+        res.send({ status: 'Success!', id: createdProduct._id })
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send(error.message)
@@ -38,9 +44,37 @@ router.post('/', async (req, res) => {
 
 })
 
+router.post('/:id/images', async (req, res) => {
+    const { path } = req.body
+    const productId = req.params.id
+
+    try {
+        if (!path) {
+            return res.status(400).send({ error: 'Request body must contain key "path".' })
+        }
+
+        const product = await Product.findById(productId)
+
+        if (!product) {
+            return res.send({ error: PRODUCT_NOT_FOUND_ERROR.replace('{id}', productId) })
+        }
+
+        product.images.push(path)
+        await product.save()
+
+        return res.send({ status: 'Success!', addedImagePath: path })
+    } catch (error) {
+        if (isMongoError(error)) {
+            return res.status(403).send({ error: error.message })
+        }
+
+        return res.status(500).send({ error: error.message })
+    }
+})
+
 router.put('/:id', async (req, res) => {
     const id = req.params.id
-    
+
     try {
         const productProps = Object.entries(req.body)
             .filter(kvp => Product.schema.obj.hasOwnProperty(kvp[0]))
@@ -48,8 +82,8 @@ router.put('/:id', async (req, res) => {
         const updateProductObject = productProps.reduce((acc, kvp) => {
             const [key, value] = kvp
             const isObjectWithEmptyProperties =
-                typeof(value) === 'object' && Object.values(value).some(op => op === null)
-                
+                typeof (value) === 'object' && Object.values(value).some(op => op === null)
+
             if (isObjectWithEmptyProperties) {
                 return acc
             }
@@ -64,33 +98,71 @@ router.put('/:id', async (req, res) => {
         return res.send(`Product with id ${id} successfully updated.`)
     } catch (error) {
         if (isMongoError(error)) {
-            return res.status(403).send(error.message)
+            return res.status(403).send({ error: error.message })
         }
 
         if (error.name === 'CastError') {
-            return res.status(403).send(`Product with id ${id} does not exist.`)
+            return res.status(403).send({ error: PRODUCT_NOT_FOUND_ERROR.replace('{id}', id) })
         }
 
-        return res.status(500).send(error.message)
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.delete('/:productId/images/:imageDir/:imagePublicName', async (req, res) => {
+    try {
+        const { productId, imageDir, imagePublicName } = req.params
+        const imagePath = imageDir.concat('/', imagePublicName)
+        const imagePublicId = imagePublicName.split('.')[0]
+
+        const product = await Product.findById(productId)
+        if (!product) {
+            return res.status(400).send({ error: PRODUCT_NOT_FOUND_ERROR.replace('{id}', productId) })
+        }
+
+        // const productImagesLength = product.images.length
+        const productToDelete = product.images.find(image => image === imagePath)
+        if (!productToDelete) {
+            return res.status(400).send({ error: `Image with public id ${imagePublicId} is not part of the listing for product with id ${productId}` })
+        }
+
+        product.images.pull(productToDelete)
+
+        await product.save()
+
+        cloudinary.uploader.destroy(imagePublicId, function (error, result) {
+            if (error) {
+                return res.status(500).send({ error })
+            }
+
+            if (result.result === 'not found') {
+                return res.status(400).send({ error: `Image with public id ${imagePublicId} not found.` })
+            }
+
+            return res.send({ status: 'Success!', deletedImageId: imagePublicId })
+        })
+    } catch(error) {
+        console.log(error)
     }
 })
 
 router.delete('/:id', async (req, res) => {
+    const id = req.params.id
+
     try {
-        const id = req.params.id
         await Product.findByIdAndDelete(id)
 
         return res.send({ success: true, removedId: id })
     } catch (error) {
         if (isMongoError(error)) {
-            res.status(403).send(error.message)
+            res.status(403).send({ error: error.message })
         }
 
         if (error.name === 'CastError') {
-            return res.status(403).send(`Product with id ${id} does not exist.`)
+            return res.status(403).send({ error: PRODUCT_NOT_FOUND_ERROR.replace('{id}', id) })
         }
 
-        res.status(500).send(error.message)
+        res.status(500).send({ error: error.message })
     }
 })
 
@@ -100,7 +172,7 @@ router.patch('/:id/categories', async (req, res) => {
         const product = await Product.findById(productId)
 
         if (!product) {
-            return res.status(404).send({ error: `Product with id ${productId} does not exist.` })
+            return res.status(404).send({ error: PRODUCT_NOT_FOUND_ERROR.replace('{id}', productId) })
         }
 
         for (let operation of req.body.operations) {
@@ -145,7 +217,7 @@ router.patch('/:id/sizes', async (req, res) => {
         const product = await Product.findById(productId)
 
         if (!product) {
-            return res.status(404).send({ error: `Product with id ${productId} does not exist.` })
+            return res.status(404).send({ error: PRODUCT_NOT_FOUND_ERROR.replace('{id}', productId) })
         }
 
         for (let operation of req.body.operations) {
@@ -165,7 +237,7 @@ router.patch('/:id/sizes', async (req, res) => {
                     await product.sizes.pull(sizeToDelete)
                     await product.save()
                 }
-                
+
                 continue
             }
 
@@ -198,7 +270,7 @@ router.patch('/:id/sizes', async (req, res) => {
                     })
                 }
 
-                productSize.count = value.count            
+                productSize.count = value.count
             } else {
                 return res.status(400).send({ error: 'Invalid action applied to product sizes. Valid actions are "add", "edit" and "delete".' })
             }

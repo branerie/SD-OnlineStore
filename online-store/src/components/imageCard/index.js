@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.module.css'
 
-const ImageCard = ({ name, preview, dispatch }) => {
+const ImageCard = ({ src, dispatch }) => {
     const handleRemove = (event) => {
         event.preventDefault()
 
@@ -9,22 +9,23 @@ const ImageCard = ({ name, preview, dispatch }) => {
         const imgElement = parentDivElement.getElementsByTagName('img')[0]
         const fileSrc = imgElement.attributes['src'].value
 
-        dispatch({ type: 'removeFromList', fileToRemove: fileSrc })
+        dispatch(fileSrc)
     }
 
     return (
-        <div key={name} className={styles['image-card']}>
+        <div key={src} className={styles['image-card']}>
             <button
                 type="button"
                 className={styles['remove-btn']}
-                onClick={handleRemove}>x</button>
-            <span key={name}>
-                <img
-                    src={preview}
-                    alt=""
-                    className={styles.image}
-                />
-            </span>
+                onClick={handleRemove}
+            >
+                x
+            </button>
+            <img
+                src={src}
+                alt=""
+                className={styles.image}
+            />
         </div>
     )
 }

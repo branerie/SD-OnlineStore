@@ -1,19 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from './index.module.css'
 import AdminProductCard from '../adminProductCard'
+import ProductsContext from '../../ProductsContext'
 
-const AdminProductCardsList = ({ productPage, onProductDelete }) => {
+const AdminProductCardsList = () => {
+    const productsContext = useContext(ProductsContext)
+    const { productPage } = productsContext
+
     function renderProduct() {
         if (!productPage) {
-            return <div>Loading product cards...</div>
+            return <></>
         }
 
         return productPage.map(product => {
             return (
-                <AdminProductCard
-                    key={product.id}
-                    {...product}
-                    onProductDelete={onProductDelete} />
+                <AdminProductCard key={product.id} {...product} />
             )
         })
     }

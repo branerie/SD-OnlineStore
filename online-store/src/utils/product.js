@@ -56,11 +56,48 @@ const getProductsPage = async (categoricalFilters, rangeFilters, boolFilters, pa
     })
     
     const products = await promise.json()
-
     return products
+}
+
+const getProductImages = async (productId) => {
+    const promise = await fetch(`http://localhost:3001/api/product/${productId}/images`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+    const images = await promise.json()
+    return images
+}
+
+const addImageToProduct = async (productId, imagePath) => {
+    const result = await fetch(`http://localhost:3001/api/admin/product/${productId}/images`, {
+        method: 'POST',
+        body: {
+            path: imagePath
+        },
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+const getImagePath = (url) => {
+    const urlParts = url.split('/')
+    return urlParts.slice(urlParts.length - 2).join('/')
+}
+
+const getImagePublicId = (url) => {
+    const urlParts = url.split('/')
+    const imageName = urlParts[urlParts.length - 1]
+    return imageName.split('.')[0]
 }
 
 export {
     getProductRanges,
-    getProductsPage
+    getProductsPage,
+    getProductImages,
+    getImagePath,
+    getImagePublicId
 }

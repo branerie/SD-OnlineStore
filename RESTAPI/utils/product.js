@@ -46,7 +46,18 @@ const sortSizes = (a, b) => {
             .localeCompare(b.slice(0, b.length - 1))
 }
 
+const getImageUrl = (path) => {
+    return `http://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${path}`
+}
+
+const getImagePublicIdFromPath = (path) => {
+    const imageName = path.split('/')[1]
+    return imageName.split('.')[0]
+}
+
 module.exports = {
     getSizeRange,
-    sortSizes
+    sortSizes,
+    getImageUrl,
+    getImagePublicIdFromPath
 }

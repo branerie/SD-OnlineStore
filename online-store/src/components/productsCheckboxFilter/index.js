@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import ProductsContext from '../../ProductsContext'
 
 const ProductsCheckboxFilter = (props) => {
     const [values, setValues] = useState([])
+    const productsContext = useContext(ProductsContext)
 
     const handleChange = (event) => {
         const propValue = event.target.value
@@ -11,7 +13,7 @@ const ProductsCheckboxFilter = (props) => {
                 ? [...values, propValue]
                 : values.filter(v => v !== propValue)
 
-        props.onChange(props.propName, newValues)
+        productsContext.filtersDispatch({ type: 'cat', propName: props.propName, values: newValues })
         setValues(newValues)
     }
     

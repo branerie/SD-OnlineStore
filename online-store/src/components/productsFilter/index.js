@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
 import ProductsRangeFilter from '../productsRangeFilter'
 import ProductsBoolFilter from '../productsBoolFilter'
+import ProductContext from '../../ProductsContext'
 
 const ProductsFilter = (props) => {
-    const productProps = props.productProps
+    const productsContext = useContext(ProductContext)
+    
+    const productProps = productsContext.productProps
     if (!productProps) {
         return (
             <div>Loading Filters...</div>
@@ -18,28 +21,23 @@ const ProductsFilter = (props) => {
                 <ProductsCheckboxFilter
                         title='Categories'
                         propName='categories'
-                        values={productProps.categories}
-                        onChange={props.onCatChange} />
+                        values={productProps.categories} />
                 <ProductsCheckboxFilter
                         title='Brands'
                         propName='brand'
-                        values={productProps.brand}
-                        onChange={props.onCatChange} />
+                        values={productProps.brand} />
                 <ProductsCheckboxFilter
                         title='Sizes'
                         propName='sizes'
-                        values={productProps.sizes}
-                        onChange={props.onCatChange} />
+                        values={productProps.sizes} />
                 <ProductsRangeFilter
                         title='Price'
                         propName='price'
                         min={productProps.minPrice}
-                        max={productProps.maxPrice}
-                        onChange={props.onRangeChange} />
+                        max={productProps.maxPrice} />
                 <ProductsBoolFilter
                         title='Discount'
-                        propName='discount'
-                        onChange={props.onBoolChange} />
+                        propName='discount' />
             </div>
             <div>
                 {props.children}

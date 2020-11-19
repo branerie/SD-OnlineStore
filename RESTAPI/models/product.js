@@ -49,8 +49,7 @@ const productSchema = new mongoose.Schema({
     },
     images: [{
         type: String,
-        required: true,
-        match: [/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, 'Invalid image URL']
+        // match: [/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/, 'Invalid image URL']
     }],
     gender: {
         type: String,
@@ -71,14 +70,14 @@ productSchema.virtual('discountPrice').get(function () {
 })
 
 function preprocessDiscountOnCreate(next) {
-    if (this.discount) {
-        if (!this.discount.hasOwnProperty('percent') ||
-            !this.discount.hasOwnProperty('endDate')) {
-
-            throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
+    if (!this.discount.$isEmpty()) {
+        if (this.discount.hasOwnProperty('percent') &&  this.discount.percent &&
+            this.discount.hasOwnProperty('endDate') && this.discount.endDate) {
+            this.discount.percent /= 100
+            next()
         }
 
-        this.discount.percent /= 100
+        throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
     }
 
     next()

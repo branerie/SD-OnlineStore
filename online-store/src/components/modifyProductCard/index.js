@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import styles from './index.module.css'
-import image from '../../images/1111.jpg'
+
 import Input from '../input'
 import getCookie from '../../utils/cookie'
 import AdminCategories from '../adminCategories'
 import AdminSizes from '../adminSizes'
+
 
 const ModifyProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
@@ -17,12 +18,12 @@ const ModifyProductCard = (props) => {
         : null)
     const [description, setDescription] = useState(props.description)
     const [gender, setGender] = useState(props.gender)
-    const id = props.id
+    const productId = props.id
 
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        await fetch(`http://localhost:3001/api/admin/product/${id}`, {
+        await fetch(`http://localhost:3001/api/admin/product/${productId}`, {
             method: "PUT",
             body: JSON.stringify({
                 'price': price,
@@ -41,7 +42,7 @@ const ModifyProductCard = (props) => {
     return (
         <div className={styles.container}>
             <form className={styles.form} onSubmit={handleSubmit}>
-                <img alt='product' className={styles.img} src={image} />
+                <div id="imageUpload" style={{ display: 'inline-block' }}></div>
                 <Input
                     type='text'
                     label='Brand'
@@ -98,8 +99,8 @@ const ModifyProductCard = (props) => {
                 </div>
                 <button type='submit'>SAVE</button>
             </form>
-            <AdminSizes sizes={props.sizes} id={id} />
-            <AdminCategories categories={props.categories} id={id} />
+            <AdminSizes sizes={props.sizes} id={productId} />
+            <AdminCategories categories={props.categories} id={productId} />
         </div>
     )
 }

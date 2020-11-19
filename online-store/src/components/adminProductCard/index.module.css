@@ -1,12 +1,12 @@
 .container {
     width: 100%;
+    margin: 10px 0 10px 0;
     height: auto;
     border: 1px solid #234465;
     border-radius: 4px;
     background-color: bisque;
     display: flex;
     flex-direction: column;
-  
   }
 
 .confirmButton {

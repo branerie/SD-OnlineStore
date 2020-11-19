@@ -2,7 +2,7 @@ const router = require('express').Router()
 const Product = require('../models/product')
 const getDbProductsFilter = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
-const { getSizeRange, sortSizes } = require('../utils/product')
+const { getSizeRange, sortSizes, getImageUrl } = require('../utils/product')
 
 router.get('/ranges', async (req, res) => {
     const dbRequestFilter = getDbProductsFilter(req.query)
@@ -87,7 +87,9 @@ router.get('/products', async (req, res) => {
             },
             brand: p.brand,
             description: p.description,
-            images: p.images,
+            images: p.images.length > 0
+                ? p.images.map(image => getImageUrl(image))
+                : null,
             gender: p.gender,
             categories: p.categories,
             discountPrice: p.discountPrice
