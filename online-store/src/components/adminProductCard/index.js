@@ -5,7 +5,7 @@ import ProductCard from '../productCard'
 import ModifyProductCard from '../modifyProductCard'
 import getCookie from '../../utils/cookie'
 import ProductsContext from '../../ProductsContext'
-import ImageCards from '../imageCards'
+import AdminImageCards from '../adminImageCards'
 
 
 const AdminProductCard = (props) => {
@@ -31,17 +31,17 @@ const AdminProductCard = (props) => {
         })
 
         productsContext.handleProductDelete(id)
-    })
-
-    const handleImageChange = useCallback((productId, newImages) => {
-        
+        productsContext.updateFilters()
+        productsContext.updateProductsPage()
     })
 
     return (
         <div className={styles.container}>
-            <ImageCards images={props.images} productId={id} />
+            <AdminImageCards images={props.images} productId={id} />
             {isEditing
-                ? <ModifyProductCard key={props.id} {...props} onImageChange={handleImageChange} />
+                ? <ModifyProductCard
+                        key={props.id}
+                        {...props}  />
                 : <ProductCard key={props.id} {...props} />}
 
             {user.isAdmin ?

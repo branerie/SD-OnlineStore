@@ -5,3 +5,22 @@
 .cards {
     flex-grow: 3;
 }
+
+.add-product {
+    display: inline-block;
+    padding: 14px 6px;
+    margin: 10px 5px;
+    border-radius: 24px;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    color: #000000;
+    background-color:bisque;
+    text-align: center;
+    transition: all 0.5s
+}
+
+.add-product:hover {
+    background-color: rgb(209, 212, 29);
+}

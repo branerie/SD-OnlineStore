@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
 import Input from '../input'
 import getCookie from '../../utils/cookie'
+import ProductsContext from '../../ProductsContext'
 
 const AdminCategories = (props) => {
     const [categories, setCategories] = useState(getCategories())
     const [category, setCategory] = useState('')
     const id = props.id
+
+    const productsContext = useContext(ProductsContext)
 
     function getCategories() {
         return props.categories.map(eachCategory => `${eachCategory}`).join(', ')
@@ -36,6 +39,7 @@ const AdminCategories = (props) => {
         }
 
         setCategories(updatedCategories.categories.join(', '))
+        productsContext.updateFilters()
     }
 
 

@@ -4,20 +4,36 @@
     border: 2px solid blue;
     box-sizing: border-box;
     padding: 10px;
-    border-radius: 25px;
+    border-radius: 20px;
     background-color: bisque;
     margin: 25px auto;
-    width: 500px;
-    height: 500px;
-    align-items: center;
-
-}
-
-.main {
-    display: flex;
-    flex-grow: 10;
+    width: auto;
+    max-width: 33%;
+    height: auto;
+    max-height: 90%;
 }
 
 .button {
     flex-grow: 1;
+    margin-top: 1.2rem;
+    min-height: 30px;
+    border-radius: 5px;
+}
+
+.button:hover {
+    
+}
+
+.descriptionArea {
+    resize: none;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.input-images {
+    margin-bottom: 1.2rem;
 }

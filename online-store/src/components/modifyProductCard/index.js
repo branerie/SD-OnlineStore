@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useMemo, useReducer, useState } from 'react'
 import styles from './index.module.css'
 
 import Input from '../input'
 import getCookie from '../../utils/cookie'
 import AdminCategories from '../adminCategories'
 import AdminSizes from '../adminSizes'
-
+import ProductsContext from '../../ProductsContext'
 
 const ModifyProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
@@ -18,6 +18,9 @@ const ModifyProductCard = (props) => {
         : null)
     const [description, setDescription] = useState(props.description)
     const [gender, setGender] = useState(props.gender)
+
+    const productsContext = useContext(ProductsContext)
+
     const productId = props.id
 
     const handleSubmit = async (event) => {
@@ -37,12 +40,39 @@ const ModifyProductCard = (props) => {
                 'Authorization': getCookie('x-auth-cookie')
             }
         })
+
+        productsContext.updateFilters()
     }
+
+    const renderGender = useMemo(() => {
+        const genderInputs = [ 
+            { value: 'M', label: 'Male', checked: false },
+            { value: 'F', label: 'Female', checked: false },
+            { value: 'Unspecified', label: 'Unspecified', checked: false } 
+        ]
+    
+        genderInputs.forEach(g => {
+            if (g.value === gender) {
+                g.checked = true
+            }
+        })
+
+        return genderInputs.map(gender => {
+            return (
+                <label>
+                    <input type="radio"
+                        value={gender.value}
+                        name="gender"
+                        checked={gender.checked} />
+                    {gender.label}
+                </label>
+            )
+        })
+    })
 
     return (
         <div className={styles.container}>
             <form className={styles.form} onSubmit={handleSubmit}>
-                <div id="imageUpload" style={{ display: 'inline-block' }}></div>
                 <Input
                     type='text'
                     label='Brand'
@@ -84,18 +114,7 @@ const ModifyProductCard = (props) => {
                     onChange={e => setDescription(e.target.value)}
                 />
                 <div onChange={(e) => setGender(e.target.value)}>
-                    <label>
-                        <input type="radio" value="M" name="gender" />
-                    Male
-                </label>
-                    <label>
-                        <input type="radio" value="F" name="gender" />
-                    Female
-                </label>
-                    <label>
-                        <input type="radio" value="unspecified" name="gender" checked />
-                    Unspecified
-                </label>
+                    {renderGender}
                 </div>
                 <button type='submit'>SAVE</button>
             </form>

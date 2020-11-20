@@ -1,3 +1,19 @@
 .container {
    margin-bottom: 7px;
 }
+
+.input-wrapper {
+   display: flex;
+   justify-content: space-between;
+}
+
+.label {
+   flex-grow: 1;
+   text-align: right;
+   padding-right: 15px;
+}
+
+.input {
+   flex-grow: 5;
+   max-width: 60%;
+}

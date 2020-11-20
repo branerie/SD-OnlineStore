@@ -36,21 +36,21 @@ router.post('/', async (req, res) => {
         res.send({ status: 'Success!', id: createdProduct._id })
     } catch (error) {
         if (isMongoError(error)) {
-            return res.status(403).send(error.message)
+            return res.status(403).send({ error: error.message })
         }
 
-        return res.status(500).send(error.message)
+        return res.status(500).send({ error: error.message })
     }
 
 })
 
 router.post('/:id/images', async (req, res) => {
-    const { path } = req.body
+    const { data } = req.body
     const productId = req.params.id
 
     try {
-        if (!path) {
-            return res.status(400).send({ error: 'Request body must contain key "path".' })
+        if (!data) {
+            return res.status(400).send({ error: 'Request body must contain key "data".' })
         }
 
         const product = await Product.findById(productId)
@@ -59,10 +59,15 @@ router.post('/:id/images', async (req, res) => {
             return res.send({ error: PRODUCT_NOT_FOUND_ERROR.replace('{id}', productId) })
         }
 
-        product.images.push(path)
+        if (Array.isArray(data)) {
+            data.forEach(img => product.images.push(img))
+        } else {
+            product.images.push(data)
+        }
+
         await product.save()
 
-        return res.send({ status: 'Success!', addedImagePath: path })
+        return res.send({ status: 'Success!', addedImagePaths: data })
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })

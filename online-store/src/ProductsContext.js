@@ -8,7 +8,9 @@ const ProductsContext = React.createContext({
     filters: null,
     filtersDispatch: () => {},
     handlePageChange: () => {},
-    handleProductDelete: () => {}
+    handleProductDelete: () => {},
+    updateFilters: () => {},
+    updateProductPage: () => {}
 })
 
 export default ProductsContext

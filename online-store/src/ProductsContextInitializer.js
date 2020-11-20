@@ -21,24 +21,24 @@ const ProductsContextInitializer = (props) => {
 		setProductProps(productPropRanges)
 	}, [setProductProps])
 
-	const getCurrentProductsPage = useCallback(async (catFilters, rangeFilters, boolFilters, page) => {
+	const getCurrentProductsPage = useCallback(async () => {
 		const { total, productInfo } = await getProductsPage(
-			catFilters,
-			rangeFilters,
-			boolFilters,
+			filters.cat,
+			filters.range,
+			filters.bool,
 			page,
 			props.pageLength)
 
 		setProductPage(productInfo)
 		setTotalCount(total)
-	}, [setProductPage, setTotalCount])
+	}, [setProductPage, setTotalCount, props.pageLength, filters, page])
 
 	useEffect(() => {
 		getProductPropsRange()
-	}, [getProductPropsRange, setProductPage])
+    }, [getProductPropsRange, setProductPage])
 
 	useEffect(() => {
-		getCurrentProductsPage(filters.cat, filters.range, filters.bool, page)
+		getCurrentProductsPage()
 	}, [getCurrentProductsPage, page, filters])
 
 	useEffect(() => setPage(0), [filters])
@@ -95,7 +95,9 @@ const ProductsContextInitializer = (props) => {
             filters,
             filtersDispatch,
             handlePageChange,
-            handleProductDelete
+            handleProductDelete,
+            updateFilters: getProductPropsRange,
+            updateProductsPage: getCurrentProductsPage
         }}>
             {props.children}
         </ProductsContext.Provider>
