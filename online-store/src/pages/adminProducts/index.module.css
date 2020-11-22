@@ -3,8 +3,13 @@
 }
 
 .cards {
-    flex-grow: 3;
+    flex-grow: 11;
 }
+
+.filters {
+    flex-grow: 1;
+}
+
 
 .add-product {
     display: inline-block;

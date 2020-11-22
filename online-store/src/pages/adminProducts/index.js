@@ -15,7 +15,7 @@ const AdminProductsPage = () => {
 	return (
 		<div className={styles.container}>
 			<ProductsContextInitializer pageLength={PAGE_LENGTH}>
-				<aside>
+				<aside className={styles.filters}>
 					<Link to="/admin/products/add"
 						  className={styles['add-product']} >Add Product</Link>
 					<ProductsFilter />

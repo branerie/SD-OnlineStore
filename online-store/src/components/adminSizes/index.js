@@ -83,9 +83,11 @@ const AdminSizes = (props) => {
                         onChange={e => handleInputChange(e.target.value)}
                         step='1'
                     />
-                    <button onClick={() => editSize(inputField, 'edit')} >Submit</button>
+                    <button 
+                        onClick={() => editSize(inputField, 'edit')}
+                        className={styles['submit-btn']} >Submit</button>
                 </div>
-                <div className={styles.addField} >
+                <div className={styles['add-field']} >
                     <div className={styles.nameField} >Add sizes:</div>
                     <Input
                         type='text'
@@ -102,7 +104,9 @@ const AdminSizes = (props) => {
                         onChange={e => setAddSizeCount(e.target.value)}
                         step='1'
                     />
-                    <button onClick={() => addSize('add')} >Submit</button>
+                    <button 
+                        onClick={() => addSize('add')}
+                        className={styles['submit-btn']} >Submit</button>
                 </div>
             </div>
         )
@@ -152,8 +156,8 @@ const AdminSizes = (props) => {
     return (
         <div className={styles.container}>
             <form className={styles.form} onSubmit={handleSubmit}>
-                <div className={styles.availableSizes}>
-                    <div className={styles.h3}>Available sizes</div>
+                <div className={styles.title}>
+                    <span className={styles.h3}>Available sizes</span>
                 </div>
                 <div className={styles.table}>
                     {renderedSizes}

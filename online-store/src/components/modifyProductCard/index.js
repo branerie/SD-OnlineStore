@@ -113,7 +113,8 @@ const ModifyProductCard = (props) => {
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                 />
-                <div onChange={(e) => setGender(e.target.value)}>
+                <div onChange={(e) => setGender(e.target.value)}
+                     className={styles.gender}>
                     {renderGender}
                 </div>
                 <button type='submit'>SAVE</button>

@@ -15,5 +15,6 @@
 
 .input {
    flex-grow: 5;
+   min-width: 60%;
    max-width: 60%;
 }
