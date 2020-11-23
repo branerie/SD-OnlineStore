@@ -81,22 +81,23 @@ router.get('/products', async (req, res) => {
 
         const products = fullProducts.map(p => {
             return {
-            id: p._id,
-            sizes: p.sizes,
-            price: p.price,
-            discount: p.discount.$isEmpty() ? null : {
-                percent: p.discount.percent * 100,
-                endDate: p.discount.endDate.toISOString().slice(0, 10)
-            },
-            brand: p.brand,
-            description: p.description,
-            images: p.images.length > 0
-                ? p.images.map(image => getImageUrl(image))
-                : null,
-            gender: p.gender,
-            categories: p.categories,
-            discountPrice: p.discountPrice
-        }})
+                id: p._id,
+                sizes: p.sizes,
+                price: p.price,
+                discount: p.discount.$isEmpty() ? null : {
+                    percent: p.discount.percent * 100,
+                    endDate: p.discount.endDate.toISOString().slice(0, 10)
+                },
+                brand: p.brand,
+                description: p.description,
+                images: p.images.length > 0
+                    ? p.images.map(image => getImageUrl(image))
+                    : null,
+                gender: p.gender,
+                categories: p.categories,
+                discountPrice: p.discountPrice
+            }
+        })
 
         return res.send({ total: totalCount, productInfo: products })
     } catch (error) {

@@ -3,6 +3,8 @@ import styles from './index.module.css'
 import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
 
+import { registerUser } from '../../services/user'
+
 const EMAIL_MAX_LENGTH = 20
 const NAME_MAX_LENGTH = 20
 const PASSWORD_MIN_LENGTH = 6
@@ -11,40 +13,32 @@ const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA
 
 const RegisterPage = () => {
     const history = useHistory()
-    const { register , errors, handleSubmit ,setError } = useForm()
+    const { register, errors, handleSubmit, setError } = useForm()
 
-    const registerUser = async(data) => {
-        
-        const response = await fetch('http://localhost:3001/api/user/register',{
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+    const registerNewUser = async (data) => {
+        const registerResult = await registerUser(data)
 
-        if(response.status === 403 ){
-        const handleError = await response.json()
-        setError('email', {
-            type: 'string',
-            message: handleError.error
-        })
-    }
-        const token = response.headers.get('Authorization')
-        document.cookie = `x-auth-cookie=${token};`
-      
+        if (registerResult.uniqueRestriction) {
+            setError(registerResult.uniqueRestriction, {
+                type: 'string',
+                message: registerResult.error
+            })
+
+            return
+        }
+
         history.push('/')
     }
 
     return (
         <div>
-            <form className={styles.registerForm} onSubmit={handleSubmit(registerUser)}>
+            <form className={styles.registerForm} onSubmit={handleSubmit(registerNewUser)}>
                 <label for='fname'>First name:</label>
                 <input
                     name='firstName'
                     id='fname'
-                    type = 'text'
-                    ref ={ register({
+                    type='text'
+                    ref={register({
                         required: {
                             value: true,
                             message: 'Your input is required'
@@ -61,37 +55,37 @@ const RegisterPage = () => {
                 />
                 {errors.firstName && (<div className={styles.error}>{errors.firstName.message}</div>)}
                 <label for='lname'>Last name:</label>
-                <input 
+                <input
                     name='lastName'
                     id='lname'
-                    type = 'text'
-                    ref = {register({
+                    type='text'
+                    ref={register({
                         pattern: /^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/,
-                        required: true,                                        
+                        required: true,
                         maxLength: NAME_MAX_LENGTH
                     })}
                 />
-                    {errors.lastName?.type === 'required' && (
-                                                <div className={styles.error}>Your input is required</div>
-                                                )}
-                    {errors.lastName?.type === 'pattern' && (
-                                                <div className={styles.error}>Name can only contain Latin letters and dash (-).</div>
-                                                )}
-                    {errors.lastName?.type === 'maxLength' && (
-                                                <div className={styles.error}>Name must be shorter than {NAME_MAX_LENGTH} symbols.</div>
-                    )}
+                {errors.lastName?.type === 'required' && (
+                    <div className={styles.error}>Your input is required</div>
+                )}
+                {errors.lastName?.type === 'pattern' && (
+                    <div className={styles.error}>Name can only contain Latin letters and dash (-).</div>
+                )}
+                {errors.lastName?.type === 'maxLength' && (
+                    <div className={styles.error}>Name must be shorter than {NAME_MAX_LENGTH} symbols.</div>
+                )}
                 <label for='pass'>Password:</label>
-                <input 
+                <input
                     name='password'
                     id='pass'
-                    type = 'password'
-                    ref = {register({
+                    type='password'
+                    ref={register({
                         pattern: {
                             value: PASSWORD_PATTERN,
                             message: `Password must be between ${PASSWORD_MIN_LENGTH} to ${PASSWORD_MAX_LENGTH} characters long and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.`
                         },
                         required: {
-                            value : true,
+                            value: true,
                             message: 'Your input is required'
                         },
                         minLength: {
@@ -104,13 +98,13 @@ const RegisterPage = () => {
                         }
                     })}
                 />
-                    {errors.password && (<div className={styles.error}>{errors.password.message}</div>)}
+                {errors.password && (<div className={styles.error}>{errors.password.message}</div>)}
                 <label for='emails'>Your email address:</label>
                 <input
                     name='email'
                     id='emails'
                     type='string'
-                    ref = {register({
+                    ref={register({
                         required: {
                             value: true,
                             message: 'Your input is required'
@@ -126,7 +120,7 @@ const RegisterPage = () => {
                     })}
                 />
                 {errors.email && (<div className={styles.error}>{errors.email.message}</div>)}
-            <button type='submit'>Register</button>
+                <button type='submit'>Register</button>
             </form>
         </div>
     )

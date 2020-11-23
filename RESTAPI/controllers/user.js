@@ -49,7 +49,11 @@ router.post('/register', async (req, res) => {
     } catch (error) {
         if (isMongoError(error)) {
             if (error.message.includes('E11000')) {
-                error.message = `User with email ${email} already exists`
+                error.message = `User with email ${email} already exists.`
+                return res.status(403).send({
+                    error: error.message,
+                    uniqueRestriction: 'email'
+                })
             }
 
             return res.status(403).send({ error: error.message })
