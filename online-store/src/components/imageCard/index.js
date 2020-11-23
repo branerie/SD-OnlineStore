@@ -1,15 +1,11 @@
 import React from 'react'
 import styles from './index.module.css'
 
-const ImageCard = ({ src, dispatch }) => {
+const ImageCard = ({ src, handleImageRemove }) => {
     const handleRemove = (event) => {
         event.preventDefault()
 
-        const parentDivElement = event.target.parentElement
-        const imgElement = parentDivElement.getElementsByTagName('img')[0]
-        const fileSrc = imgElement.attributes['src'].value
-
-        dispatch(fileSrc)
+        handleImageRemove()
     }
 
     return (

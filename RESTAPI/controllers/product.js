@@ -34,6 +34,9 @@ router.get('/ranges', async (req, res) => {
         productRanges = productRanges[0]
 
         productRanges.categories = [...new Set(productRanges.categories.flat())]
+        productRanges.categories.sort((a, b) => a.localeCompare(b))
+
+        productRanges.brand.sort((a, b) => a.localeCompare(b))
 
         productRanges.minCount = Math.min(...productRanges.minCount)
         productRanges.maxCount = Math.max(...productRanges.maxCount)

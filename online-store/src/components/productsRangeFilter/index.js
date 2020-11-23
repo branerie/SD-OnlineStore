@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import styles from './index.module.css'
 import ProductsContext from '../../ProductsContext'
 
 const ProductsRangeFilter = (props) => {
@@ -19,22 +20,26 @@ const ProductsRangeFilter = (props) => {
     return (
         <div>
             <h3>{props.title}</h3>
+            <label>Min: </label>
             <input
                 type="number"
                 name={`min${capitalizedPropName}`}
+                className={styles['range-input']}
                 value={minValue}
                 min="0"
                 max={props.max}
                 onChange={e => setMinValue(e.target.value)} 
                 onBlur={handleChange} />
+            <label>Max: </label>
             <input
                 type="number"
                 name={`max${capitalizedPropName}`}
+                className={styles['range-input']}
                 value={maxValue}
                 min="0"
                 max={props.max}
                 onChange={e => setMaxValue(e.target.value)}
-                onBlur={() => props.onChange(props.propName, { min: minValue, max: maxValue })} />
+                onBlur={handleChange} />
         </div>
     )
 }

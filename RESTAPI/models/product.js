@@ -53,7 +53,7 @@ const productSchema = new mongoose.Schema({
     }],
     gender: {
         type: String,
-        enum: ['M', 'F']
+        enum: ['M', 'F', 'U']
     },
     categories: [{
         type: String,
@@ -76,7 +76,6 @@ function preprocessDiscountOnCreate(next) {
     
     if (this.discount.hasOwnProperty('endDate') &&
         this.discount.hasOwnProperty('percent')) {
-
         if (this.discount.percent && this.discount.endDate) {
             this.discount.percent /= 100
             return next() 
@@ -84,7 +83,6 @@ function preprocessDiscountOnCreate(next) {
     }
 
     throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
-
 }
 
 function preprocessDiscountOnUpdate(next) {

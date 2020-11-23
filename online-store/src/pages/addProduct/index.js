@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useReducer } from 'react'
 import { useHistory } from 'react-router-dom'
-import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import Input from '../../components/input'
+import DragAndDrop from '../../components/dragAndDrop'
+import GenderInput from '../../components/genderInput'
+
+import { createProduct, addImagesToProduct } from '../../services/adminProduct'
+import { uploadImages } from '../../services/product'
 
 const BRAND_MAX_LENGTH = 30
 const DESCRIPTION_MAX_LENGTH = 1000
@@ -16,51 +20,105 @@ const AddProductCard = () => {
     const [price, setPrice] = useState(0)
     const [discountInPercent, setDiscountInPercent] = useState(null)
     const [discountEndDate, setDiscountEndDate] = useState(null)
-    const [description , setDescrioption] = useState('')
-    const [gender, setGender] = useState(null)
+    const [description, setDescription] = useState('')
+    const [gender, setGender] = useState('U')
     const sizes = []
     const newCategories = []
-     
-    const handleSumit = async (event) => {
+
+    const [images, imagesDispatch] = useReducer(reducer, [])
+
+    function reducer(state, action) {
+        switch (action.type) {
+            case 'addToList':
+                return [...state, action.files]
+                  
+            case 'removeFromList':
+                return state.filter(file => file.url !== action.fileToRemove)
+            case 'reset':
+                return []
+            default:
+                return state
+        }
+    }
+
+    const handleSubmit = async (event) => {
         event.preventDefault()
 
-        const sizeValue = {'sizeName': sizeName , 'count': sizeCount}
+        const sizeValue = { sizeName: sizeName, count: sizeCount }
         sizes.push(sizeValue)
         newCategories.push(categories)
 
         const newProduct = {
-            'brand': brand,
-            'categories': newCategories,
-            'sizes': sizes,
-            'price': price,
-            'description': description,
-            'gender': gender
+            brand,
+            sizes,
+            price,
+            description,
+            gender,
+            categories: newCategories,
         }
 
-        if(discountInPercent !== null && discountEndDate !== null){
-            newProduct.discount = {'percent': discountInPercent, 'endDate': discountEndDate}
-        }        
+        if (discountInPercent !== null && discountEndDate !== null) {
+            newProduct.discount = { percent: discountInPercent, endDate: discountEndDate }
+        }
 
-        await fetch('http://localhost:3001/api/admin/product/',{
-            method: 'POST',
-            body: JSON.stringify(
-                newProduct
-            ),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
-            }
-        })
+        const productCreationResult = await createProduct(newProduct)
+        if (productCreationResult.error) {
+            //TODO: handle errors
+        }
+
+        const addedImagePaths = await uploadImages(images)
+
+        const imagesAddResult = await addImagesToProduct(productCreationResult.id, addedImagePaths)
+        if (imagesAddResult.error) {
+            //TODO: handle error if adding images was unsuccessful 
+        }
 
         history.push('/admin/products')
     }
+
+    const preventEnterSubmit = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault()
+        }
+    }
+
+    const handleImageRemove = (removedImage) => {
+        imagesDispatch({ type: 'removeFromList', fileToRemove: removedImage })
+    }
+
+    const handleImageAdd = (addedImages) => {
+        imagesDispatch({ type: 'addToList', files: addedImages })
+    }
+
+    const browseImageAdd = (event) => {
+        const inputElement = event.target
+        let files = Array.from(inputElement.files)
+
+        files.forEach(file => {
+            handleImageAdd({ file, url: URL.createObjectURL(file)})
+        })
+    }
+
+    const handleImageBrowseClick = () => {
+        document.getElementById('imageBrowseInput').click()
+    }
+
     return (
-        <form className={styles.container} onSubmit={handleSumit}>
-            <main className={styles.main}>
-                <div>
-                    <h3>tuk shte vkarvame snimki</h3>
-                </div>
-                <div className={styles.inputFields}>
+        <main className={styles.container}>
+            <div className={styles['input-images']}>
+                <DragAndDrop
+                    imageCards={images.map(img => img.url)}
+                    handleImageRemove={handleImageRemove}
+                    handleImageAdd={handleImageAdd} />
+                <input
+                    id='imageBrowseInput'
+                    type='file'
+                    style={{ display: 'none' }}
+                    onChange={browseImageAdd} />
+                <button type="button" onClick={handleImageBrowseClick}>Add Image</button>
+            </div>
+            <div className={styles['input-fields']}>
+                <form className={styles.form} onSubmit={handleSubmit} onKeyPress={preventEnterSubmit}>
                     <Input
                         type='text'
                         label='Brand'
@@ -73,7 +131,7 @@ const AddProductCard = () => {
                         label='Categories'
                         id='categories'
                         placeholder='Shoes, Bags, T-shirts ...'
-                        onChange={e => setCategories(e.target.value)}                        
+                        onChange={e => setCategories(e.target.value)}
                     />
                     <Input
                         type='text'
@@ -88,7 +146,7 @@ const AddProductCard = () => {
                         id='amount'
                         placeholder='100, 200, 250 ...'
                         onChange={e => setSizeCount(e.target.value)}
-                        step= '1'
+                        step='1'
                     />
                     <Input
                         type='number'
@@ -109,32 +167,20 @@ const AddProductCard = () => {
                         id='discountEndDate'
                         onChange={e => setDiscountEndDate(e.target.value)}
                     />
-                    <label for="description">Product description :</label><br></br>
+                    <label htmlFor="description">Product description :</label><br></br>
                     <textarea
                         id="description"
                         rows="4"
                         cols="20"
-                        onChange={e => setDescrioption(e.target.value)}
+                        onChange={e => setDescription(e.target.value)}
+                        className={styles.descriptionArea}
                         maxLength={DESCRIPTION_MAX_LENGTH}>
                     </textarea>
-                    <div onChange={(e) => setGender(e.target.value)}>
-                        <label>
-                            <input type="radio" value="M" name="gender" />
-                                Male
-                        </label>
-                        <label>
-                            <input type="radio" value="F" name="gender" />
-                                Female
-                        </label>
-                        <label>
-                            <input type="radio" value="unspecified" name="gender" checked />
-                                Unspecified
-                        </label>
-                    </div>
-                </div>
-            </main>
-            <button className={styles.button} type='submit'>SAVE</button> 
-        </form>
+                    <GenderInput currentGender={gender} onChange={setGender} />
+                    <button className={styles.button} type='submit'>SAVE</button>
+                </form>
+            </div>
+        </main>
     )
 }
 

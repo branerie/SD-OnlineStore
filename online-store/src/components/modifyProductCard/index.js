@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext,  useState } from 'react'
 import styles from './index.module.css'
 
 import Input from '../input'
-import getCookie from '../../utils/cookie'
 import AdminCategories from '../adminCategories'
 import AdminSizes from '../adminSizes'
+import ProductsContext from '../../ProductsContext'
+import GenderInput from '../genderInput'
 
+import { updateProduct } from '../../services/adminProduct'
 
 const ModifyProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
@@ -18,31 +20,36 @@ const ModifyProductCard = (props) => {
         : null)
     const [description, setDescription] = useState(props.description)
     const [gender, setGender] = useState(props.gender)
+
+    const productsContext = useContext(ProductsContext)
+
     const productId = props.id
 
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        await fetch(`http://localhost:3001/api/admin/product/${productId}`, {
-            method: "PUT",
-            body: JSON.stringify({
-                'price': price,
-                'discount': { 'percent': discountPercent, 'endDate': discountEndDate },
-                'brand': brand,
-                'description': description,
-                'gender': gender
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
+        const newProductProps = {
+            price,
+            brand,
+            description,
+            gender,
+            discount: { 
+                percent: discountPercent,
+                endDate: discountEndDate
             }
-        })
+        }
+
+        const updateResult = await updateProduct(productId, newProductProps)
+        if (updateResult.error) {
+            //TODO: handle errors
+        }
+
+        productsContext.updateFilters()
     }
 
     return (
         <div className={styles.container}>
             <form className={styles.form} onSubmit={handleSubmit}>
-                <div id="imageUpload" style={{ display: 'inline-block' }}></div>
                 <Input
                     type='text'
                     label='Brand'
@@ -83,20 +90,7 @@ const ModifyProductCard = (props) => {
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                 />
-                <div onChange={(e) => setGender(e.target.value)}>
-                    <label>
-                        <input type="radio" value="M" name="gender" />
-                    Male
-                </label>
-                    <label>
-                        <input type="radio" value="F" name="gender" />
-                    Female
-                </label>
-                    <label>
-                        <input type="radio" value="unspecified" name="gender" checked />
-                    Unspecified
-                </label>
-                </div>
+                <GenderInput currentGender={gender} onChange={setGender} />
                 <button type='submit'>SAVE</button>
             </form>
             <AdminSizes sizes={props.sizes} id={productId} />

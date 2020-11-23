@@ -1,47 +1,57 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
 import Input from '../input'
-import getCookie from '../../utils/cookie'
+import ProductsContext from '../../ProductsContext'
+
+import { updateProductCategories } from '../../services/adminProduct'
 
 const AdminCategories = (props) => {
-    const [categories, setCategories] = useState(getCategories())
+    const [categories, setCategories] = useState(props.categories)
     const [category, setCategory] = useState('')
-    const id = props.id
-
-    function getCategories() {
-        return props.categories.map(eachCategory => `${eachCategory}`).join(', ')
-    }
+    const [categoryChanges, setCategoryChanges] = useState([])
+    const productsContext = useContext(ProductsContext)
 
     const editCategories = async (event, action) => {
         event.preventDefault()
 
-        const response = await fetch(`http://localhost:3001/api/admin/product/${id}/categories`, {
-            method: 'PATCH',
-            body: JSON.stringify({
-                'operations': [{
-                    'action': action,
-                    'value': category
-                }]
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
-            }
-        })
+        if (action === 'add') {
+            setCategories([...categories, category])
+        } else {
+            setCategories(categories.filter(cat => cat !== category))
+        }
 
-        const updatedCategories = await response.json()
+        setCategoryChanges([
+            ...categoryChanges,
+            { action: action, value: category }
+        ])
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+
+        if (categoryChanges.length === 0) {
+            return
+        }
+
+        const productId = props.id
+        const updatedCategories = await updateProductCategories(productId, categoryChanges)
         if (updatedCategories.error) {
             //TODO: Display error to client
             return
         }
 
-        setCategories(updatedCategories.categories.join(', '))
+        setCategoryChanges([])
+        productsContext.updateFilters()
     }
 
-
     return (
-        <form className={styles.container} onSubmit={e => editCategories(e, 'add')}>
-            <div>Product is set in categories: <span>{categories}</span></div>
+        <form className={styles.container} onSubmit={handleSubmit}>
+            <div>
+                <span className={styles.title}>Product categories:</span>
+                <span>
+                    {categories.map(cat => `${cat}`).join(', ')}
+                </span>
+            </div>
             <Input
                 type='text'
                 label='Edit categories field'
@@ -51,8 +61,17 @@ const AdminCategories = (props) => {
                 maxLength='20'
                 size='35'
             />
-            <button className={styles.button} type='submit'>Add categories</button>
-            <button className={styles.button} onClick={(e) => editCategories(e, 'delete')}>Remove categories</button>
+            <button
+                className={styles.button}
+                onClick={e => editCategories(e, 'add')}>
+                    Add category
+            </button>
+            <button
+                className={styles.button}
+                onClick={(e) => editCategories(e, 'delete')}>
+                    Remove category
+            </button>
+            <button type="submit">SAVE</button>
         </form>
     )
 }

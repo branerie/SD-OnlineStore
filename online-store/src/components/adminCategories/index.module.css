@@ -5,4 +5,9 @@
     border-radius: 4px;
     background-color: rgb(243, 154, 221);
     flex: 1;
+    padding: 10px;
+  }
+
+  .title {
+    margin-right: 10px;
   }

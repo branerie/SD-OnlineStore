@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
 
 import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
@@ -18,9 +17,8 @@ const ProductsFilter = (props) => {
     }
 
     return (
-        <aside>
+        <>
             <div className={styles.container}>
-                <Link to="/admin/products/add" className={styles.addProduct} >Add Product</Link>
                 <ProductsCheckboxFilter
                         title='Categories'
                         propName='categories'
@@ -45,7 +43,7 @@ const ProductsFilter = (props) => {
             <div>
                 {props.children}
             </div>
-        </aside>
+        </>
     )
 }
 
