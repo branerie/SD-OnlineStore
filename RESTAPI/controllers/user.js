@@ -52,10 +52,10 @@ router.post('/register', async (req, res) => {
                 error.message = `User with email ${email} already exists`
             }
 
-            return res.status(403).send(error.message)
+            return res.status(403).send({error: error.message})
         }
 
-        return res.status(500).send(error.message)
+        return res.status(500).send({error: error.message})
     }
 })
 

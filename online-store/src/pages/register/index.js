@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.module.css'
 import { useForm } from 'react-hook-form'
-import getCookie from '../../utils/cookie'
+import { useHistory } from 'react-router-dom'
 
 const EMAIL_MAX_LENGTH = 20
 const NAME_MAX_LENGTH = 20
@@ -10,17 +10,30 @@ const PASSWORD_MAX_LENGTH = 30
 const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`);
 
 const RegisterPage = () => {
-    const { register , errors, handleSubmit } = useForm()
+    const history = useHistory()
+    const { register , errors, handleSubmit ,setError } = useForm()
 
     const registerUser = async(data) => {
         
-        await fetch('http://localhost:3001/api/user/register',{
+        const response = await fetch('http://localhost:3001/api/user/register',{
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json'
             }
         })
+
+        if(response.status === 403 ){
+        const handleError = await response.json()
+        setError('email', {
+            type: 'string',
+            message: handleError.error
+        })
+    }
+        const token = response.headers.get('Authorization')
+        document.cookie = `x-auth-cookie=${token};`
+      
+        history.push('/')
     }
 
     return (
@@ -28,62 +41,91 @@ const RegisterPage = () => {
             <form className={styles.registerForm} onSubmit={handleSubmit(registerUser)}>
                 <label for='fname'>First name:</label>
                 <input
-                        name='firstName'
-                        id='fname'
-                        type = 'text'
-                        ref = {register({
-                                        required: true,
-                                        pattern: /^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/,
-                                        maxLength: NAME_MAX_LENGTH
-                                    })}
+                    name='firstName'
+                    id='fname'
+                    type = 'text'
+                    ref ={ register({
+                        required: {
+                            value: true,
+                            message: 'Your input is required'
+                        },
+                        pattern: {
+                            value: /^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/,
+                            message: 'Name can only contain Latin letters and dash (-).'
+                        },
+                        maxLength: {
+                            value: NAME_MAX_LENGTH,
+                            message: `Name must be shorter than ${NAME_MAX_LENGTH} symbols.`
+                        }
+                    })}
                 />
-                    {errors.firstName?.type === 'required' && 'Your input is required'}
-                    {errors.firstName?.type === 'pattern' && 'Name can only contain Latin letters and dash (-).'}
-                    {errors.firstName?.type === 'maxLength' && `Name must be shorter than ${NAME_MAX_LENGTH} symbols.`}
+                {errors.firstName && (<div className={styles.error}>{errors.firstName.message}</div>)}
                 <label for='lname'>Last name:</label>
                 <input 
-                        name='lastName'
-                        id='lname'
-                        type = 'text'
-                        ref = {register({
-                                        pattern: /^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/,
-                                        required: true,                                        
-                                        maxLength: NAME_MAX_LENGTH
-                                    })}
+                    name='lastName'
+                    id='lname'
+                    type = 'text'
+                    ref = {register({
+                        pattern: /^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/,
+                        required: true,                                        
+                        maxLength: NAME_MAX_LENGTH
+                    })}
                 />
-                    {errors.lastName?.type === 'required' && 'Your input is required'}
-                    {errors.lastName?.type === 'pattern' && 'Name can only contain Latin letters and dash (-).'}
-                    {errors.lastName?.type === 'maxLength' && `Name must be shorter than ${NAME_MAX_LENGTH} symbols.`}
+                    {errors.lastName?.type === 'required' && (
+                                                <div className={styles.error}>Your input is required</div>
+                                                )}
+                    {errors.lastName?.type === 'pattern' && (
+                                                <div className={styles.error}>Name can only contain Latin letters and dash (-).</div>
+                                                )}
+                    {errors.lastName?.type === 'maxLength' && (
+                                                <div className={styles.error}>Name must be shorter than {NAME_MAX_LENGTH} symbols.</div>
+                    )}
                 <label for='pass'>Password:</label>
                 <input 
-                        name='password'
-                        id='pass'
-                        type = 'password'
-                        ref = {register({
-                                        pattern: PASSWORD_PATTERN,
-                                        required: true,
-                                        minLength:PASSWORD_MIN_LENGTH,
-                                        maxLength: PASSWORD_MAX_LENGTH
-                                    })}
+                    name='password'
+                    id='pass'
+                    type = 'password'
+                    ref = {register({
+                        pattern: {
+                            value: PASSWORD_PATTERN,
+                            message: `Password must be between ${PASSWORD_MIN_LENGTH} to ${PASSWORD_MAX_LENGTH} characters long and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.`
+                        },
+                        required: {
+                            value : true,
+                            message: 'Your input is required'
+                        },
+                        minLength: {
+                            value: PASSWORD_MIN_LENGTH,
+                            message: `Minimun length of password is ${PASSWORD_MIN_LENGTH} symbols.`
+                        },
+                        maxLength: {
+                            value: PASSWORD_MAX_LENGTH,
+                            message: `Maximum length of password is ${PASSWORD_MAX_LENGTH} symbols.`
+                        }
+                    })}
                 />
-                    {errors.password?.type === 'required' && 'Your input is required'}
-                    {errors.password?.type === 'pattern' && `Password must be between ${PASSWORD_MIN_LENGTH} to ${PASSWORD_MAX_LENGTH} characters long and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.`}
-                    {errors.password?.type === 'minLength' && `Minimun length of password is ${PASSWORD_MIN_LENGTH} symbols.`}
-                    {errors.password?.type === 'maxLength' && `Maximum length of password is ${PASSWORD_MAX_LENGTH} symbols.`}
+                    {errors.password && (<div className={styles.error}>{errors.password.message}</div>)}
                 <label for='emails'>Your email address:</label>
                 <input
-                        name='email'
-                        id='emails'
-                        type='email'
-                        ref = {register({
-                                        required:true,
-                                        pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                                        maxLength: EMAIL_MAX_LENGTH
-                        })}
+                    name='email'
+                    id='emails'
+                    type='string'
+                    ref = {register({
+                        required: {
+                            value: true,
+                            message: 'Your input is required'
+                        },
+                        pattern: {
+                            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                            message: 'Invalid email'
+                        },
+                        maxLength: {
+                            value: EMAIL_MAX_LENGTH,
+                            message: `Email must be shorter than ${EMAIL_MAX_LENGTH} symbols.`
+                        }
+                    })}
                 />
-                   {errors.email?.type === 'required' && 'Your input is required'}
-                   {errors.email?.type === 'pattern' && 'Invalid email'}
-                   {errors.email?.type === 'maxLength' && `Email must be shorter than ${EMAIL_MAX_LENGTH} symbols.`}
+                {errors.email && (<div className={styles.error}>{errors.email.message}</div>)}
             <button type='submit'>Register</button>
             </form>
         </div>
