@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
-import { getProductRanges, getProductsPage } from './utils/product'
+import { getProductRanges, getProductsPage } from './services/product'
 
 const ProductsContextInitializer = (props) => {
     const [productProps, setProductProps] = useState(null)

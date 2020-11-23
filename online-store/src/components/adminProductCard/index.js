@@ -1,11 +1,13 @@
 import React, { useCallback, useContext, useState } from 'react'
 import styles from './index.module.css'
 import UserContext from '../../Context'
+
 import ProductCard from '../productCard'
 import ModifyProductCard from '../modifyProductCard'
-import getCookie from '../../utils/cookie'
 import ProductsContext from '../../ProductsContext'
 import AdminImageCards from '../adminImageCards'
+
+import { deleteProduct } from '../../services/adminProduct'
 
 
 const AdminProductCard = (props) => {
@@ -22,13 +24,10 @@ const AdminProductCard = (props) => {
     const handleDelete = useCallback(async (event) => {
         event.preventDefault()
 
-        await fetch(`http://localhost:3001/api/admin/product/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
-            }
-        })
+        const deleteResult = await deleteProduct(id)
+        if (deleteResult.error) {
+            //TODO: handle errors
+        }
 
         productsContext.handleProductDelete(id)
         productsContext.updateFilters()
@@ -53,7 +52,6 @@ const AdminProductCard = (props) => {
                         Delete
                     </button>
                 </div> : null}
-
         </div>
     )
 }

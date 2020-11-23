@@ -1,11 +1,13 @@
-import React, { useContext, useMemo, useReducer, useState } from 'react'
+import React, { useContext,  useState } from 'react'
 import styles from './index.module.css'
 
 import Input from '../input'
-import getCookie from '../../utils/cookie'
 import AdminCategories from '../adminCategories'
 import AdminSizes from '../adminSizes'
 import ProductsContext from '../../ProductsContext'
+import GenderInput from '../genderInput'
+
+import { updateProduct } from '../../services/adminProduct'
 
 const ModifyProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
@@ -26,49 +28,24 @@ const ModifyProductCard = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        await fetch(`http://localhost:3001/api/admin/product/${productId}`, {
-            method: "PUT",
-            body: JSON.stringify({
-                'price': price,
-                'discount': { 'percent': discountPercent, 'endDate': discountEndDate },
-                'brand': brand,
-                'description': description,
-                'gender': gender
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
+        const newProductProps = {
+            price,
+            brand,
+            description,
+            gender,
+            discount: { 
+                percent: discountPercent,
+                endDate: discountEndDate
             }
-        })
+        }
+
+        const updateResult = await updateProduct(productId, newProductProps)
+        if (updateResult.error) {
+            //TODO: handle errors
+        }
 
         productsContext.updateFilters()
     }
-
-    const renderGender = useMemo(() => {
-        const genderInputs = [ 
-            { value: 'M', label: 'Male', checked: false },
-            { value: 'F', label: 'Female', checked: false },
-            { value: 'Unspecified', label: 'Unspecified', checked: false } 
-        ]
-    
-        genderInputs.forEach(g => {
-            if (g.value === gender) {
-                g.checked = true
-            }
-        })
-
-        return genderInputs.map(gender => {
-            return (
-                <label>
-                    <input type="radio"
-                        value={gender.value}
-                        name="gender"
-                        checked={gender.checked} />
-                    {gender.label}
-                </label>
-            )
-        })
-    })
 
     return (
         <div className={styles.container}>
@@ -113,10 +90,7 @@ const ModifyProductCard = (props) => {
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                 />
-                <div onChange={(e) => setGender(e.target.value)}
-                     className={styles.gender}>
-                    {renderGender}
-                </div>
+                <GenderInput currentGender={gender} onChange={setGender} />
                 <button type='submit'>SAVE</button>
             </form>
             <AdminSizes sizes={props.sizes} id={productId} />

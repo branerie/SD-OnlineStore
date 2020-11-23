@@ -1,10 +1,12 @@
 import React, { useState, useReducer } from 'react'
 import { useHistory } from 'react-router-dom'
-import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import Input from '../../components/input'
 import DragAndDrop from '../../components/dragAndDrop'
-import { getImagePath } from '../../utils/product'
+import GenderInput from '../../components/genderInput'
+
+import { createProduct, addImagesToProduct } from '../../services/adminProduct'
+import { uploadImages } from '../../services/product'
 
 const BRAND_MAX_LENGTH = 30
 const DESCRIPTION_MAX_LENGTH = 1000
@@ -19,7 +21,7 @@ const AddProductCard = () => {
     const [discountInPercent, setDiscountInPercent] = useState(null)
     const [discountEndDate, setDiscountEndDate] = useState(null)
     const [description, setDescription] = useState('')
-    const [gender, setGender] = useState('Unspecified')
+    const [gender, setGender] = useState('U')
     const sizes = []
     const newCategories = []
 
@@ -27,8 +29,6 @@ const AddProductCard = () => {
 
     function reducer(state, action) {
         switch (action.type) {
-            // case 'addToDropZone':
-            //     return { ...state, inDropZone: action.inDropZone }
             case 'addToList':
                 return [...state, action.files]
                   
@@ -61,49 +61,15 @@ const AddProductCard = () => {
             newProduct.discount = { percent: discountInPercent, endDate: discountEndDate }
         }
 
-        const productResponse = await fetch('http://localhost:3001/api/admin/product/', {
-            method: 'POST',
-            body: JSON.stringify(
-                newProduct
-            ),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
-            }
-        })
-
-        const productResult = await productResponse.json()
-        if (productResult.error) {
+        const productCreationResult = await createProduct(newProduct)
+        if (productCreationResult.error) {
             //TODO: handle errors
         }
 
-        const addedImagePaths = []
-        for (let img of images) {
-            //TODO: switch to signed uploads and hide cloudinary info
-            const formData = new FormData()
-            formData.append('file', img.file)
-            formData.append('upload_preset', 'j8qqeqco')
-            const response = await fetch(`https://api.cloudinary.com/v1_1/drk3sslgq/image/upload`, {
-                method: 'POST',
-                body: formData
-            })
+        const addedImagePaths = await uploadImages(images)
 
-            const result = await response.json()
-            addedImagePaths.push(getImagePath(result.url))
-        }
-
-        const addImageUrl = `http://localhost:3001/api/admin/product/${productResult.id}/images`
-        const imagesResponse = await fetch(addImageUrl, {
-            method: 'POST',
-            body: JSON.stringify({ data: addedImagePaths }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
-            }
-        })
-
-        const imagesResult = await imagesResponse.json()
-        if (imagesResult.error) {
+        const imagesAddResult = await addImagesToProduct(productCreationResult.id, addedImagePaths)
+        if (imagesAddResult.error) {
             //TODO: handle error if adding images was unsuccessful 
         }
 
@@ -201,7 +167,7 @@ const AddProductCard = () => {
                         id='discountEndDate'
                         onChange={e => setDiscountEndDate(e.target.value)}
                     />
-                    <label for="description">Product description :</label><br></br>
+                    <label htmlFor="description">Product description :</label><br></br>
                     <textarea
                         id="description"
                         rows="4"
@@ -210,20 +176,7 @@ const AddProductCard = () => {
                         className={styles.descriptionArea}
                         maxLength={DESCRIPTION_MAX_LENGTH}>
                     </textarea>
-                    <div onChange={(e) => setGender(e.target.value)}>
-                        <label>
-                            <input type="radio" value="M" name="gender" />
-                                Male
-                        </label>
-                        <label>
-                            <input type="radio" value="F" name="gender" />
-                                Female
-                        </label>
-                        <label>
-                            <input type="radio" value="Unspecified" name="gender" checked />
-                                Unspecified
-                        </label>
-                    </div>
+                    <GenderInput currentGender={gender} onChange={setGender} />
                     <button className={styles.button} type='submit'>SAVE</button>
                 </form>
             </div>

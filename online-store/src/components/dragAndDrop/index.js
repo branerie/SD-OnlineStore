@@ -1,6 +1,5 @@
-import React, { useReducer } from 'react'
+import React from 'react'
 import styles from './index.module.css'
-import UploadButton from '../uploadButton'
 import ImageCards from '../imageCards'
 
 const DragAndDrop = ({ imageCards, handleImageRemove, handleImageAdd }) => {

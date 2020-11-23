@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import Input from '../input'
 import ProductsContext from '../../ProductsContext'
+import { updateProductSizes } from '../../services/adminProduct'
 
 const DEFAULT_INPUT_FIELD = { 'sizeName': '---', 'count': 0 }
 
@@ -113,10 +113,10 @@ const AdminSizes = (props) => {
     }
 
     const addSize = (action) => {
-        const addNewSize = { sizeName: addSizeName, count: addSizeCount }
-        const sendNewSize = { value: addNewSize, action: action }
+        const newSize = { sizeName: addSizeName, count: addSizeCount }
+        const newSizeAction = { value: newSize, action: action }
 
-        modifiedSizes.push(sendNewSize)
+        modifiedSizes.push(newSizeAction)
     }
 
     const handleInputChange = (value) => {
@@ -130,19 +130,7 @@ const AdminSizes = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        const response = await fetch(`http://localhost:3001/api/admin/product/${productId}/sizes`, {
-            method: 'PATCH',
-            body: JSON.stringify({
-                'operations': modifiedSizes
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': getCookie('x-auth-cookie')
-            }
-        })
-
-        const updatedSizes = await response.json()
-
+        const updatedSizes = await updateProductSizes(productId, modifiedSizes)
         if (updatedSizes.error) {
             //TODO: Display error to client
             return

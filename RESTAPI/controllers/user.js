@@ -11,19 +11,19 @@ router.post('/login', async (req, res) => {
     try {
 
         if (tokenForCheck && await verifyToken(tokenForCheck)) {
-            return res.status(400).send('User is already logged in')
+            return res.status(400).send({ error: 'User is already logged in' })
         }
 
         const user = await User.findOne({ email })
 
         if (!user) {
-            return res.status(401).send(`User with email ${email} does not exist`)
+            return res.status(401).send({ error: `User with email ${email} does not exist` })
         }
 
         const isPasswordValid = await user.matchPassword(password)
 
         if (!isPasswordValid) {
-            return res.status(401).send('Invalid password')
+            return res.status(401).send({ error: 'Invalid password' })
         }
 
         const token = createToken({ id: user._id, isAdmin: user.isAdmin })
@@ -31,10 +31,10 @@ router.post('/login', async (req, res) => {
         res.send({ id: user._id, isAdmin: user.isAdmin })
     } catch (error) {
         if (isMongoError(error)) {
-            return res.status(403).send(error.message)
+            return res.status(403).send({ error: error.message })
         }
 
-        return res.status(500).send(error.message)
+        return res.status(500).send({ error: error.message })
     }
 })
 
@@ -52,10 +52,10 @@ router.post('/register', async (req, res) => {
                 error.message = `User with email ${email} already exists`
             }
 
-            return res.status(403).send(error.message)
+            return res.status(403).send({ error: error.message })
         }
 
-        return res.status(500).send(error.message)
+        return res.status(500).send({ error: error.message })
     }
 })
 
@@ -71,13 +71,13 @@ router.post('/logout', async (req, res) => {
             return res.send('Successfully logged out')
         } catch (error) {
             if (isMongoError(error)) {
-                return res.status(403).send(error.message)
+                return res.status(403).send({ error: error.message })
             }
 
-            return res.status(500).send(error.message)
+            return res.status(500).send({ error: error.message })
         }
     } else {
-        return res.status(401).send('No one is logged in')
+        return res.status(401).send({ error : 'No one is logged in' })
     }
 })
 
@@ -92,7 +92,7 @@ router.get('/verify' , async (req, res) => {
             return res.status(403).send({
                 userId: null,
                 isAdmin: false,
-                errorMesage: error.message
+                error: error.message
             })
         }
     }

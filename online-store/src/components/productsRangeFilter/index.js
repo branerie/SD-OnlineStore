@@ -39,7 +39,7 @@ const ProductsRangeFilter = (props) => {
                 min="0"
                 max={props.max}
                 onChange={e => setMaxValue(e.target.value)}
-                onBlur={() => props.onChange(props.propName, { min: minValue, max: maxValue })} />
+                onBlur={handleChange} />
         </div>
     )
 }
