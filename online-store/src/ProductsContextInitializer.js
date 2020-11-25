@@ -43,7 +43,7 @@ const ProductsContextInitializer = (props) => {
 		getCurrentProductsPage()
 	}, [getCurrentProductsPage, page, filters])
 
-	useEffect(() => setPage(0), [filters])
+    useEffect(() => setPage(0), [filters])
 
     function filtersReducer(state, action) {
         const propName = action.propName

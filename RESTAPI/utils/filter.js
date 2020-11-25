@@ -38,7 +38,7 @@ function getDbProductsFilter(query) {
         if (!propValue || !isProductSchemaField(propValue)) {
             continue
         }
-
+        
         if (propType === 'cat') {
             if (propValue === 'sizes') {
                 filter['sizes.sizeName'] = parseSizeFilters(query[property])
@@ -55,7 +55,7 @@ function getDbProductsFilter(query) {
             if (maxValue < minValue) {
                 [minValue, maxValue] = [maxValue, minValue]
             }
-
+            
             filter[propValue] = {
                 $gte: minValue,
                 $lte: maxValue

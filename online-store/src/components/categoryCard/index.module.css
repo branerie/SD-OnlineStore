@@ -1,0 +1,25 @@
+.background-image {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 9.375rem;
+    max-height: 13.5rem;
+    color: white;
+}
+
+.card:hover {
+    color: #EF696E;
+}
+
+.name {
+    position: absolute;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2rem;
+    z-index: 2;
+}
