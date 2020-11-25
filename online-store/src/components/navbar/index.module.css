@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.site-nav {
+    background-color: white;
+    min-height: 5rem; 
+    display: flex;
+    justify-content: end;
+}
+
+.navbar-links {
+    min-width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    list-style-type: none;
+}
+
+.navbar-buttons {
+    margin-left: 1.5rem; 
+    padding: 0px 1.5rem;
+    display: flex;
+    justify-content: end;
+    list-style-type: none;
+}

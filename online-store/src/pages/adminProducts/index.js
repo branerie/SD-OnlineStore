@@ -17,7 +17,7 @@ const AdminProductsPage = () => {
 			<ProductsContextInitializer pageLength={PAGE_LENGTH}>
 				<aside className={styles.filters}>
 					<Link to="/admin/products/add"
-						  className={styles['add-product']} >Add Product</Link>
+						  className={styles['add-product']}>Add Product</Link>
 					<ProductsFilter />
 				</aside>
 				<main className={styles.cards}>

@@ -19,7 +19,6 @@ const AdminProductCardsList = () => {
         })
     }
 
-
     return (
         <div className={styles.container}>
             {renderProduct()}

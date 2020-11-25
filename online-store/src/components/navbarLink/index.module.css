@@ -1,0 +1,16 @@
+.list-item {
+    padding: 0px 2rem;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 1.6rem;
+    color: #707070;
+    text-transform: uppercase;
+}
+
+.link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: #EF696E;
+}
