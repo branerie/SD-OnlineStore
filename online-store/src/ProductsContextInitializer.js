@@ -7,11 +7,12 @@ const ProductsContextInitializer = (props) => {
     const [productPage, setProductPage] = useState(null)
     const [page, setPage] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
-
+    
     const filtersState = {
         cat: {},
         range: {},
-        bool: []
+        bool: [],
+        sort: ['addDate', 'desc']
     }
 
     const [filters, filtersDispatch] = useReducer(filtersReducer, filtersState)
@@ -25,9 +26,10 @@ const ProductsContextInitializer = (props) => {
 		const { total, productInfo } = await getProductsPage(
 			filters.cat,
 			filters.range,
-			filters.bool,
-			page,
-			props.pageLength)
+            filters.bool,
+            filters.sort,
+            page,
+            props.pageLength)            
 
 		setProductPage(productInfo)
 		setTotalCount(total)
@@ -72,6 +74,8 @@ const ProductsContextInitializer = (props) => {
                 }
 
                 return {...state, bool: newBoolFilters}
+            case 'sort':
+                return {...state, sort: [action.property , action.direction]}
             default:
                 return state
         }

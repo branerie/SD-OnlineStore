@@ -1,0 +1,53 @@
+.dropDownMenu {
+  margin: 10px;
+}
+
+button:focus {
+  outline: none;
+}
+
+.title {
+  background-color: white;
+  width: 100px;
+  border: 0.5px solid  rgb(158, 148, 134);
+  border-radius: 4px;
+  color: rgb(158, 148, 134);
+  padding: 5px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.title:active {
+  border: 1px solid rgb(145, 137, 126);
+  background-color: cornflowerblue;
+  color: white;
+  transition: 0.1s;
+}
+
+
+.list {
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 140px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding: 2px;
+  margin-top: 10px;
+}
+
+.criteria {
+  background-color: #f9f9f9;
+  border: none;
+  color: black;
+  text-align: start;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 6px 4px;
+  cursor: pointer;
+  padding: 0;
+  display: block;
+}
+
+.criteria:hover {
+  background-color: rgb(212, 206, 206);
+}

@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const Product = require('../models/product')
-const getDbProductsFilter = require('../utils/filter')
+const { getDbProductsFilter, getSortCriteria } = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
 const { getSizeRange, sortSizes, getImageUrl } = require('../utils/product')
 
@@ -73,9 +73,11 @@ router.get('/products', async (req, res) => {
         const page = Math.max(0, req.query.page)
         const pageLength = Math.max(1, req.query.pageLength)
         const productFilters = getDbProductsFilter(req.query)
+        const sortCriteria = getSortCriteria(req.query.sort)
 
         const totalCount = await Product.find(productFilters).count()
         const fullProducts = await Product.find(productFilters)
+                                          .sort(sortCriteria)
                                           .skip(page * pageLength)
                                           .limit(pageLength)
 

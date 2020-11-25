@@ -9,7 +9,9 @@ const EMAIL_MAX_LENGTH = 20
 const NAME_MAX_LENGTH = 20
 const PASSWORD_MIN_LENGTH = 6
 const PASSWORD_MAX_LENGTH = 30
-const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`);
+const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`)
+const NAME_PATTERN = new RegExp(/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/)
+const EMAIL_PATTERN = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
 
 const RegisterPage = () => {
     const history = useHistory()
@@ -44,7 +46,7 @@ const RegisterPage = () => {
                             message: 'Your input is required'
                         },
                         pattern: {
-                            value: /^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/,
+                            value: NAME_PATTERN,
                             message: 'Name can only contain Latin letters and dash (-).'
                         },
                         maxLength: {
@@ -60,7 +62,7 @@ const RegisterPage = () => {
                     id='lname'
                     type='text'
                     ref={register({
-                        pattern: /^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/,
+                        pattern: NAME_PATTERN,
                         required: true,
                         maxLength: NAME_MAX_LENGTH
                     })}
@@ -110,7 +112,7 @@ const RegisterPage = () => {
                             message: 'Your input is required'
                         },
                         pattern: {
-                            value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                            value: EMAIL_PATTERN,
                             message: 'Invalid email'
                         },
                         maxLength: {
