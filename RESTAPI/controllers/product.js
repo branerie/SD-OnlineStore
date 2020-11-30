@@ -2,7 +2,7 @@ const router = require('express').Router()
 const Product = require('../models/product')
 const { getDbProductsFilter, getSortCriteria } = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
-const { getSizeRange, sortSizes, getImageUrl } = require('../utils/product')
+const { getSizeRange, sortSizes, getImageUrl, getAllCategories } = require('../utils/product')
 
 router.get('/ranges', async (req, res) => {
     const dbRequestFilter = getDbProductsFilter(req.query)
@@ -108,6 +108,15 @@ router.get('/products', async (req, res) => {
         }
 
         return res.status(500).send({ error: error.message })
+    }
+})
+
+router.get('/categories', (req, res) => {
+    try {
+        const categories = getAllCategories()
+        return res.send({ categories })
+    } catch(error) {
+        return res.status(500).send({ error: 'Internal Server Error'})
     }
 })
 

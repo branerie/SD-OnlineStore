@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
+
 import styles from './index.module.css'
 
-import plusSign from '../../../images/plus.png'
-import minusSign from '../../../images/minus.png'
-
-const QuantityInput = ({ value, name, setNewValue }) => {
+const QuantityInput = ({ value, name, setNewValue, max }) => {
     const changeValue = (newValue) => {
         let numberValue = Number(newValue)
         if (!numberValue && numberValue !== 0) {
@@ -20,31 +18,25 @@ const QuantityInput = ({ value, name, setNewValue }) => {
 
     return (
         <div className={styles.container}>
-            {/* <button  className={styles.minus}> */}
-            {/* </button> */}
+            <label className={styles.label}>{name}</label>
+            <button
+                type="button"
+                className={[styles.sign, styles['btn-left']].join(' ')}
+                onClick={() => changeValue(Number(value) - 1)}>-</button>
             <input
-                type='text'
+                type='number'
                 name={name}
                 min='0'
-                max='99999'
+                max={max}
                 value={value}
-                className={styles['input-field']}
+                className={[styles['input-field']].join(' ')}
                 pattern='[0-9]+'
                 onChange={e => setNewValue(e.target.value)} />
-            {/* <button className={styles.plus}> */}
-            <img
-                src={minusSign}
-                className={styles['minus-sign']}
-                width='10'
-                height='10'
-                onClick={() => changeValue(Number(value) - 1)} />
-            <img
-                src={plusSign}
-                className={styles['plus-sign']}
-                width='50'
-                height='50'
-                onClick={() => changeValue(Number(value) + 1)} />
-            {/* </button> */}
+            <button
+                type="button"
+                className={[styles.sign, styles['btn-right']].join(' ')}
+                value="+"
+                onClick={() => changeValue(Number(value) + 1)}>+</button>
         </div>
     )
 }

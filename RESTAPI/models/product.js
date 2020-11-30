@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { getAllCategories } = require('../utils/product')
 
 const SIZE_MIN_LENGTH = 1
 const SIZE_MAX_LENGTH = 4
@@ -57,7 +58,7 @@ const productSchema = new mongoose.Schema({
     },
     categories: [{
         type: String,
-        enum: ['Shoes', 'Bags', 'T-shirts', 'Bathing suits', 'Dresses']
+        enum: getAllCategories()
     }],
     addDate: {
         type: Date

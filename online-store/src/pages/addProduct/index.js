@@ -2,22 +2,25 @@ import React, { useState, useReducer } from 'react'
 import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import Input from '../../components/input'
-import TextInput from '../../components/inputFields/textInput'
 import DragAndDrop from '../../components/dragAndDrop'
-import GenderInput from '../../components/genderInput'
+import GenderInput from '../../components/inputFields/genderInput'
+import TextInput from '../../components/inputFields/textInput'
+import QuantityInput from '../../components/inputFields/quantityInput'
+import NumberInput from '../../components/inputFields/numberInput'
+import DescriptionInput from '../../components/inputFields/descriptionInput'
+import CategoriesInput from '../../components/inputFields/categoriesInput'
 
 import { createProduct, addImagesToProduct } from '../../services/adminProduct'
 import { uploadImages } from '../../services/product'
 
 const BRAND_MAX_LENGTH = 30
-const DESCRIPTION_MAX_LENGTH = 1000
 
 const AddProductCard = () => {
     const history = useHistory()
     const [brand, setBrand] = useState('')
     const [categories, setCategories] = useState([])
     const [sizeName, setSizeName] = useState(null)
-    const [sizeCount, setSizeCount] = useState(null)
+    const [sizeCount, setSizeCount] = useState(0)
     const [price, setPrice] = useState(0)
     const [discountInPercent, setDiscountInPercent] = useState(null)
     const [discountEndDate, setDiscountEndDate] = useState(null)
@@ -32,7 +35,7 @@ const AddProductCard = () => {
         switch (action.type) {
             case 'addToList':
                 return [...state, action.files]
-                  
+
             case 'removeFromList':
                 return state.filter(file => file.url !== action.fileToRemove)
             case 'reset':
@@ -96,7 +99,7 @@ const AddProductCard = () => {
         let files = Array.from(inputElement.files)
 
         files.forEach(file => {
-            handleImageAdd({ file, url: URL.createObjectURL(file)})
+            handleImageAdd({ file, url: URL.createObjectURL(file) })
         })
     }
 
@@ -120,63 +123,56 @@ const AddProductCard = () => {
             </div>
             <div className={styles['input-fields']}>
                 <form className={styles.form} onSubmit={handleSubmit} onKeyPress={preventEnterSubmit}>
-                    <Input
+                    <TextInput
                         type='text'
-                        label='Brand'
                         id='brand'
+                        placeholder='Brand'
                         onChange={e => setBrand(e.target.value)}
-                        maxLength={BRAND_MAX_LENGTH}
                     />
-                    <Input
+                    {/* <Input
                         type='text'
                         label='Categories'
                         id='categories'
                         placeholder='Shoes, Bags, T-shirts ...'
                         onChange={e => setCategories(e.target.value)}
-                    />
-                    <TextInput
-                        type='text'
-                        label='Add size name'
-                        id='sizeName'
-                        placeholder='XS, S, M, L, XL, XXL'
-                        onChange={e => setSizeName(e.target.value)}
-                    />
-                    <Input
-                        type='number'
-                        label='Add amount'
-                        id='amount'
-                        placeholder='100, 200, 250 ...'
-                        onChange={e => setSizeCount(e.target.value)}
-                        step='1'
-                    />
-                    <Input
-                        type='number'
-                        label='Price'
-                        id='price'
+                    /> */}
+                    <CategoriesInput />
+                    <NumberInput
+                        placeholder='Price'
+                        min='0.01'
                         onChange={e => setPrice(Number(e.target.value).toFixed(2))}
+                        unitsPlaceholder='$'
                     />
-                    <Input
-                        type='number'
-                        label='Discount in %'
-                        id='discount'
-                        placeholder='10, 15, 20, 50 ...'
-                        onChange={e => setDiscountInPercent(Number(e.target.value))}
-                    />
-                    <Input
-                        type='date'
-                        label='End date of discount'
-                        id='discountEndDate'
-                        onChange={e => setDiscountEndDate(e.target.value)}
-                    />
-                    <label htmlFor="description">Product description :</label><br></br>
-                    <textarea
-                        id="description"
-                        rows="4"
-                        cols="20"
-                        onChange={e => setDescription(e.target.value)}
-                        className={styles.descriptionArea}
-                        maxLength={DESCRIPTION_MAX_LENGTH}>
-                    </textarea>
+                    <div class={styles['input-group']}>
+                        <TextInput
+                            type='text'
+                            id='sizeName'
+                            placeholder='Initial size name'
+                            onChange={e => setSizeName(e.target.value)}
+                        />
+                        <QuantityInput
+                            value={sizeCount}
+                            name='Initial size count'
+                            max={99999}
+                            setNewValue={setSizeCount}
+                        />
+                    </div>
+                    <div className={styles['input-group']}>
+                        <QuantityInput
+                            value={discountInPercent}
+                            name='Discount in %'
+                            setNewValue={setDiscountInPercent}
+                        />
+                        <Input
+                            type='date'
+                            label='End date of discount'
+                            id='discountEndDate'
+                            onChange={e => setDiscountEndDate(e.target.value)}
+                        />
+                    </div>
+                    <DescriptionInput
+                        value={description}
+                        onChange={e => setDescription(e.target.value)} />
                     <GenderInput currentGender={gender} onChange={setGender} />
                     <button className={styles.button} type='submit'>SAVE</button>
                 </form>

@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+}
+
+.description-area {
+    resize: none;
+    border: 1px solid gray;
+    border-radius: 0.3rem;
+    padding: 10px;
+    flex-grow: 1;
+}
+
+.description-area:placeholder-shown {
+    background-color: rgb(230, 227, 227);
+}
+
+.description-area:hover {
+    border: 1px solid black;
+}

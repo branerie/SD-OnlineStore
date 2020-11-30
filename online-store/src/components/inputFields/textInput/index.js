@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styles from './index.module.css'
 import inputStyles from '../index.module.css'
+import InputWrapper from '../inputWrapper'
 
 const TextInput = ({ value, onChange, onBlur, type, maxLength, placeholder, ref }) => {
     const [isVisible, setIsVisible] = useState(value != undefined)
@@ -16,24 +17,17 @@ const TextInput = ({ value, onChange, onBlur, type, maxLength, placeholder, ref 
     }
 
     return (
-        <div className={styles.container}>
-            <fieldset className={styles['inner-container']}>
-                {isVisible && 
-                    <legend>
-                        <small>{placeholder}</small>
-                    </legend>}
-
-                <input 
-                    type={type}
-                    className={inputStyles.input}
-                    ref={ref}
-                    value={value}
-                    onChange={handleChange}
-                    onBlur={onBlur}
-                    maxLength={maxLength}
-                    placeholder={placeholder} />
-            </fieldset>
-        </div>
+        <InputWrapper isVisible={isVisible} placeholder={placeholder} >
+            <input
+                type={type}
+                className={inputStyles.input}
+                ref={ref}
+                value={value}
+                onChange={handleChange}
+                onBlur={onBlur}
+                maxLength={maxLength}
+                placeholder={placeholder} />
+        </InputWrapper>
     )
 }
 

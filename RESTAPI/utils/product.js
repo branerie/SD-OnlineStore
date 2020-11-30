@@ -55,9 +55,14 @@ const getImagePublicIdFromPath = (path) => {
     return imageName.split('.')[0]
 }
 
+const getAllCategories = () => {
+    return ['Shoes', 'Bags', 'T-shirts', 'Bathing suits', 'Dresses']
+}
+
 module.exports = {
     getSizeRange,
     sortSizes,
     getImageUrl,
-    getImagePublicIdFromPath
+    getImagePublicIdFromPath,
+    getAllCategories
 }

@@ -85,34 +85,27 @@ const AdminSizes = (props) => {
                         onChange={e => handleInputChange(e.target.value)}
                         step='1'
                     />
-                    <button 
+                    <button
                         onClick={() => editSize(inputField, 'edit')}
                         className={styles['submit-btn']} >Submit</button>
                 </div>
                 <div className={styles['add-field']} >
-                    <div className={styles.nameField} >Add sizes:</div>
-                    <TextInput
-                        type='text'
-                        id='sizeName'
-                        placeholder='Size name (42, 43, S, M, XL etc.)'
-                        onChange={e => setAddSizeName(e.target.value)}
-                    />
-                    <QuantityInput
-                        value={addSizeCount}
-                        name='sizeQuantity'
-                        setNewValue={value => setAddSizeCount(value)}
-                    />
-                    {/* <Input
-                        type='number'
-                        // label='Add amount'
-                        id='amount'
-                        placeholder='Amount to add'
-                        onChange={e => setAddSizeCount(e.target.value)}
-                        step='1'
-                    /> */}
-                    <button 
-                        onClick={() => addSize('add')}
-                        className={styles['submit-btn']} >Submit</button>
+                        <span className={styles.title}>Add sizes:</span>
+                        <TextInput
+                            type='text'
+                            id='sizeName'
+                            placeholder='Size name (42, 43, S, M, XL etc.)'
+                            onChange={e => setAddSizeName(e.target.value)}
+                        />
+                        <QuantityInput
+                            value={addSizeCount}
+                            name='sizeQuantity'
+                            max={99999}
+                            setNewValue={value => setAddSizeCount(value)}
+                        />
+                        <button
+                            onClick={() => addSize('add')}
+                            className={styles['submit-btn']} >Submit</button>
                 </div>
             </div>
         )

@@ -1,5 +1,6 @@
 .container {
    margin-bottom: 7px;
+   box-sizing: border-box;
 }
 
 .input-wrapper {

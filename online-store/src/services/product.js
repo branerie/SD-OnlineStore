@@ -79,9 +79,21 @@ const getProductImages = async (productId) => {
     return images
 }
 
+const getCategories = async () => {
+    const response = await fetch(`${PRODUCT_URL}/categories`, {
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
+        }
+    })
+
+    const categories = await response.json()
+    return categories
+}
+
 export {
     uploadImages,
     getProductImages,
     getProductsPage,
     getProductRanges,
+    getCategories
 }

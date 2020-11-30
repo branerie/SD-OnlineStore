@@ -15,8 +15,8 @@
 }
 
 .navbar-buttons {
-    margin-left: 1.5rem; 
-    padding: 0px 1.5rem;
+    margin-left: 0.5vw; 
+    padding: 0 1vw;
     display: flex;
     justify-content: end;
     list-style-type: none;

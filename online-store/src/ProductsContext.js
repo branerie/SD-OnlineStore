@@ -10,7 +10,7 @@ const ProductsContext = React.createContext({
     handlePageChange: () => {},
     handleProductDelete: () => {},
     updateFilters: () => {},
-    updateProductPage: () => {}
+    updateProductPage: () => {},
 })
 
 export default ProductsContext

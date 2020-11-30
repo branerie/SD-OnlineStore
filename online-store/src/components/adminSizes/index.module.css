@@ -1,14 +1,15 @@
 .container {
-    width: 50%;
-    height: auto;
-    border: 1px solid #234465;
-    border-radius: 4px;
-    background-color: rgb(228, 250, 194);
-    display: flex;
-    flex-direction: row;
-    flex-grow: 2;
-    padding: 10px;
-  }
+  box-sizing: border-box;
+  width: 50%;
+  height: auto;
+  border: 1px solid #234465;
+  border-radius: 4px;
+  background-color: rgb(228, 250, 194);
+  display: flex;
+  flex-direction: row;
+  flex-grow: 2;
+  padding: 10px;
+}
 
 .form {
   display: flex;
@@ -17,7 +18,7 @@
   padding: 0px 10px;
 }
 
-.nameField {
+.title {
   color: blueviolet;
   font-style: italic;
   size: 5px;
@@ -35,6 +36,8 @@
 .add-field {
   display: flex;
   flex-direction: column;
+  border: 1px solid black;
+  padding: 2px;
 }
 
 .editLinefield {

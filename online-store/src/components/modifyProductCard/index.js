@@ -5,7 +5,7 @@ import Input from '../input'
 import AdminCategories from '../adminCategories'
 import AdminSizes from '../adminSizes'
 import ProductsContext from '../../ProductsContext'
-import GenderInput from '../genderInput'
+import GenderInput from '../inputFields/genderInput'
 
 import { updateProduct } from '../../services/adminProduct'
 import NumberInput from '../inputFields/numberInput'

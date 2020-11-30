@@ -33,7 +33,7 @@ const ProductsContextInitializer = (props) => {
 
 		setProductPage(productInfo)
 		setTotalCount(total)
-	}, [setProductPage, setTotalCount, props.pageLength, filters, page])
+    }, [setProductPage, setTotalCount, props.pageLength, filters, page])
 
 	useEffect(() => {
 		getProductPropsRange()

@@ -3,8 +3,7 @@ import styles from './index.module.css'
 
 import CategoryCards from '../../components/categoryCards'
 
-import leftImage from '../../images/homeImage1.jpg'
-import rightImage from '../../images/homeImage2.jpg'
+import indexImage from '../../images/index.jpg'
 
 import Header from '../../components/header'
 
@@ -13,8 +12,7 @@ const HomePage = () => {
         <>
             <Header />
             <div>
-                <img src={leftImage} style={{ 'max-height': '32rem' }} />
-                <img src={rightImage} style={{ 'max-height': '32rem' }} />
+                <img src={indexImage} className={styles['home-image']} />
             </div>
             <div>
                 <h3 className={styles['secondary-title']}>top categories</h3>
