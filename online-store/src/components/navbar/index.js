@@ -10,7 +10,7 @@ import cartImage from '../../images/cartLink.svg'
 import profileImage from '../../images/profileLink.svg'
 
 const Navbar = () => {
-    const { isAdmin } = useContext(UserContext)
+    const { user: { isAdmin }} = useContext(UserContext)
 
     return (
         <nav className={styles['site-nav']}>

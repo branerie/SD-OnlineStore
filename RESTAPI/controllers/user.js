@@ -17,13 +17,13 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ email })
 
         if (!user) {
-            return res.status(401).send({ error: `User with email ${email} does not exist` })
+            return res.status(401).send({ error: 'Invalid email or password' })
         }
 
         const isPasswordValid = await user.matchPassword(password)
 
         if (!isPasswordValid) {
-            return res.status(401).send({ error: 'Invalid password' })
+            return res.status(401).send({ error: 'Invalid email or password' })
         }
 
         const token = createToken({ id: user._id, isAdmin: user.isAdmin })

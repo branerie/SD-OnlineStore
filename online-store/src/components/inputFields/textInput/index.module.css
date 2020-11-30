@@ -1,0 +1,17 @@
+.container {
+    margin-bottom: 7px;
+}
+
+.input-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.inner-container {
+    box-sizing: border-box;
+    height: 2.5rem;
+    width: 100%;
+    border: none;
+    padding: 0;
+    margin-top: 15px;
+}

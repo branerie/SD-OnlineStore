@@ -1,8 +1,10 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styles from './index.module.css'
 import Input from '../input'
+import TextInput from '../inputFields/textInput'
 import ProductsContext from '../../ProductsContext'
 import { updateProductSizes } from '../../services/adminProduct'
+import QuantityInput from '../inputFields/quantityInput'
 
 const DEFAULT_INPUT_FIELD = { 'sizeName': '---', 'count': 0 }
 
@@ -77,7 +79,7 @@ const AdminSizes = (props) => {
                     <div className={styles.nameField}>Name of Size : {inputField.sizeName}</div>
                     <Input
                         type='number'
-                        label='Count'
+                        placeholder='Amount available with this size'
                         id='count'
                         value={inputField.count}
                         onChange={e => handleInputChange(e.target.value)}
@@ -89,21 +91,25 @@ const AdminSizes = (props) => {
                 </div>
                 <div className={styles['add-field']} >
                     <div className={styles.nameField} >Add sizes:</div>
-                    <Input
+                    <TextInput
                         type='text'
-                        label='Add size name'
                         id='sizeName'
-                        placeholder='XS, S, M, L, XL, XXL'
+                        placeholder='Size name (42, 43, S, M, XL etc.)'
                         onChange={e => setAddSizeName(e.target.value)}
                     />
-                    <Input
+                    <QuantityInput
+                        value={addSizeCount}
+                        name='sizeQuantity'
+                        setNewValue={value => setAddSizeCount(value)}
+                    />
+                    {/* <Input
                         type='number'
-                        label='Add amount'
+                        // label='Add amount'
                         id='amount'
-                        placeholder='100, 200, 250 ...'
+                        placeholder='Amount to add'
                         onChange={e => setAddSizeCount(e.target.value)}
                         step='1'
-                    />
+                    /> */}
                     <button 
                         onClick={() => addSize('add')}
                         className={styles['submit-btn']} >Submit</button>

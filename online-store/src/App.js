@@ -29,7 +29,7 @@ function App() {
   }
 
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={{ user, setUser }}>
       <Navigation />
     </UserContext.Provider>
   )

@@ -5,7 +5,7 @@ const Input = ({label, id, value, onChange, onBlur, type, maxLength, placeholder
     return (
         <div className={styles.container}>
             <label htmlFor={id} className={styles['input-wrapper']}>
-                <span className={styles.label}>{label}:</span>
+                <span className={styles.label}>{label}</span>
                 <input type={type}
                         className={styles.input}
                         id={id}

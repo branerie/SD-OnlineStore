@@ -13,8 +13,8 @@ const HomePage = () => {
         <>
             <Header />
             <div>
-                <img src={leftImage} style={{ 'max-height': '35.95rem' }} />
-                <img src={rightImage} style={{ 'max-height': '35.95rem' }} />
+                <img src={leftImage} style={{ 'max-height': '32rem' }} />
+                <img src={rightImage} style={{ 'max-height': '32rem' }} />
             </div>
             <div>
                 <h3 className={styles['secondary-title']}>top categories</h3>

@@ -8,6 +8,7 @@ import ProductsContext from '../../ProductsContext'
 import GenderInput from '../genderInput'
 
 import { updateProduct } from '../../services/adminProduct'
+import NumberInput from '../inputFields/numberInput'
 
 const ModifyProductCard = (props) => {
     const [brand, setBrand] = useState(props.brand)
@@ -58,11 +59,21 @@ const ModifyProductCard = (props) => {
                     onChange={e => setBrand(e.target.value)}
                     maxLength='30'
                 />
-                <Input
+                {/* <Input
                     type='number'
                     label='Price'
                     id='price'
                     value={price}
+                    onChange={e => setPrice(e.target.value)}
+                    onBlur={() => {
+                        const formattedPrice = parseFloat(price).toFixed(2)
+                        setPrice(formattedPrice)
+                    }}
+                /> */}
+                <NumberInput
+                    value={price}
+                    placeholder='Price'
+                    min='0'
                     onChange={e => setPrice(e.target.value)}
                     onBlur={() => {
                         const formattedPrice = parseFloat(price).toFixed(2)

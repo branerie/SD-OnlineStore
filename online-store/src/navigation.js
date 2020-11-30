@@ -8,19 +8,25 @@ import {
 import UserContext from './Context'
 import HomePage from './pages/home'
 import AdminProductsPage from './pages/adminProducts'
-import AddProductCard from './pages/addProduct'
+import AddProductPage from './pages/addProduct'
 import RegisterPage from './pages/register'
+import LoginPage from './pages/login'
 
 const Navigation = () => {
-    const { isAdmin } = useContext(UserContext)
+    const { user: { isAdmin, userId }} = useContext(UserContext)
 
     return (
         <BrowserRouter>
             <Switch>
             <Route exact path='/' component={HomePage} />
-            <Route path='/register' component={RegisterPage} />
+            <Route path='/register'>
+                {userId ? (<Redirect to='/' />) : (<RegisterPage />) }
+            </Route>
+            <Route path='/login'>
+                {userId ? (<Redirect to='/' />) : (<LoginPage />)}
+            </Route>
             <Route path='/admin/products/add'>
-                {isAdmin ? (<AddProductCard />) : (<Redirect to='/login' />) }
+                {isAdmin ? (<AddProductPage />) : (<Redirect to='/login' />) }
             </Route>
             <Route path='/admin/products'>
                 {isAdmin ? (<AdminProductsPage />) : (<Redirect to='/login' />) }

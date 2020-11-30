@@ -12,7 +12,7 @@ import { deleteProduct } from '../../services/adminProduct'
 
 const AdminProductCard = (props) => {
     const [isEditing, setIsEditing] = useState(false)
-    const user = useContext(UserContext)
+    const { user: { isAdmin }} = useContext(UserContext)
     const productsContext = useContext(ProductsContext)
 
     const id = props.id
@@ -43,7 +43,7 @@ const AdminProductCard = (props) => {
                         {...props}  />
                 : <ProductCard key={props.id} {...props} />}
 
-            {user.isAdmin ?
+            {isAdmin ?
                 <div className={styles.adminButtons}>
                     <button onClick={changeEditingState}>Edit</button>
                     <button

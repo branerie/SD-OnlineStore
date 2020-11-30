@@ -1,5 +1,5 @@
 .container {
-    width: 100%;
+    width: 50%;
     height: auto;
     border: 1px solid #234465;
     border-radius: 4px;
@@ -14,8 +14,6 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 50%;
-  min-width: 40%;
   padding: 0px 10px;
 }
 
@@ -31,6 +29,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .add-field {

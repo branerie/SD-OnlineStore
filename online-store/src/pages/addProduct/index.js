@@ -2,6 +2,7 @@ import React, { useState, useReducer } from 'react'
 import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import Input from '../../components/input'
+import TextInput from '../../components/inputFields/textInput'
 import DragAndDrop from '../../components/dragAndDrop'
 import GenderInput from '../../components/genderInput'
 
@@ -133,7 +134,7 @@ const AddProductCard = () => {
                         placeholder='Shoes, Bags, T-shirts ...'
                         onChange={e => setCategories(e.target.value)}
                     />
-                    <Input
+                    <TextInput
                         type='text'
                         label='Add size name'
                         id='sizeName'

@@ -15,7 +15,7 @@ const verifyUser = async () => {
     return await response.json()
 }
 
-const logIn = async (url, email, password) => {
+const logInUser = async (email, password) => {
     const response = await fetch(`${USER_URL}/login`, {
         method: 'POST',
         body: JSON.stringify({ email, password }),
@@ -49,6 +49,6 @@ const registerUser = async (data) => {
 
 export {
     verifyUser,
-    logIn,
+    logInUser,
     registerUser
 }
