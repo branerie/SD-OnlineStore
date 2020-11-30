@@ -47,12 +47,12 @@ const getProductRanges = async () => {
     return products
 }
 
-const getProductsPage = async (categoricalFilters, rangeFilters, boolFilters, page, pageLength) => {
+const getProductsPage = async (categoricalFilters, rangeFilters, boolFilters, sort, page, pageLength) => {
     const queryStringArray = [
         ...getCategoricalFilterQueries(categoricalFilters),
         ...getRangeFilterQueries(rangeFilters),
         ...getBoolFilterQueries(boolFilters),
-        `page=${page}&pageLength=${pageLength}`
+        `page=${page}&pageLength=${pageLength}&sort=${sort[0]}_${sort[1]}`
     ]
 
     const queryString = queryStringArray.join('&')

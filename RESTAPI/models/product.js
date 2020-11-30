@@ -58,16 +58,28 @@ const productSchema = new mongoose.Schema({
     categories: [{
         type: String,
         enum: ['Shoes', 'Bags', 'T-shirts', 'Bathing suits', 'Dresses']
-    }]
+    }],
+    addDate: {
+        type: Date
+    }
 })
 
 productSchema.pre('validate', preprocessDiscountOnCreate)
 productSchema.pre('findOneAndUpdate', preprocessDiscountOnUpdate)
 productSchema.pre('update', preprocessDiscountOnUpdate)
+productSchema.pre('save', processAddDateOnCreate )
 
 productSchema.virtual('discountPrice').get(function () {
     return this.price * (1 - this.discount.percent)
 })
+
+function processAddDateOnCreate(next) {
+    if(this.isNew){
+        this.addDate = new Date()
+    }
+
+    return next()
+}
 
 function preprocessDiscountOnCreate(next) {
     if (this.discount.$isEmpty()){

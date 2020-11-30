@@ -70,4 +70,12 @@ function getDbProductsFilter(query) {
     return filter
 }
 
-module.exports = getDbProductsFilter
+function getSortCriteria(sortQuery) {
+    const [property, direction] = sortQuery.split('_')
+    return { [property] : direction }
+}
+
+module.exports = {
+    getDbProductsFilter,
+    getSortCriteria
+} 
