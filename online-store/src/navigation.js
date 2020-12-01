@@ -11,6 +11,7 @@ import AdminProductsPage from './pages/adminProducts'
 import AddProductPage from './pages/addProduct'
 import RegisterPage from './pages/register'
 import LoginPage from './pages/login'
+import ProductPage from './pages/product'
 
 const Navigation = () => {
     const { user: { isAdmin, userId }} = useContext(UserContext)
@@ -19,6 +20,7 @@ const Navigation = () => {
         <BrowserRouter>
             <Switch>
             <Route exact path='/' component={HomePage} />
+            <Route path='/products' component={ProductPage} />
             <Route path='/register'>
                 {userId ? (<Redirect to='/' />) : (<RegisterPage />) }
             </Route>
