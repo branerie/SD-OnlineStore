@@ -24,6 +24,23 @@ const getBoolFilterQueries = (boolFilters) => {
     return queryStrings
 }
 
+const getProductsQueryString = (
+    categoricalFilters,
+    rangeFilters,
+    boolFilters,
+    sort,
+    page,
+    pageLength) => {
+    const queryStringArray = [
+        ...getCategoricalFilterQueries(categoricalFilters),
+        ...getRangeFilterQueries(rangeFilters),
+        ...getBoolFilterQueries(boolFilters),
+        `page=${page}&pageLength=${pageLength}&sort=${sort[0]}_${sort[1]}`
+    ]
+
+    return queryStringArray.join('&')
+}
+
 const getImagePath = (url) => {
     const urlParts = url.split('/')
     return urlParts.slice(urlParts.length - 2).join('/')
@@ -38,7 +55,5 @@ const getImagePublicId = (url) => {
 export {
     getImagePath,
     getImagePublicId,
-    getCategoricalFilterQueries,
-    getRangeFilterQueries,
-    getBoolFilterQueries,
+    getProductsQueryString,
 }

@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
 import { getProductRanges, getProductsPage } from './services/product'
+import { getProductsQueryString } from './utils/product'
 
-const ProductsContextInitializer = (props) => {
+const ProductsContextInitializer = ({ children, pageLength, initialFilters, initialPage }) => {
     const [productProps, setProductProps] = useState(null)
     const [productPage, setProductPage] = useState(null)
-    const [page, setPage] = useState(0)
+    const [page, setPage] = useState(initialPage || 0)
     const [totalCount, setTotalCount] = useState(0)
     
-    const filtersState = {
+    const filtersState = initialFilters || {
         cat: {},
         range: {},
         bool: [],
@@ -23,17 +24,20 @@ const ProductsContextInitializer = (props) => {
 	}, [setProductProps])
 
 	const getCurrentProductsPage = useCallback(async () => {
-		const { total, productInfo } = await getProductsPage(
+        const queryString = getProductsQueryString(
 			filters.cat,
 			filters.range,
             filters.bool,
             filters.sort,
             page,
-            props.pageLength)            
+            pageLength) 
 
+		const { total, productInfo } = await getProductsPage(queryString) 
+        
+        window.history.pushState({}, null, `${window.location.pathname}?${queryString}`)
 		setProductPage(productInfo)
-		setTotalCount(total)
-    }, [setProductPage, setTotalCount, props.pageLength, filters, page])
+        setTotalCount(total)
+    }, [setProductPage, setTotalCount, pageLength, filters, page])
 
 	useEffect(() => {
 		getProductPropsRange()
@@ -76,6 +80,8 @@ const ProductsContextInitializer = (props) => {
                 return {...state, bool: newBoolFilters}
             case 'sort':
                 return {...state, sort: [action.property , action.direction]}
+            case 'reset':
+                return action.resetValue
             default:
                 return state
         }
@@ -103,7 +109,7 @@ const ProductsContextInitializer = (props) => {
             updateFilters: getProductPropsRange,
             updateProductsPage: getCurrentProductsPage
         }}>
-            {props.children}
+            {children}
         </ProductsContext.Provider>
     )
 }

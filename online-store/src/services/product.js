@@ -6,12 +6,7 @@ import {
     CLOUDINARY_UPLOAD_PRESET,
     AUTH_COOKIE_NAME
 } from '../utils/constants'
-import {
-    getBoolFilterQueries,
-    getCategoricalFilterQueries, 
-    getRangeFilterQueries,
-    getImagePath 
-} from '../utils/product'
+import { getProductsQueryString, getImagePath } from '../utils/product'
 
 const PRODUCT_URL = REST_API_URL + '/product'
 
@@ -47,16 +42,7 @@ const getProductRanges = async () => {
     return products
 }
 
-const getProductsPage = async (categoricalFilters, rangeFilters, boolFilters, sort, page, pageLength) => {
-    const queryStringArray = [
-        ...getCategoricalFilterQueries(categoricalFilters),
-        ...getRangeFilterQueries(rangeFilters),
-        ...getBoolFilterQueries(boolFilters),
-        `page=${page}&pageLength=${pageLength}&sort=${sort[0]}_${sort[1]}`
-    ]
-
-    const queryString = queryStringArray.join('&')
-    
+const getProductsPage = async (queryString) => {    
     const promise = await fetch(`${PRODUCT_URL}/products?${queryString}`, {
         method: 'GET',
         headers: {
