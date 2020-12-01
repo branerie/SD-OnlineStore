@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.container {
+    display: flex;
+    align-items: start;
+}
+
+.image {
+    height: 2.3rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+.input {
+    color: #707070;
+    border: 1px solid  #707070;
+    border-radius: 0.5rem;
+    padding-left: 0.5rem;
+    min-height: 1.7rem;
+}
+
+.input::placeholder {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 1rem;
+}
+
+.input:invalid {
+    width: 4rem;
+    border-color: #707070;
+}
+
+.input:hover, .input:valid {
+    width: 15rem;
+}
+

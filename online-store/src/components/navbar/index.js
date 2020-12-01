@@ -3,8 +3,7 @@ import styles from './index.module.css'
 import UserContext from '../../Context'
 import NavbarLink from '../navbarLink'
 import NavbarImageButton from '../navbarImageButton'
-
-import searchImage from '../../images/searchLink.svg'
+import NavbarSearch from '../navbarSearch'
 import favoritesImage from '../../images/favoritesLink.svg'
 import cartImage from '../../images/cartLink.svg'
 import profileImage from '../../images/profileLink.svg'
@@ -15,6 +14,7 @@ const Navbar = () => {
     return (
         <nav className={styles['site-nav']}>
             <ul className={styles['navbar-links']}>
+                <li className={styles['logo-space']}></li>
                 <NavbarLink name='Men' path='/products?cat_gender=M'/>
                 <NavbarLink name='Women' path='/products?cat_gender=F'/>
                 <NavbarLink name='Promotions' path='/products?bool_discount=true'/>
@@ -24,7 +24,7 @@ const Navbar = () => {
                 }
             </ul>
             <ul className={styles['navbar-buttons']}>
-                <NavbarImageButton path='' imageSrc={searchImage} />
+                <NavbarSearch />
                 <NavbarImageButton path='' imageSrc={favoritesImage} />
                 <NavbarImageButton path='' imageSrc={cartImage} />
                 <NavbarImageButton path='' imageSrc={profileImage} />

@@ -18,6 +18,14 @@
     margin-top: 1.2rem;
     min-height: 30px;
     border-radius: 5px;
+    border: 1px solid gray;
+    background-color: rgb(230, 227, 227);
+}
+
+.button:hover {
+    background-color: black;
+    border-color: black;
+    color: white;
 }
 
 .form {

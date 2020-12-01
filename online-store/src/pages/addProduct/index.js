@@ -136,7 +136,10 @@ const AddProductCard = () => {
                         placeholder='Shoes, Bags, T-shirts ...'
                         onChange={e => setCategories(e.target.value)}
                     /> */}
-                    <CategoriesInput />
+                    <CategoriesInput
+                        addedCategories={categories}
+                        handleAdd={cat => setCategories([...categories, cat])}
+                        handleRemove={cat => setCategories(categories.filter(c => c !== cat))} />
                     <NumberInput
                         placeholder='Price'
                         min='0.01'

@@ -22,6 +22,7 @@ function parseQueryString(queryString) {
         }
     }
 
+    //TODO: Figure out a better way to filter by boolean
     if (result.bool) {
         result.bool = Object.keys(result.bool)
     }

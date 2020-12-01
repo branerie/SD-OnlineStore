@@ -18,9 +18,6 @@ const DescriptionInput = ({ value, onChange }) => {
     })
 
     return (
-        // <div className={styles.container}>
-            
-        // </div>
         <InputWrapper isVisible={isVisible} placeholder='Description'>
             <textarea
                 rows="5"
