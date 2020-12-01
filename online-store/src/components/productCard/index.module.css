@@ -1,10 +1,8 @@
 .container {
-    width: 100%;
-    height: auto;
-    border: 1px solid #234465;
-    margin-bottom: 3%;
-    border-radius: 4px;
-    background-color: bisque;
+    width: 20rem;
+    height: 28rem;
+    margin: 2%;
+    position: relative;
   }
 
 .price {
@@ -23,7 +21,12 @@
     color: red;
 }
 
-.img {
-    width: 100px;
-    height: 80px;
+
+
+.product-image {
+    position: absolute;
+    height: 15rem;
+    width: 12rem;
+    top: 2rem;
+    right: 6rem;
 }

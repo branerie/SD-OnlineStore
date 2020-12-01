@@ -6,7 +6,7 @@ import ProductsRangeFilter from '../productsRangeFilter'
 import ProductsBoolFilter from '../productsBoolFilter'
 import ProductContext from '../../ProductsContext'
 
-const ProductsFilter = (props) => {
+const ProductsFilter = () => {
     const productsContext = useContext(ProductContext)
     
     const productProps = productsContext.productProps
@@ -39,9 +39,6 @@ const ProductsFilter = (props) => {
                 <ProductsBoolFilter
                         title='Discount'
                         propName='discount' />
-            </div>
-            <div>
-                {props.children}
             </div>
         </>
     )
