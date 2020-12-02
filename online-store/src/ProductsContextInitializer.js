@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
-import { getProductRanges, getProductsPage } from './services/product'
+import { getProductRanges, getProductsPage, getProductSearchResults } from './services/product'
 import { getProductsQueryString } from './utils/product'
 
 const ProductsContextInitializer = ({ children, pageLength, initialFilters, initialPage }) => {
@@ -87,14 +87,24 @@ const ProductsContextInitializer = ({ children, pageLength, initialFilters, init
         }
     }
 
-    const handlePageChange = (newPage) => {
+    const handlePageChange = useCallback((newPage) => {
         setPage(newPage)
-    }
+    })
 
-    const handleProductDelete = (productId) => {
+    const handleProductDelete = useCallback((productId) => {
         const newProductsList = productPage.filter(p => p.id !== productId)
         setProductPage(newProductsList)
-    }
+    })
+
+    const searchProducts = useCallback(async (searchTerm) => {
+        const result = await getProductSearchResults(searchTerm, page, pageLength)
+
+        if (result.error) {
+            //TODO: handle errors
+        }
+
+        setProductPage(result.productInfo)
+    })
 
     return (
         <ProductsContext.Provider value={{
@@ -106,8 +116,9 @@ const ProductsContextInitializer = ({ children, pageLength, initialFilters, init
             filtersDispatch,
             handlePageChange,
             handleProductDelete,
+            searchProducts,
             updateFilters: getProductPropsRange,
-            updateProductsPage: getCurrentProductsPage
+            updateProductsPage: getCurrentProductsPage,
         }}>
             {children}
         </ProductsContext.Provider>

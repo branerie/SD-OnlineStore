@@ -2,7 +2,7 @@ const router = require('express').Router()
 const Product = require('../models/product')
 const { getDbProductsFilter, getSortCriteria } = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
-const { getSizeRange, sortSizes, getImageUrl, getAllCategories } = require('../utils/product')
+const { getSizeRange, sortSizes, getImageUrl, getAllCategories, parseMongoProducts } = require('../utils/product')
 
 router.get('/ranges', async (req, res) => {
     const dbRequestFilter = getDbProductsFilter(req.query)
@@ -53,7 +53,7 @@ router.get('/ranges', async (req, res) => {
         }
 
         productRanges.sizes = Array.from(sizes)
-                                   .sort(sortSizes)
+            .sort(sortSizes)
 
         delete productRanges._id
         delete productRanges.allSizes
@@ -75,31 +75,13 @@ router.get('/products', async (req, res) => {
         const productFilters = getDbProductsFilter(req.query)
         const sortCriteria = getSortCriteria(req.query.sort)
 
-        const totalCount = await Product.find(productFilters).count()
+        const totalCount = await Product.find(productFilters).countDocuments()
         const fullProducts = await Product.find(productFilters)
-                                          .sort(sortCriteria)
-                                          .skip(page * pageLength)
-                                          .limit(pageLength)
+            .sort(sortCriteria)
+            .skip(page * pageLength)
+            .limit(pageLength)
 
-        const products = fullProducts.map(p => {
-            return {
-                id: p._id,
-                sizes: p.sizes,
-                price: p.price,
-                discount: p.discount.$isEmpty() ? null : {
-                    percent: p.discount.percent * 100,
-                    endDate: p.discount.endDate.toISOString().slice(0, 10)
-                },
-                brand: p.brand,
-                description: p.description,
-                images: p.images.length > 0
-                    ? p.images.map(image => getImageUrl(image))
-                    : null,
-                gender: p.gender,
-                categories: p.categories,
-                discountPrice: p.discountPrice
-            }
-        })
+        const products = parseMongoProducts(fullProducts)
 
         return res.send({ total: totalCount, productInfo: products })
     } catch (error) {
@@ -115,8 +97,31 @@ router.get('/categories', (req, res) => {
     try {
         const categories = getAllCategories()
         return res.send({ categories })
-    } catch(error) {
-        return res.status(500).send({ error: 'Internal Server Error'})
+    } catch (error) {
+        return res.status(500).send({ error: 'Internal Server Error' })
+    }
+})
+
+router.get('/search', async (req, res) => {
+    try {
+        const { searchTerm, page, pageLength } = req.params
+
+        const totalCount = await Product.find({ $text: { $search: searchTerm } })
+                                        .countDocuments()
+
+        const searchResult = await Product.find({ $text: { $search: searchTerm } })
+                                          .sort({ score: { $meta: 'textScore' } })
+                                          .skip((page || 0) * pageLength)
+                                          .limit(pageLength)
+
+        const productInfo = parseMongoProducts(searchResult)
+        return res.send({ total: totalCount, productInfo: productInfo})
+    } catch (error) {
+        if (isMongoError(error)) {
+            return res.status(403).send({ error: error.message })
+        }
+
+        return res.status(500).send({ error: error.message })
     }
 })
 

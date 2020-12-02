@@ -59,10 +59,33 @@ const getAllCategories = () => {
     return ['Shoes', 'Bags', 'T-shirts', 'Bathing suits', 'Dresses']
 }
 
+const parseMongoProducts = (mongoProducts) => {
+    return mongoProducts.map(p => {
+        return {
+            id: p._id,
+            sizes: p.sizes,
+            price: p.price,
+            discount: p.discount.$isEmpty() ? null : {
+                percent: p.discount.percent * 100,
+                endDate: p.discount.endDate.toISOString().slice(0, 10)
+            },
+            brand: p.brand,
+            description: p.description,
+            images: p.images.length > 0
+                ? p.images.map(image => getImageUrl(image))
+                : null,
+            gender: p.gender,
+            categories: p.categories,
+            discountPrice: p.discountPrice
+        }
+    })
+}
+
 module.exports = {
     getSizeRange,
     sortSizes,
     getImageUrl,
     getImagePublicIdFromPath,
-    getAllCategories
+    getAllCategories,
+    parseMongoProducts
 }

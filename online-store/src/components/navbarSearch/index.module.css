@@ -33,3 +33,6 @@
     width: 15rem;
 }
 
+.submit-btn {
+    display: none;
+}

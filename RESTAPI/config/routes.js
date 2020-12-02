@@ -5,7 +5,9 @@ const {
     adminProductController,
     adminUserController
 } = require('../controllers')
+const { attachCurrentUser } = require('../utils/authenticate')
 
+router.use('/', attachCurrentUser)
 router.use('/api/user/', userController)
 router.use('/api/product/', productController)
 router.use('/api/admin/product', adminProductController)

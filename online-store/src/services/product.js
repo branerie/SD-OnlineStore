@@ -65,6 +65,19 @@ const getProductImages = async (productId) => {
     return images
 }
 
+const getProductSearchResults = async (searchTerm, pageLength, page) => {
+    const queryString  = `searchTerm=${searchTerm}&pageLength=${pageLength}&page=${page}`
+    const promise = await fetch(`${PRODUCT_URL}/search?${queryString}`, {
+        method: 'GET',
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
+        }
+    })
+
+    const searchResult = await promise.json()
+    return searchResult
+}
+
 const getCategories = async () => {
     const response = await fetch(`${PRODUCT_URL}/categories`, {
         headers: {
@@ -81,5 +94,6 @@ export {
     getProductImages,
     getProductsPage,
     getProductRanges,
+    getProductSearchResults,
     getCategories
 }

@@ -1,28 +1,27 @@
+const express = require('express')
+const app = express()
+const cookieParser = require('cookie-parser')
+const cors = require('cors')
+const routes = require('./config/routes')
+
 const dotenv = require('dotenv')
 dotenv.config()
 
-const express = require('express')
-const configExpress = require('./config/express')
+app.use(cors({
+    exposedHeaders: 'Authorization'
+}))
 
-const mongoose = require('mongoose')
-mongoose.set('runValidators', true)
+app.use(express.json())
+app.use(express.urlencoded({
+    extended: true
+}))
 
-mongoose.connect(process.env.DB_CONNECTION, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
-} , (err) => {
-    if (err) {
-        console.error(err)
-        throw err
-    }
-    
-    console.log('Database is setup and running')
-})
+app.use(cookieParser(process.env.COOKIE_SECRET))
 
+app.use('/', routes)
 
-const app = express()
-configExpress(app)
+const configMongoose = require('./config/mongoose')
+configMongoose()
+
 
 app.listen(process.env.PORT, console.log(`Listening on port ${process.env.PORT}!`))

@@ -78,6 +78,8 @@ productSchema.virtual('discountPrice').get(function () {
     return this.price * (1 - this.discount.percent)
 })
 
+// productSchema.index({ categories: 'text' })
+
 function processAddDateOnCreate(next) {
     if (this.isNew) {
         this.addDate = new Date()
