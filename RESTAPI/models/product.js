@@ -87,16 +87,14 @@ function processAddDateOnCreate(next) {
 }
 
 function preprocessDiscountOnCreate(next) {
-    if (this.discount.$isEmpty()){
+    if (this.discount.$isEmpty() || !this.discount.isModified()){
         return next()
     }
 
     if (this.discount.hasOwnProperty('endDate') &&
         this.discount.hasOwnProperty('percent')) {
         if (this.discount.percent && this.discount.endDate) {
-            if (this.discount.isModified()) {
-                this.discount.percent /= 100
-            }
+            this.discount.percent /= 100
 
             return next()  
         }            
