@@ -62,20 +62,24 @@ const productSchema = new mongoose.Schema({
     }],
     addDate: {
         type: Date
-    }
+    },
+    likedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 })
 
 productSchema.pre('validate', preprocessDiscountOnCreate)
 productSchema.pre('findOneAndUpdate', preprocessDiscountOnUpdate)
 productSchema.pre('update', preprocessDiscountOnUpdate)
-productSchema.pre('save', processAddDateOnCreate )
+productSchema.pre('save', processAddDateOnCreate)
 
 productSchema.virtual('discountPrice').get(function () {
     return this.price * (1 - this.discount.percent)
 })
 
 function processAddDateOnCreate(next) {
-    if(this.isNew){
+    if (this.isNew) {
         this.addDate = new Date()
     }
 
@@ -86,10 +90,10 @@ function preprocessDiscountOnCreate(next) {
     if (this.discount.$isEmpty()){
         return next()
     }
-    
+
     if (this.discount.hasOwnProperty('endDate') &&
         this.discount.hasOwnProperty('percent')) {
-        if (this.discount.percent && this.discount.endDate) {
+        if (this.discount.percent && this.discount.endDate && this.discount.isModified()) {
             this.discount.percent /= 100
             return next() 
         }                   
@@ -102,14 +106,14 @@ function preprocessDiscountOnUpdate(next) {
     const update = this.getUpdate()
 
     if (update.hasOwnProperty('$set') &&
-        update.$set.hasOwnProperty('discount') && 
+        update.$set.hasOwnProperty('discount') &&
         update.$set.discount.hasOwnProperty('percent')) {
 
         const discount = update.$set.discount
         if (!discount.hasOwnProperty('endDate') || !discount.endDate) {
             throw new SyntaxError('Product discount must have an end date.')
         }
-        
+
         update.$set.discount.percent /= 100
     }
 

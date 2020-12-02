@@ -36,7 +36,11 @@ const userSchema = new mongoose.Schema({
     },
     isAdmin: {
         type: Boolean
-    }
+    },
+    favorites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }]
 })
 
 userSchema.methods = {

@@ -5,6 +5,29 @@ const User = require('../models/user')
 const TokenBlackList = require('../models/tokenBlackList')
 const { isMongoError } = require('../utils/utils')
 
+router.get('/verify' , async (req, res) => {
+    const currentToken = req.headers.authorization
+
+    if (currentToken) {
+        try {
+            const userInfo = await verifyToken(currentToken)
+            return res.send({ userId: userInfo.id, isAdmin: userInfo.isAdmin || false })
+        } catch(error) {
+            return res.status(403).send({
+                userId: null,
+                isAdmin: false,
+                error: error.message
+            })
+        }
+    }
+
+    return res.send({ userId: null, isAdmin: false })
+})
+
+router.post('/favorites', async (req, res) => {
+    
+})
+
 router.post('/login', async (req, res) => {
     const { email, password } = req.body
     const tokenForCheck = req.headers.authorization
@@ -83,25 +106,6 @@ router.post('/logout', async (req, res) => {
     } else {
         return res.status(401).send({ error : 'No one is logged in' })
     }
-})
-
-router.get('/verify' , async (req, res) => {
-    const currentToken = req.headers.authorization
-
-    if (currentToken) {
-        try {
-            const userInfo = await verifyToken(currentToken)
-            return res.send({ userId: userInfo.id, isAdmin: userInfo.isAdmin || false })
-        } catch(error) {
-            return res.status(403).send({
-                userId: null,
-                isAdmin: false,
-                error: error.message
-            })
-        }
-    }
-
-    return res.send({ userId: null, isAdmin: false })
 })
 
 module.exports = router
