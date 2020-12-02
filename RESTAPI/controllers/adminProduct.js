@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
             description,
             images,
             gender,
-            categories: { $push: { $each: categories } }
+            categories
         })
 
         res.send({ status: 'Success!', id: createdProduct._id })

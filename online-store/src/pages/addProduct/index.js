@@ -26,8 +26,6 @@ const AddProductCard = () => {
     const [discountEndDate, setDiscountEndDate] = useState(null)
     const [description, setDescription] = useState('')
     const [gender, setGender] = useState('U')
-    const sizes = []
-    const newCategories = []
 
     const [images, imagesDispatch] = useReducer(reducer, [])
 
@@ -48,17 +46,13 @@ const AddProductCard = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        const sizeValue = { sizeName: sizeName, count: sizeCount }
-        sizes.push(sizeValue)
-        newCategories.push(categories)
-
         const newProduct = {
             brand,
-            sizes,
+            sizes: [{ sizeName: sizeName, count: sizeCount }],
             price,
             description,
             gender,
-            categories: newCategories,
+            categories,
         }
 
         if (discountInPercent !== null && discountEndDate !== null) {

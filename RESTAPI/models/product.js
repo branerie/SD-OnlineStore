@@ -93,10 +93,13 @@ function preprocessDiscountOnCreate(next) {
 
     if (this.discount.hasOwnProperty('endDate') &&
         this.discount.hasOwnProperty('percent')) {
-        if (this.discount.percent && this.discount.endDate && this.discount.isModified()) {
-            this.discount.percent /= 100
-            return next() 
-        }                   
+        if (this.discount.percent && this.discount.endDate) {
+            if (this.discount.isModified()) {
+                this.discount.percent /= 100
+            }
+
+            return next()  
+        }            
     }
 
     throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
