@@ -87,24 +87,22 @@ const ProductsContextInitializer = ({ children, pageLength, initialFilters, init
         }
     }
 
-    const handlePageChange = useCallback((newPage) => {
-        setPage(newPage)
-    })
+    const handlePageChange = newPage => setPage(newPage)
 
-    const handleProductDelete = useCallback((productId) => {
+    const handleProductDelete = (productId) => {
         const newProductsList = productPage.filter(p => p.id !== productId)
         setProductPage(newProductsList)
-    })
+    }
 
     const searchProducts = useCallback(async (searchTerm) => {
-        const result = await getProductSearchResults(searchTerm, page, pageLength)
+        const result = await getProductSearchResults(searchTerm, pageLength, page)
 
         if (result.error) {
             //TODO: handle errors
         }
 
         setProductPage(result.productInfo)
-    })
+    }, [page, pageLength])
 
     return (
         <ProductsContext.Provider value={{

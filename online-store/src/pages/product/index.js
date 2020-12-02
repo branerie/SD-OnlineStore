@@ -13,9 +13,9 @@ const PAGE_LENGTH = 20
 const ProductPage = () => {
     return (
         <>
-            <Header />
-            <div className={styles.container} >
-                <ProductsContextInitializer pageLength={PAGE_LENGTH}>
+            <ProductsContextInitializer pageLength={PAGE_LENGTH}>
+                <Header />
+                <div className={styles.container} >
                     <ProductsPageWrapper>
                         <aside className={styles['aside-container']}>
                             <ProductsFilter />
@@ -25,8 +25,8 @@ const ProductPage = () => {
                             <Pagination pageLength={PAGE_LENGTH} />
                         </main>
                     </ProductsPageWrapper>
-                </ProductsContextInitializer>
-            </div>
+                </div>
+            </ProductsContextInitializer>
         </>
     )
 }
