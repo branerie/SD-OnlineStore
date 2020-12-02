@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
 .container {
     width: 20rem;
     height: 28rem;
@@ -5,28 +8,60 @@
     position: relative;
   }
 
-.price {
-    word-wrap: break-word;
-    padding: 0.5%;
-    font-style: italic;
-  
-}
-
-.discount {
-    word-wrap: break-word;
-    padding: 0.5%;
-    font-style: italic;
-    display: inline-block;
-    text-size-adjust: 15;
-    color: red;
-}
-
-
-
 .product-image {
     position: absolute;
-    height: 15rem;
-    width: 12rem;
-    top: 2rem;
-    right: 6rem;
+    height: 60%;
+    width: 55%;
+    top: 7%;
+    right: 31%;
 }
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70%;
+    width: 100%;
+}
+
+.brand-likeButton {
+    display: flex;
+    justify-content: center;
+}
+
+
+.brand {
+    font-size: 2rem;
+    font-family: 'Lateef', cursive;
+    width: 155px;
+    text-align: center;
+    display: inline;
+}
+
+.like-button {
+    width: 2rem;
+}
+
+.like-button:hover {
+    background-color: red;
+}
+
+.price-container {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 1.5rem;
+}
+
+.price {
+    padding-left: 1rem;
+    display: block;
+}
+
+.discount-style {
+    color: red;
+    padding-right: 15%;
+}
+
+
+
