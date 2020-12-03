@@ -8,19 +8,16 @@ import favoritesImage from '../../images/favoritesLink.svg'
 import cartImage from '../../images/cartLink.svg'
 import profileImage from '../../images/profileLink.svg'
 
-import NavbarImageLink from '../navbarImageLink'
-
-const Navbar = () => {
-    const { user: { isAdmin } } = useContext(UserContext)
+const NavbarHome = () => {
+    const { user: { isAdmin }} = useContext(UserContext)
 
     return (
         <nav className={styles['site-nav']}>
             <ul className={styles['navbar-links']}>
                 <li className={styles['logo-space']}></li>
-                {/* <NavbarLink name='Men' path='/products?cat_gender=M'/> */}
-                <NavbarImageLink name='Men' path='/products?cat_gender=M' imageName='menLink.png' />
-                <NavbarImageLink name='Women' path='/products?cat_gender=F' imageName='menLink.png'  />
-                <NavbarImageLink name='Promotions' path='/products?bool_discount=true' imageName='menLink.png' />
+                <NavbarLink name='Men' path='/products?cat_gender=M'/>
+                <NavbarLink name='Women' path='/products?cat_gender=F'/>
+                <NavbarLink name='Promotions' path='/products?bool_discount=true'/>
                 {isAdmin
                     ? <NavbarLink name='Admin' path='/admin/products' />
                     : null
@@ -36,4 +33,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default NavbarHome

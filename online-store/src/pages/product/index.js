@@ -6,25 +6,26 @@ import Header from '../../components/header'
 import ProductsFilter from '../../components/productsFilter'
 import Pagination from '../../components/pagination'
 import ProductCardsList from '../../components/productCardsList'
-import ProductsPageWrapper from '../../components/productsPageWrapper'
+import { parseQueryString } from '../../utils/url'
 
 const PAGE_LENGTH = 20
 
 const ProductPage = () => {
+    const query = parseQueryString(window.location.search)
+    const search = query.searchTerm || ''
+
     return (
         <>
-            <ProductsContextInitializer pageLength={PAGE_LENGTH}>
+            <ProductsContextInitializer pageLength={PAGE_LENGTH} search={search}>
                 <Header />
                 <div className={styles.container} >
-                    <ProductsPageWrapper>
-                        <aside className={styles['aside-container']}>
-                            <ProductsFilter />
-                        </aside>
-                        <main className={styles['main-container']}>
-                            <ProductCardsList />
-                            <Pagination pageLength={PAGE_LENGTH} />
-                        </main>
-                    </ProductsPageWrapper>
+                    <aside className={styles['aside-container']}>
+                        <ProductsFilter />
+                    </aside>
+                    <main className={styles['main-container']}>
+                        <ProductCardsList />
+                        <Pagination pageLength={PAGE_LENGTH} />
+                    </main>
                 </div>
             </ProductsContextInitializer>
         </>

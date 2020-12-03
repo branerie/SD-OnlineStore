@@ -1,5 +1,10 @@
 function parseQueryString(queryString) {
     let queryPairs = queryString.replace('?', '').split('&')
+
+    if (queryPairs.length === 0 ||
+        (queryPairs.length === 1 && queryPairs[0] === '')) {
+        return {}
+    }
     
     const result = {}
     for (let queryPair of queryPairs) {

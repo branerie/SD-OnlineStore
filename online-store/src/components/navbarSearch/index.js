@@ -1,22 +1,36 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import ProductsContext from '../../ProductsContext'
 import styles from './index.module.css'
 
 import searchImage from '../../images/searchLink.svg'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import { parseQueryString } from '../../utils/url'
 
 const NavbarSearch = () => {
-    const [searchTerm, setSearchTerm] = useState(window.location.search.searchTerm || '')
+    const [searchTerm, setSearchTerm] = useState('')
     const productsContext = useContext(ProductsContext)
-    // const ref = useRef(null)
+    const ref = useRef(null)
+    const history = useHistory()
+
+    useEffect(() => {
+        const query = parseQueryString(window.location.search)
+        if (query.searchTerm) {
+            setSearchTerm(query.searchTerm)
+        }
+    }, [])
 
     const handleSubmit = (event) => {
         event.preventDefault()
 
-        productsContext.searchProducts(searchTerm)
-    }
+        const { pathname } = window.location
+        const isOnProductsPage = pathname === '/products' || pathname === '/admin/products'
 
-    const searchLink = `/products?searchTerm=${searchTerm}`
+        if (!isOnProductsPage) {
+            history.push(`/products?searchTerm=${searchTerm}`)
+        }
+
+        productsContext.filtersDispatch({ type: 'search', searchTerm: searchTerm })
+    }
 
     return (
         <form noValidate onSubmit={handleSubmit} className={styles.container}>
@@ -27,11 +41,8 @@ const NavbarSearch = () => {
                 className={styles.input}
                 placeholder='Search' required
                 onChange={e => setSearchTerm(e.target.value)} />
-            <Link to={searchLink}>
-                <img src={searchImage} className={styles.image} />
-            </Link>
-            {/* <img src={searchImage} className={styles.image} onClick={() => ref.current.click()} /> */}
-            {/* <input type='submit' ref={ref} className={styles['submit-btn']} /> */}
+            <img src={searchImage} className={styles.image} onClick={() => ref.current.click()} />
+            <input type='submit' ref={ref} className={styles['submit-btn']} />
         </form>
     )
 }

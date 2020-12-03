@@ -10,11 +10,11 @@ module.exports = async function () {
             useCreateIndex: true
         })
 
-        db.collections.products.createIndex({
-            brand: 'text',
-            description: 'text',
-            categories: 'text'
-        })
+        // db.collections.products.createIndex({
+        //     brand: 'text',
+        //     description: 'text',
+        //     categories: 'text'
+        // })
 
         console.log('Database is setup and running')
     } catch (err) {

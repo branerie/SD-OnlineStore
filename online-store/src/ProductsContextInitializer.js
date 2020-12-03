@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
-import { getProductRanges, getProductsPage, getProductSearchResults } from './services/product'
+import { getProductRanges, getProductsPage } from './services/product'
 import { getProductsQueryString } from './utils/product'
 
-const ProductsContextInitializer = ({ children, pageLength, initialFilters, initialPage }) => {
+const ProductsContextInitializer = ({ children, pageLength, search }) => {
     const [productProps, setProductProps] = useState(null)
     const [productPage, setProductPage] = useState(null)
-    const [page, setPage] = useState(initialPage || 0)
+    const [page, setPage] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
     
-    const filtersState = initialFilters || {
+    const filtersState = {
+        bool: [],
         cat: {},
         range: {},
-        bool: [],
+        search: search || '',
         sort: ['addDate', 'desc']
     }
 
@@ -24,15 +25,10 @@ const ProductsContextInitializer = ({ children, pageLength, initialFilters, init
 	}, [setProductProps])
 
 	const getCurrentProductsPage = useCallback(async () => {
-        const queryString = getProductsQueryString(
-			filters.cat,
-			filters.range,
-            filters.bool,
-            filters.sort,
-            page,
-            pageLength) 
-
-		const { total, productInfo } = await getProductsPage(queryString) 
+        const queryString = getProductsQueryString(filters, page, pageLength)
+        const { total, productInfo } = await getProductsPage(queryString) 
+        
+        console.log()
         
         window.history.pushState({}, null, `${window.location.pathname}?${queryString}`)
 		setProductPage(productInfo)
@@ -78,6 +74,8 @@ const ProductsContextInitializer = ({ children, pageLength, initialFilters, init
                 }
 
                 return {...state, bool: newBoolFilters}
+            case 'search':
+                return {...state, search: action.searchTerm}
             case 'sort':
                 return {...state, sort: [action.property , action.direction]}
             case 'reset':
@@ -94,16 +92,6 @@ const ProductsContextInitializer = ({ children, pageLength, initialFilters, init
         setProductPage(newProductsList)
     }
 
-    const searchProducts = useCallback(async (searchTerm) => {
-        const result = await getProductSearchResults(searchTerm, pageLength, page)
-
-        if (result.error) {
-            //TODO: handle errors
-        }
-
-        setProductPage(result.productInfo)
-    }, [page, pageLength])
-
     return (
         <ProductsContext.Provider value={{
             productProps,
@@ -114,7 +102,6 @@ const ProductsContextInitializer = ({ children, pageLength, initialFilters, init
             filtersDispatch,
             handlePageChange,
             handleProductDelete,
-            searchProducts,
             updateFilters: getProductPropsRange,
             updateProductsPage: getCurrentProductsPage,
         }}>

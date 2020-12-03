@@ -33,6 +33,11 @@ function getDbProductsFilter(query) {
     for (const property of Object.getOwnPropertyNames(query)) {
         const [propType, propValue] = property.split('_')
 
+        if (property === 'searchTerm' && query[property] !== '') {
+            filter['$text'] = { $search: query[property] }
+            continue
+        }
+
         // database schema does not contain this property
         // therefore, we don't try to filter by it
         if (!propValue || !isProductSchemaField(propValue)) {

@@ -3,15 +3,12 @@ import styles from './index.module.css'
 
 import CategoryCards from '../../components/categoryCards'
 import indexImage from '../../images/index.jpg'
-import Header from '../../components/header'
-import ProductsContextInitializer from '../../ProductsContextInitializer'
+import HeaderHome from '../../components/headerHome'
 
 const HomePage = () => {
     return (
         <>
-            <ProductsContextInitializer>
-                <Header />
-            </ProductsContextInitializer>
+            <HeaderHome />
             <div>
                 <img
                     src={indexImage}

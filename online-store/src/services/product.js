@@ -6,7 +6,7 @@ import {
     CLOUDINARY_UPLOAD_PRESET,
     AUTH_COOKIE_NAME
 } from '../utils/constants'
-import { getProductsQueryString, getImagePath } from '../utils/product'
+import { getImagePath } from '../utils/product'
 
 const PRODUCT_URL = REST_API_URL + '/product'
 
@@ -65,19 +65,6 @@ const getProductImages = async (productId) => {
     return images
 }
 
-const getProductSearchResults = async (searchTerm, pageLength, page) => {
-    const queryString  = `searchTerm=${searchTerm}&pageLength=${pageLength}&page=${page}`
-    const promise = await fetch(`${PRODUCT_URL}/search?${queryString}`, {
-        method: 'GET',
-        headers: {
-            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
-        }
-    })
-
-    const searchResult = await promise.json()
-    return searchResult
-}
-
 const getCategories = async () => {
     const response = await fetch(`${PRODUCT_URL}/categories`, {
         headers: {
@@ -94,6 +81,5 @@ export {
     getProductImages,
     getProductsPage,
     getProductRanges,
-    getProductSearchResults,
     getCategories
 }
