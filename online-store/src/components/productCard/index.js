@@ -1,28 +1,45 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from './index.module.css'
+import UserContext from '../../Context'
+import { setFavorites } from '../../services/user.js'
 import cardFrame from '../../images/productCardFrame.svg'
-import favotiesImage from '../../images/favoritesLink.svg'
+import favotiesImageEmpty from '../../images/favoritesLink.svg'
+import favotiesImageFill from '../../images/favoritesLinkFilled.svg'
+
+const NO_IMAGES = 'No image'
 
 const ProductCard = (props) => {
-    let discount = null   
+    let discount = null
+    const { user, setUser }= useContext(UserContext)
+    const isInFavorites = user.favorites.includes(props.id)
 
     if(props.discount) {
-        console.log(props.discount.percent)
         const discPrice = props.discountPrice.toFixed(2)
         const discPercent = props.discount.percent
 
         discount = `-${parseInt(discPercent)}% = ${discPrice}$`
     }
-   
+  
+   const changeFavorites = async () => {
+        const response = await setFavorites(props.id)
+
+        if(response.error) {
+            //TODO handle errors
+        }
+
+        setUser({...user, favorites: response.favorites})
+   }
+
+    const imgSrc = isInFavorites ? favotiesImageFill : favotiesImageEmpty
 
     return (
         <div className={styles.container}>
-            <img src={cardFrame}/>
-            <img src={props.images} alt={'No images'}  className={styles['product-image']}/>
+            <img src={cardFrame} alt={NO_IMAGES}/>
+            <img src={props.images} alt={NO_IMAGES}  className={styles['product-image']}/>
             <div className={styles['text-container']}>
                 <div className={styles['brand-likeButton']}>                    
                     <div className={styles.brand}>{props.brand}</div>
-                    <img src={favotiesImage} className={styles['like-button']}/>                 
+                    <img onClick={changeFavorites} src={imgSrc} alt={NO_IMAGES} title={'Favorite collection'} className={styles['like-button']}/>                    
                 </div>
                 <div className={styles['price-container']}>
                     <div className={styles.price}>{props.price}$</div>

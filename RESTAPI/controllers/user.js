@@ -11,20 +11,51 @@ router.get('/verify' , async (req, res) => {
     if (currentToken) {
         try {
             const userInfo = await verifyToken(currentToken)
-            return res.send({ userId: userInfo.id, isAdmin: userInfo.isAdmin || false })
+            return res.send({ userId: userInfo.id, isAdmin: userInfo.isAdmin || false, favorites: userInfo.favorites })
         } catch(error) {
             return res.status(403).send({
                 userId: null,
                 isAdmin: false,
+                favorites: [],
                 error: error.message
             })
         }
     }
 
-    return res.send({ userId: null, isAdmin: false })
+    return res.send({ userId: null, isAdmin: false, favorites: [] })
 })
 
-router.post('/favorites', async (req, res) => {
+router.patch('/favorites', async (req, res) => {
+    const currentToken = req.headers.authorization
+    const productId = req.body.productId
+
+        if(currentToken) {
+            try {
+                const userInfo = await verifyToken(currentToken)
+                let user = await User.findById(userInfo.id)
+
+                if (user.favorites.includes(productId)) {               
+                    await user.updateOne({ $pull: { favorites: productId }})
+
+                } else {
+                    await user.updateOne({ $push: { favorites: productId }})
+                }
+
+                user = await User.findById(userInfo.id)
+                return res.send({ favorites: user.favorites , userId: user.id })
+
+            } catch (error) {
+                if (isMongoError(error)) {
+                    return res.status(403).send({ error: error.message })
+                }
+        
+                return res.status(500).send({ error: error.message })
+            }
+        } else {
+            //TODO implement without login
+        }
+
+        
     
 })
 
@@ -49,9 +80,9 @@ router.post('/login', async (req, res) => {
             return res.status(401).send({ error: 'Invalid email or password' })
         }
 
-        const token = createToken({ id: user._id, isAdmin: user.isAdmin })
+        const token = createToken({ id: user._id, isAdmin: user.isAdmin, favorites: user.favorites })
         res.header('Authorization', token)
-        res.send({ id: user._id, isAdmin: user.isAdmin })
+        res.send({ id: user._id, isAdmin: user.isAdmin, favorites: user.favorites })
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })
@@ -66,7 +97,7 @@ router.post('/register', async (req, res) => {
 
     try {
         const createdUser = await User.create({ email, firstName, lastName, password })
-        const token = createToken({ id: createdUser._id })
+        const token = createToken({ id: createdUser._id, favorites: [] })
         res.header('Authorization', token)
         res.send({ id: createdUser._id })
     } catch (error) {

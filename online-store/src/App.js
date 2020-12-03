@@ -7,7 +7,7 @@ import getCookie from './utils/cookie'
 import { verifyUser } from './services/user'
 
 function App() {
-  const [user, setUser] = useState({ userId: null, isAdmin: false })
+  const [user, setUser] = useState({ userId: null, isAdmin: false, favorites: [] })
   const [isLoading, setIsLoading] = useState(true)
 
   const verifyCurrentUser = useCallback(async () => {
@@ -16,7 +16,7 @@ function App() {
       //TODO: handle errors
     }
 
-    setUser({ userId: userInfo.userId, isAdmin: userInfo.isAdmin })
+    setUser({ userId: userInfo.userId, isAdmin: userInfo.isAdmin, favorites: userInfo.favorites })
     setIsLoading(false)
   })
 

@@ -47,8 +47,22 @@ const registerUser = async (data) => {
     return await response.json()
 }
 
+const setFavorites = async (productId) => {
+    const response = await fetch(`${USER_URL}/favorites`, {
+        method: 'PATCH',
+        body: JSON.stringify({ productId }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    return await response.json()
+}
+
 export {
     verifyUser,
     logInUser,
-    registerUser
+    registerUser,
+    setFavorites
 }
