@@ -42,10 +42,6 @@
     width: 2rem;
 }
 
-.like-button:hover {
-    background-color: red;
-}
-
 .price-container {
     display: flex;
     justify-content: space-between;
