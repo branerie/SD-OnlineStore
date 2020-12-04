@@ -3,12 +3,64 @@
 .container {
     justify-content: space-between;
     display: flex;
-    width: 40%;
-    margin: 2% 0 2% 5%;
     font-family: 'Lateef', cursive;
     color: #735C74;
     font-size: 1.3rem;
+    width: 100%;
+    margin: 2% 0;
+    align-items: center;
+    position: relative;
+    
 }
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 1.5rem;
+    width: 1.5rem;
+    right: 0rem;
+  }
+  
+.checkmark {
+    position: absolute;
+    height: 1.5rem;
+    width: 1.5rem;
+    right: 0rem;
+    background-color: white;
+    border-radius: 7px;
+}
+
+.container:hover input ~ .checkmark {
+    background-color: #eee;
+    box-shadow: 0 0 0 0.15rem #fff, 0 0 0.25rem 0.25rem  #3D5344;
+}
+
+.container input:checked ~ .checkmark {
+    background-color: #3D5344;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+   }
 
 .title {
     font-family: 'Lateef', cursive;
@@ -16,4 +68,14 @@
     font-size: 2rem;
     font-weight: normal;
     margin: 0;
+    font-size: 2.1rem;
+}
+
+.check-box {
+    margin-left: 10%;
+    margin-top: 5%;
+}
+
+.box-name {
+    font-family: 'Lateef', cursive;
 }

@@ -58,7 +58,25 @@
     padding-left: 1rem;
     display: block;
     color: #707070;
+    /* background: linear-gradient(to left top, transparent 47.75%, currentColor 49.5%, currentColor 50.5%, transparent 52.25%); */
+    
 }
+
+.price::before {
+    position: absolute;
+    content: "";
+    left: 0.5rem;
+    top: 40%;
+    right: 15rem;
+    border-top: 1px solid;
+    border-color: inherit;  
+    -webkit-transform:rotate(-15deg);
+    -moz-transform:rotate(-15deg);
+    -ms-transform:rotate(-15deg);
+    -o-transform:rotate(-15deg);
+    transform:rotate(-15deg);
+  
+  }
 
 .discount-style {
     color: #EF696E;
