@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import styles from './index.module.css'
 import UserContext from '../../Context'
 import { setFavorites } from '../../services/user.js'
 import cardFrame from '../../images/productCardFrame.svg'
 import favotiesImageEmpty from '../../images/favoritesLink.svg'
 import favotiesImageFill from '../../images/favoritesLinkFilled.svg'
+import RatingStars from '../ratingStar'
 
 const NO_IMAGES = 'No image'
 
@@ -34,7 +36,7 @@ const ProductCard = (props) => {
 
     return (
         <div className={styles.container}>
-            <img src={cardFrame} alt={NO_IMAGES}/>
+            <img src={cardFrame} className={styles.frame} alt={NO_IMAGES}/>
             <img src={props.images} alt={NO_IMAGES}  className={styles['product-image']}/>
             <div className={styles['text-container']}>
                 <div className={styles['brand-likeButton']}>                    
@@ -45,6 +47,10 @@ const ProductCard = (props) => {
                     <div className={styles.price}>{props.price}$</div>
                     <div className={styles['discount-style']}>
                         { props.discountPrice ? discount : null}</div>
+                </div>
+                <div className={styles['rating-view']}>
+                    <RatingStars />
+                    <Link to={''} className={styles.link}>VIEW</Link>
                 </div>
             </div>
         </div>
