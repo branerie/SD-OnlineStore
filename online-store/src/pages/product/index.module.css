@@ -4,6 +4,7 @@
 
 .aside-container {
     flex-grow: 1;
+    min-width: 14%;
 }
 
 .main-container {

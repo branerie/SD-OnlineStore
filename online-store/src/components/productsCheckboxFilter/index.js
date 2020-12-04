@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import ProductsContext from '../../ProductsContext'
+import styles from './index.module.css'
 
 const ProductsCheckboxFilter = (props) => {
     const [values, setValues] = useState([])
@@ -21,16 +22,16 @@ const ProductsCheckboxFilter = (props) => {
 
     return (
         <div>
-            <h3>{props.title}</h3>
+            <div className={styles.title}>{props.title}</div>
             {props.values.map(value => {
                 return (
-                    <div key={value}>
+                    <div key={value} className={styles.container}>
+                        <span>{value}</span>
                         <input
                             type="checkbox"
                             value={value}
                             name={props.propName}
                             onChange={handleChange} />
-                        <span>{value}</span>
                     </div>
                 )
             })}

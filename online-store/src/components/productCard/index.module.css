@@ -2,18 +2,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
 
 .container {
+    height: 29rem;
     width: 20rem;
-    height: 28rem;
     margin: 2%;
     position: relative;
   }
 
+.frame {
+    height: 100%;
+}
+
 .product-image {
     position: absolute;
     height: 60%;
-    width: 55%;
-    top: 7%;
-    right: 31%;
+    top: 10%;
+    right: 28%;
 }
 
 .text-container {
@@ -22,6 +25,7 @@
     position: absolute;
     top: 70%;
     width: 100%;
+    height: 10rem;
 }
 
 .brand-likeButton {
@@ -36,6 +40,7 @@
     width: 155px;
     text-align: center;
     display: inline;
+    color: #735C74;
 }
 
 .like-button {
@@ -46,17 +51,35 @@
     display: flex;
     justify-content: space-between;
     font-family: 'Architects Daughter', cursive;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
 }
 
 .price {
     padding-left: 1rem;
     display: block;
+    color: #707070;
 }
 
 .discount-style {
-    color: red;
+    color: #EF696E;
     padding-right: 15%;
+}
+
+.rating-view {
+    display: flex;
+    justify-content: space-between;
+}
+
+.link {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2.5rem;
+    color: #707070;
+    padding-right: 15%;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: #EF696E;
 }
 
 

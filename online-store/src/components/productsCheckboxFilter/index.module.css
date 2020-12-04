@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+
+.container {
+    justify-content: space-between;
+    display: flex;
+    width: 40%;
+    margin: 2% 0 2% 5%
+}
+
+.title {
+    font-family: 'Lateef', cursive;
+    font-size: 2rem;
+}
