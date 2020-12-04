@@ -3,8 +3,7 @@ import {
     REST_API_URL,
     HTTP_HEADERS,
     JSON_CONTENT_TYPE,
-    CLOUDINARY_UPLOAD_PRESET,
-    AUTH_COOKIE_NAME
+    CLOUDINARY_UPLOAD_PRESET
 } from '../utils/constants'
 import { getImagePath } from '../utils/product'
 
@@ -34,8 +33,7 @@ const getProductRanges = async () => {
     const promise = await fetch(`${PRODUCT_URL}/ranges`, {
         method: 'GET',
         headers: {
-            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
-            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
         }
     })
     const products = await promise.json()

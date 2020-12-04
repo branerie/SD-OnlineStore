@@ -8,7 +8,7 @@ const verifyUser = async () => {
         method: 'GET',
         headers: {
             [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
-            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME) || ''
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
         }
     })
 
