@@ -20,21 +20,6 @@ ul {
     height: 30px;
 }
 
-.column-title {
-    font-weight: normal;
-    text-transform: uppercase;
-    color: #735C74;
-    margin-bottom: 5px;
-}
-
-.column-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    font-size: 0.67rem;
-}
-
 .icon-text {
     margin-left: 5px;
     text-transform: none;
