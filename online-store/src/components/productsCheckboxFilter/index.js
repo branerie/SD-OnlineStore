@@ -21,18 +21,19 @@ const ProductsCheckboxFilter = (props) => {
     console.log(1)
 
     return (
-        <div>
+        <div className={styles['check-box']}>
             <div className={styles.title}>{props.title}</div>
             {props.values.map(value => {
                 return (
-                    <div key={value} className={styles.container}>
-                        <span>{value}</span>
+                    <label key={value} className={styles.container}>
+                        <span className={styles['box-name']}>{value}</span>
                         <input
                             type="checkbox"
                             value={value}
                             name={props.propName}
                             onChange={handleChange} />
-                    </div>
+                        <span className={styles.checkmark}></span>
+                    </label>
                 )
             })}
         </div>

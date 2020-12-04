@@ -9,6 +9,7 @@ import ProductCardsList from '../../components/productCardsList'
 import { parseQueryString } from '../../utils/url'
 
 const PAGE_LENGTH = 20
+const ASIDE_TITLE = 'Showing 500 of 500 result filter it:'
 
 const ProductPage = () => {
     const query = parseQueryString(window.location.search)
@@ -20,6 +21,7 @@ const ProductPage = () => {
                 <Header />
                 <div className={styles.container} >
                     <aside className={styles['aside-container']}>
+                        <div className={styles['aside-title']}>{ASIDE_TITLE}</div>
                         <ProductsFilter />
                     </aside>
                     <main className={styles['main-container']}>

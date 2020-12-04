@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+
 .container {
     display: flex;
 }
@@ -5,8 +7,16 @@
 .aside-container {
     flex-grow: 1;
     min-width: 14%;
+    max-width: 14%;
+    background-color: #3D53444F;
 }
 
 .main-container {
     flex-grow: 4;
+}
+
+.aside-title {
+    font-family: 'Lateef', cursive;
+    font-size: 2rem;
+    text-align: center;
 }
