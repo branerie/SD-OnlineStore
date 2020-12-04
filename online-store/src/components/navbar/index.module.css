@@ -1,18 +1,19 @@
 .site-nav {
-    background-color: white;
     min-height: 5rem; 
     display: flex;
     justify-content: space-between;
+    padding-top: 0.6rem;
 }
 
 .navbar-links {
-    min-width: 50%;
+    width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     list-style-type: none;
 }
 
 .navbar-buttons {
+    margin-top: -3.7rem;
     margin-left: 0.5vw; 
     padding: 0 1vw;
     display: flex;
@@ -20,7 +21,12 @@
     list-style-type: none;
 }
 
-.logo-space {
-    min-width: 100px;
+.expanded-bg {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 8rem;
+    z-index: -1;
+    background-color: #3D5344;
 }
 
