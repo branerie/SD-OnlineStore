@@ -3,6 +3,7 @@ import styles from './index.module.css'
 import ProductsContextInitializer from '../../ProductsContextInitializer'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import ProductsFilter from '../../components/productsFilter'
 import Pagination from '../../components/pagination'
 import ProductCardsList from '../../components/productCardsList'
@@ -30,6 +31,7 @@ const ProductPage = () => {
                     </main>
                 </div>
             </ProductsContextInitializer>
+            <Footer />
         </>
     )
 }

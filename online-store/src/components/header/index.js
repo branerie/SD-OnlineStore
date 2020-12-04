@@ -13,7 +13,7 @@ const Header = () => {
             <Link to='/'>
                 <img src={logo} className={styles.logo} />
             </Link>
-            <Navbar />
+            <Navbar clickedName='Promotions' />
         </header>
     )
 }

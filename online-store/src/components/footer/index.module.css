@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+
+footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+    font-family: 'Lateef', cursive;
+    background-color: rgba(61, 83, 68, 0.31);
+    margin-top: 2rem;
+    color: #735C74;
+}
+
+ul {
+    list-style-type: none;
+    margin-top: 0;
+}
+
+.icon {
+    height: 30px;
+}
+
+.column-title {
+    font-weight: normal;
+    text-transform: uppercase;
+    color: #735C74;
+    margin-bottom: 5px;
+}
+
+.column-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.67rem;
+}
+
+.icon-text {
+    margin-left: 5px;
+    text-transform: none;
+}
+
+.social-media {
+    margin-right: 3rem;
+}

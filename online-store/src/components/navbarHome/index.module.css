@@ -3,6 +3,7 @@
     min-height: 5rem; 
     display: flex;
     justify-content: space-between;
+    padding-top: 0.6rem;
 }
 
 .navbar-links {
