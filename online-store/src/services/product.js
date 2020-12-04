@@ -41,14 +41,14 @@ const getProductRanges = async () => {
 }
 
 const getProductsPage = async (queryString) => {    
-    const promise = await fetch(`${PRODUCT_URL}/products?${queryString}`, {
+    const response = await fetch(`${PRODUCT_URL}/products?${queryString}`, {
         method: 'GET',
         headers: {
             [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
         }
     })
     
-    return await promise.json()
+    return await response.json()
 }
 
 const getProductImages = async (productId) => {

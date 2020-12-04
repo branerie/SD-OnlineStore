@@ -20,15 +20,23 @@ const ProductsContextInitializer = ({ children, pageLength, search }) => {
     const [filters, filtersDispatch] = useReducer(filtersReducer, filtersState)
 
     const getProductPropsRange = useCallback(async () => {
-		const productPropRanges = await getProductRanges()
+        const productPropRanges = await getProductRanges()
+        if (productPropRanges.error) {
+            //TODO: Handle errors
+        }
+
 		setProductProps(productPropRanges)
 	}, [setProductProps])
 
 	const getCurrentProductsPage = useCallback(async () => {
         const queryString = getProductsQueryString(filters, page, pageLength)
-        const { total, productInfo } = await getProductsPage(queryString) 
         
-        console.log()
+        const result = await getProductsPage(queryString) 
+        if (result.error) {
+            //TODO: Handle errors
+        }
+
+        const { total, productInfo } = result
         
         window.history.pushState({}, null, `${window.location.pathname}?${queryString}`)
 		setProductPage(productInfo)
