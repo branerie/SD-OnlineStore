@@ -1,5 +1,15 @@
 .container {
     display: flex;
     flex-direction: column;
-    background-color: #3D53444F;
+}
+
+.title {
+    font-family: 'Lateef', cursive;
+    font-size: 1.53rem;
+    color: #735C74;
+}
+
+.center-text {
+    text-align: center;
+    margin: 0;
 }

@@ -6,7 +6,7 @@ const NavbarImageLink = ({ name, path, imageName, clicked }) => {
     // const [isShowing, setIsShowing] = useState(clicked)
     
     return (
-        <div className={styles.container}>
+        <div className={clicked ? styles['clicked-container'] : styles.container}>
             {/* onMouseEnter={() => setIsShowing(!isShowing || clicked)}
             onMouseLeave={() => setIsShowing(!isShowing || clicked)}> */}
             { clicked && <img src={`/images/${imageName}`} className={styles.image} />}

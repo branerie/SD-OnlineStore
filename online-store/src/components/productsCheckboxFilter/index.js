@@ -22,7 +22,7 @@ const ProductsCheckboxFilter = (props) => {
 
     return (
         <div>
-            <div className={styles.title}>{props.title}</div>
+            <h3 className={styles.title}>{props.title}</h3>
             {props.values.map(value => {
                 return (
                     <div key={value} className={styles.container}>

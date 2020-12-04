@@ -4,6 +4,7 @@ import ProductsContextInitializer from '../../ProductsContextInitializer'
 
 import Header from '../../components/header'
 import Footer from '../../components/footer'
+import NavButtons from '../../components/navButtons'
 import ProductsFilter from '../../components/productsFilter'
 import Pagination from '../../components/pagination'
 import ProductCardsList from '../../components/productCardsList'
@@ -24,8 +25,11 @@ const ProductPage = () => {
                         <ProductsFilter />
                     </aside>
                     <main className={styles['main-container']}>
-                        <ProductCardsList />
-                        <Pagination pageLength={PAGE_LENGTH} />
+                        <NavButtons />
+                        <div>
+                            <ProductCardsList />
+                            <Pagination pageLength={PAGE_LENGTH} />
+                        </div>
                     </main>
                 </div>
             </ProductsContextInitializer>

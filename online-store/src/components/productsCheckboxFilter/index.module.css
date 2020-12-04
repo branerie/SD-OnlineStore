@@ -4,10 +4,16 @@
     justify-content: space-between;
     display: flex;
     width: 40%;
-    margin: 2% 0 2% 5%
+    margin: 2% 0 2% 5%;
+    font-family: 'Lateef', cursive;
+    color: #735C74;
+    font-size: 1.3rem;
 }
 
 .title {
     font-family: 'Lateef', cursive;
+    color: #735C74;
     font-size: 2rem;
+    font-weight: normal;
+    margin: 0;
 }

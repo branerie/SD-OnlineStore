@@ -7,11 +7,10 @@ footer {
     padding-bottom: 2rem;
     font-family: 'Lateef', cursive;
     background-color: rgba(61, 83, 68, 0.31);
-    margin-top: 2rem;
     color: #735C74;
 }
 
-ul {
+footer ul {
     list-style-type: none;
     margin-top: 0;
 }

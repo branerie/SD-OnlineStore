@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import styles from './index.module.css'
 import ProductsContext from '../../ProductsContext'
 
 const ProductsBoolFilter = (props) => {
@@ -14,7 +15,7 @@ const ProductsBoolFilter = (props) => {
 
     return (
         <div>
-            <span>{props.title}</span>
+            <h3 className={styles.title}>{props.title}</h3>
             <input
             name={props.propName}
             value={value}

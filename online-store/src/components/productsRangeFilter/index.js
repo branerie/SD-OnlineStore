@@ -18,8 +18,8 @@ const ProductsRangeFilter = (props) => {
     }
 
     return (
-        <div>
-            <h3>{props.title}</h3>
+        <div className={styles.container}>
+            <h3 className={styles.title}>{props.title}</h3>
             <label>Min: </label>
             <input
                 type="number"

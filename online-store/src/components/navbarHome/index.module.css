@@ -13,14 +13,6 @@
     list-style-type: none;
 }
 
-.navbar-buttons {
-    margin-left: 0.5vw; 
-    padding: 0 1vw;
-    display: flex;
-    justify-content: flex-end;
-    list-style-type: none;
-}
-
 .logo-space {
     min-width: 100px;
 }
