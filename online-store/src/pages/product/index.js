@@ -10,7 +10,7 @@ import Pagination from '../../components/pagination'
 import ProductCardsList from '../../components/productCardsList'
 import { parseQueryString } from '../../utils/url'
 
-const PAGE_LENGTH = 20
+const PAGE_LENGTH = 12
 
 const ProductPage = () => {
     const query = parseQueryString(window.location.search)
@@ -26,10 +26,9 @@ const ProductPage = () => {
                     </aside>
                     <main className={styles['main-container']}>
                         <NavButtons />
-                        <div>
+                        <Pagination pageLength={PAGE_LENGTH}>
                             <ProductCardsList />
-                            <Pagination pageLength={PAGE_LENGTH} />
-                        </div>
+                        </Pagination>
                     </main>
                 </div>
             </ProductsContextInitializer>

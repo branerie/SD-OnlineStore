@@ -8,7 +8,7 @@ import SortCriteria from '../../components/sortCriteria'
 import ProductsContextInitializer from '../../ProductsContextInitializer'
 import { Link } from 'react-router-dom'
 
-const PAGE_LENGTH = 3
+const PAGE_LENGTH = 12
 
 const AdminProductsPage = () => {
 	console.log(3)
@@ -23,8 +23,9 @@ const AdminProductsPage = () => {
 					<ProductsFilter />
 				</aside>
 				<main className={styles.cards}>
-					<AdminProductCardsList />
-					<Pagination pageLength={PAGE_LENGTH} />
+					<Pagination pageLength={PAGE_LENGTH} >
+						<AdminProductCardsList />
+					</Pagination>
 				</main>
 			</ProductsContextInitializer>
 		</div>
