@@ -58,11 +58,16 @@
     padding-left: 1rem;
     display: block;
     color: #707070;
-    /* background: linear-gradient(to left top, transparent 47.75%, currentColor 49.5%, currentColor 50.5%, transparent 52.25%); */
+    
+}
+.price-discount {
+    padding-left: 1rem;
+    display: block;
+    color: #707070;
     
 }
 
-.price::before {
+.price-discount::before {
     position: absolute;
     content: "";
     left: 0.5rem;
