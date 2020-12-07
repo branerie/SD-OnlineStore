@@ -10,7 +10,7 @@ import Pagination from '../../components/pagination'
 import ProductCardsList from '../../components/productCardsList'
 import { parseQueryString } from '../../utils/url'
 
-const PAGE_LENGTH = 12
+const PAGE_LENGTH = 3
 
 const ProductPage = () => {
     const query = parseQueryString(window.location.search)

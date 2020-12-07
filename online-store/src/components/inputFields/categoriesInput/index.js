@@ -20,16 +20,16 @@ const CategoriesInput = ({ handleAdd, handleRemove, addedCategories }) => {
         }
     }, [categories])
 
-    const handleCategoryAdd = useCallback(category => {
+    const handleCategoryAdd = category => {
 
         setCategories(categories.filter(cat => cat !== category))
         handleAdd(category)
-    })
+    }
 
-    const handleCategoryRemove = useCallback(category => {
+    const handleCategoryRemove = category => {
         setCategories([...categories, category])
         handleRemove(category)
-    })
+    }
 
     return (
         <div className={styles.container}>

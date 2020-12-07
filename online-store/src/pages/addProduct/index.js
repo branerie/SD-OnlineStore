@@ -140,7 +140,7 @@ const AddProductCard = () => {
                         onChange={e => setPrice(Number(e.target.value).toFixed(2))}
                         unitsPlaceholder='$'
                     />
-                    <div class={styles['input-group']}>
+                    <div className={styles['input-group']}>
                         <TextInput
                             type='text'
                             id='sizeName'

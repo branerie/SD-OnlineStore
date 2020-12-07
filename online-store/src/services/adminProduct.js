@@ -3,16 +3,18 @@ import getCookie from '../utils/cookie'
 
 const ADMIN_PRODUCT_URL = REST_API_URL + '/admin/product'
 
-const ADMIN_HEADERS = {
-    [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
-    [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+const getAdminHeaders = () => {
+    return {
+        [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+        [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+    }
 }
 
 const removeImage = async (productId, imagePath) => {
     const removeUrl = `${ADMIN_PRODUCT_URL}/${productId}/images/${imagePath}`
     const removeResponse = await fetch(removeUrl, {
         method: 'DELETE',
-        headers: ADMIN_HEADERS
+        headers: getAdminHeaders()
     })
 
     return await removeResponse.json()
@@ -23,7 +25,7 @@ const addImagesToProduct = async (productId, imageUrls) => {
     const imagesResponse = await fetch(addImageUrl, {
         method: 'POST',
         body: JSON.stringify({ data: imageUrls }),
-        headers: ADMIN_HEADERS
+        headers: getAdminHeaders()
     })
 
     return await imagesResponse.json()
@@ -35,7 +37,7 @@ const updateProductCategories = async (productId, categoryChanges) => {
         body: JSON.stringify({
             operations: categoryChanges
         }),
-        headers: ADMIN_HEADERS
+        headers: getAdminHeaders()
     })
 
     return await updateResponse.json()
@@ -47,7 +49,7 @@ const updateProductSizes = async (productId, modifiedSizes) => {
         body: JSON.stringify({
             operations: modifiedSizes
         }),
-        headers: ADMIN_HEADERS
+        headers: getAdminHeaders()
     })
 
     return await updateResponse.json()
@@ -56,7 +58,7 @@ const updateProductSizes = async (productId, modifiedSizes) => {
 const deleteProduct = async (productId) => {
     const deleteResponse = await fetch(`${ADMIN_PRODUCT_URL}/${productId}`, {
         method: 'DELETE',
-        headers: ADMIN_HEADERS
+        headers: getAdminHeaders()
     })
 
     return await deleteResponse.json()
@@ -68,7 +70,7 @@ const createProduct = async (newProduct) => {
         body: JSON.stringify(
             newProduct
         ),
-        headers: ADMIN_HEADERS
+        headers: getAdminHeaders()
     })
 
     return await productResponse.json()
@@ -78,7 +80,7 @@ const updateProduct = async (productId, newProductProps) => {
     const response = await fetch(`${ADMIN_PRODUCT_URL}/${productId}`, {
         method: 'PUT',
         body: JSON.stringify(newProductProps),
-        headers: ADMIN_HEADERS
+        headers: getAdminHeaders()
     })
 
     return await response.json()
