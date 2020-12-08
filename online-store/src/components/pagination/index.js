@@ -2,13 +2,15 @@ import React, { useContext, useMemo } from 'react'
 import ProductsContext from '../../ProductsContext'
 import styles from './index.module.css'
 
+import PaginationElement from '../paginationElement'
+
 import previousArrow from '../../images/previousArrow.png'
 import nextArrow from '../../images/nextArrow.png'
 
 const PAGE_LINK_LIMIT = 6
 
 const Pagination = ({ pageLength, children }) => {
-    const { totalCount, page, handlePageChange } = useContext(ProductsContext)
+    const { totalCount, filters: { page }, filtersDispatch } = useContext(ProductsContext)
 
     const totalPages = Math.ceil(totalCount / pageLength)
 
@@ -63,36 +65,19 @@ const Pagination = ({ pageLength, children }) => {
             <div className={[styles['pagination-container'], styles.pagination].join(' ')}>
                 <span
                     className={hasPrevious ? styles['page-nav'] : styles.hidden}
-                    onClick={() => handlePageChange(page - 1)}>
+                    onClick={() => filtersDispatch({ type: 'page', newPage: page - 1 })}>
                     previous
-                <img src={previousArrow} className={styles.arrow} />
+                    <img src={previousArrow} className={styles.arrow} />
                 </span>
                 {pagesToDisplay && pagesToDisplay.map(pageNumber => {
-                    const isNumber = !isNaN(pageNumber)
-                    const displayedPageNumber = isNumber ? pageNumber + 1 : pageNumber
-
-                    const isSamePage = pageNumber === page
-                    if (isSamePage) {
-                        return <span key={pageNumber}
-                            className={[styles['page-link'], styles.current].join(' ')}>
-                            {displayedPageNumber}
-                        </span>
-                    }
-
-                    return (
-                        <span key={pageNumber}
-                            onClick={!isNaN(pageNumber) ? () => handlePageChange(pageNumber) : null}
-                            className={styles['page-link']} >
-                            {displayedPageNumber}
-                        </span>
-                    )
+                    return <PaginationElement pageNumber={pageNumber} />
                 })}
                 <span
                     className={hasNext ? styles['page-nav'] : styles.hidden}
-                    onClick={() => handlePageChange(page + 1)}>
+                    onClick={() => filtersDispatch({ type: 'page', newPage: page + 1 })}>
                     <img src={nextArrow} className={styles.arrow} />
-                next
-            </span>
+                    next
+                </span>
             </div>
         </div>
     )

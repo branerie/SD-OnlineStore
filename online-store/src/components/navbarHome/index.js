@@ -11,9 +11,9 @@ const NavbarHome = () => {
         <nav className={styles['site-nav']}>
             <ul className={styles['navbar-links']}>
                 <li className={styles['logo-space']}></li>
-                <NavbarLink name='Men' path='/products?cat_gender=M'/>
-                <NavbarLink name='Women' path='/products?cat_gender=F'/>
-                <NavbarLink name='Promotions' path='/products?bool_discount=true'/>
+                <NavbarLink name='Men' path='/products/men'/>
+                <NavbarLink name='Women' path='/products/women'/>
+                <NavbarLink name='Promotions' path='/products/promotions'/>
                 {isAdmin
                     ? <NavbarLink name='Admin' path='/admin/products' />
                     : null

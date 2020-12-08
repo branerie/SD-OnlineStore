@@ -5,16 +5,19 @@ import Header from '../../components/header'
 import Footer from '../../components/footer'
 import ProductPageBody from '../../components/productPageBody'
 
-const ProductPage = ({ pageLength }) => {
+const MensPage = ({ pageLength }) => {
+    window.history.replaceState({}, null, '/products?cat_gender=M')
+
     return (
         <>
-            <ProductsContextInitializer pageLength={pageLength}>
-                <Header />
-                <ProductPageBody pageLength={pageLength} />
+            <ProductsContextInitializer
+                pageLength={pageLength}>
+                    <Header clickedName='Men' />
+                    <ProductPageBody pageLength={pageLength} />
             </ProductsContextInitializer>
             <Footer />
         </>
     )
 }
 
-export default ProductPage
+export default MensPage

@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './index.module.css'
-import logo from '../../images/logo.svg'
+import logo from '../../images/logo.png'
 
 import PageTitle from '../pageTitle'
 import NavbarHome from '../navbarHome'

@@ -8,14 +8,12 @@ import SortCriteria from '../../components/sortCriteria'
 import ProductsContextInitializer from '../../ProductsContextInitializer'
 import { Link } from 'react-router-dom'
 
-const PAGE_LENGTH = 12
-
-const AdminProductsPage = () => {
+const AdminProductsPage = ({ pageLength }) => {
 	console.log(3)
 
 	return (
 		<div className={styles.container}>
-			<ProductsContextInitializer pageLength={PAGE_LENGTH}>
+			<ProductsContextInitializer pageLength={pageLength}>
 				<aside className={styles.filters}>
 					<Link to="/admin/products/add"
 						  className={styles['add-product']} >Add Product</Link>
@@ -23,7 +21,7 @@ const AdminProductsPage = () => {
 					<ProductsFilter />
 				</aside>
 				<main className={styles.cards}>
-					<Pagination pageLength={PAGE_LENGTH} >
+					<Pagination pageLength={pageLength} >
 						<AdminProductCardsList />
 					</Pagination>
 				</main>

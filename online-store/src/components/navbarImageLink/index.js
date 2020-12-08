@@ -1,21 +1,38 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styles from './index.module.css'
 import { Link } from 'react-router-dom'
 
-const NavbarImageLink = ({ name, path, imageName, clicked }) => {
-    // const [isShowing, setIsShowing] = useState(clicked)
-    
+const NavbarImageLink = ({ name, path, imageName, clicked, order, handleClick }) => {
+    // const handlePageReload = () => {
+    //     handleClick(name)
+
+    //     const [pathname, search] = path.split('?')
+    //     if (window.location.pathname === pathname && search) {
+    //         window.location.search = search
+    //     }
+    // }
+
     return (
-        <div className={clicked ? styles['clicked-container'] : styles.container}>
-            {/* onMouseEnter={() => setIsShowing(!isShowing || clicked)}
-            onMouseLeave={() => setIsShowing(!isShowing || clicked)}> */}
-            { clicked && <img src={`/images/${imageName}`} className={styles.image} />}
-            <Link to={path} className={clicked 
-                                            ? [styles.link, styles['img-link']].join(' ')
-                                            : styles.link}>
-                <span>{name}</span>
-            </Link>
-        </div>
+        <>{clicked
+            ?
+            <div className={
+                [styles['clicked-container'], styles[`order-${order}`]].join(' ')}>
+
+                <img src={`/images/${imageName}`} className={styles.image} />
+                <span className={[styles.link, styles['img-link']].join(' ')}>
+                    {name}
+                </span>
+
+            </div>
+            :
+            <div className={[styles.container, styles[`order-${order}`]].join(' ')}>
+
+                <Link to={path} className={styles.link} onClick={handleClick}>
+                    <span>{name}</span>
+                </Link>
+            </div>}
+        </>
+
     )
 }
 

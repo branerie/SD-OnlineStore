@@ -40,8 +40,9 @@ const getProductRanges = async () => {
     return products
 }
 
-const getProductsPage = async (queryString) => {    
-    const response = await fetch(`${PRODUCT_URL}/products?${queryString}`, {
+const getProductsPage = async (userQueryString, pageLength) => {    
+    const response = await fetch(`${PRODUCT_URL}/products?${userQueryString}&pageLength=${pageLength}`, 
+    {
         method: 'GET',
         headers: {
             [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE

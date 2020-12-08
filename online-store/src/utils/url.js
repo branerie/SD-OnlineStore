@@ -1,4 +1,8 @@
 function parseQueryString(queryString) {
+    if (!queryString) {
+        return {}
+    }
+
     let queryPairs = queryString.replace('?', '').split('&')
 
     if (queryPairs.length === 0 ||
@@ -25,11 +29,6 @@ function parseQueryString(queryString) {
         } else {
             result[[key]] = value
         }
-    }
-
-    //TODO: Figure out a better way to filter by boolean
-    if (result.bool) {
-        result.bool = Object.keys(result.bool)
     }
 
     return result

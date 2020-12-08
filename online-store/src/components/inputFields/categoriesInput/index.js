@@ -2,41 +2,56 @@ import React, { useCallback, useEffect, useState } from 'react'
 import styles from './index.module.css'
 import { getCategories } from '../../../services/product'
 
+const INITIAL_TEXT = '--- Add categories ---'
+
 const CategoriesInput = ({ handleAdd, handleRemove, addedCategories }) => {
     const [categories, setCategories] = useState(null)
 
     const getAllCategories = useCallback(async () => {
         const result = await getCategories()
-        setCategories(result.categories)
-    })
-
-    useEffect(() => {
-        getAllCategories()
+        setCategories([INITIAL_TEXT, ...result.categories])
     }, [])
 
     useEffect(() => {
+        getAllCategories()
+    }, [getAllCategories])
+
+    const getSortedCategories = useCallback(() => {
         if (categories) {
-            setCategories(categories.sort((c1, c2) => c1.localeCompare(c2)))
+            return categories.sort((c1, c2) => {
+                if (c1 === INITIAL_TEXT) {
+                    return -1
+                } else if (c2 === INITIAL_TEXT) {
+                    return 1
+                }
+
+                return c1.localeCompare(c2)
+            })
         }
     }, [categories])
 
-    const handleCategoryAdd = category => {
+    const handleCategoryAdd = useCallback(category => {
+        if (category === INITIAL_TEXT) {
+            return
+        }
 
         setCategories(categories.filter(cat => cat !== category))
         handleAdd(category)
-    }
+    }, [handleAdd, categories])
 
-    const handleCategoryRemove = category => {
+    const handleCategoryRemove = useCallback(category => {
         setCategories([...categories, category])
         handleRemove(category)
-    }
+    }, [handleRemove, categories])
 
     return (
         <div className={styles.container}>
-            <select className={styles.select}>
-                {categories && categories.sort((c1, c2) => c1.localeCompare(c2)).map(cat => {
+            <select
+                className={styles.select}
+                onChange={e => handleCategoryAdd(e.target.value)}>
+                {categories && getSortedCategories().map(cat => {
                     return (
-                        <option key={cat} value={cat} onClick={e => handleCategoryAdd(e.target.value)}>
+                        <option key={cat} value={cat}>
                             {cat}
                         </option>
                     )
@@ -45,7 +60,10 @@ const CategoriesInput = ({ handleAdd, handleRemove, addedCategories }) => {
             {<div className={styles['cat-container']}>
                 {addedCategories.map(cat => {
                     return (
-                        <span className={styles.category} onClick={() => handleCategoryRemove(cat)}>{cat}</span>
+                        <span
+                            key={cat}
+                            className={styles.category} 
+                            onClick={() => handleCategoryRemove(cat)}>{cat}</span>
                     )
                 })}
             </div>}

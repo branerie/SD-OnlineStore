@@ -12,6 +12,11 @@ import AddProductPage from './pages/addProduct'
 import RegisterPage from './pages/register'
 import LoginPage from './pages/login'
 import ProductPage from './pages/product'
+import MensPage from './pages/men'
+import WomensPage from './pages/women'
+import PromotionsPage from './pages/promotions'
+
+const PAGE_LENGTH = 3
 
 const Navigation = () => {
     const { user: { isAdmin, userId }} = useContext(UserContext)
@@ -20,7 +25,18 @@ const Navigation = () => {
         <BrowserRouter>
             <Switch>
             <Route exact path='/' component={HomePage} />
-            <Route path='/products' component={ProductPage} />
+            <Route path='/products/men'>
+                <MensPage pageLength={PAGE_LENGTH} />
+            </Route>
+            <Route path='/products/women'>
+                <WomensPage pageLength={PAGE_LENGTH} />
+            </Route>
+            <Route path='/products/promotions'>
+                <PromotionsPage pageLength={PAGE_LENGTH} />
+            </Route>
+            <Route path='/products'>
+                <ProductPage pageLength={PAGE_LENGTH} />
+            </Route>
             <Route path='/register'>
                 {userId ? (<Redirect to='/' />) : (<RegisterPage />) }
             </Route>
@@ -31,7 +47,10 @@ const Navigation = () => {
                 {isAdmin ? (<AddProductPage />) : (<Redirect to='/login' />) }
             </Route>
             <Route path='/admin/products'>
-                {isAdmin ? (<AdminProductsPage />) : (<Redirect to='/login' />) }
+                { isAdmin 
+                    ? <AdminProductsPage pageLength={PAGE_LENGTH} /> 
+                    : <Redirect to='/login' />
+                }
             </Route>            
             </Switch>
         </BrowserRouter>

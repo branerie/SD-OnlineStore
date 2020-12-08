@@ -16,14 +16,6 @@
     visibility: hidden;
 }
 
-.current {
-    color: #EF696E;
-}
-
-.page-link {
-    padding: 0 0.5rem;
-}
-
 .page-nav {
     cursor: pointer;
 }

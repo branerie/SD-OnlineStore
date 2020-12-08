@@ -13,8 +13,6 @@ import CategoriesInput from '../../components/inputFields/categoriesInput'
 import { createProduct, addImagesToProduct } from '../../services/adminProduct'
 import { uploadImages } from '../../services/product'
 
-const BRAND_MAX_LENGTH = 30
-
 const AddProductCard = () => {
     const history = useHistory()
     const [brand, setBrand] = useState('')
@@ -22,7 +20,7 @@ const AddProductCard = () => {
     const [sizeName, setSizeName] = useState(null)
     const [sizeCount, setSizeCount] = useState(0)
     const [price, setPrice] = useState(0)
-    const [discountInPercent, setDiscountInPercent] = useState(null)
+    const [discountInPercent, setDiscountInPercent] = useState('')
     const [discountEndDate, setDiscountEndDate] = useState(null)
     const [description, setDescription] = useState('')
     const [gender, setGender] = useState('U')
@@ -55,7 +53,7 @@ const AddProductCard = () => {
             categories,
         }
 
-        if (discountInPercent !== null && discountEndDate !== null) {
+        if (discountInPercent !== '' && discountEndDate !== null) {
             newProduct.discount = { percent: discountInPercent, endDate: discountEndDate }
         }
 
@@ -123,13 +121,6 @@ const AddProductCard = () => {
                         placeholder='Brand'
                         onChange={e => setBrand(e.target.value)}
                     />
-                    {/* <Input
-                        type='text'
-                        label='Categories'
-                        id='categories'
-                        placeholder='Shoes, Bags, T-shirts ...'
-                        onChange={e => setCategories(e.target.value)}
-                    /> */}
                     <CategoriesInput
                         addedCategories={categories}
                         handleAdd={cat => setCategories([...categories, cat])}

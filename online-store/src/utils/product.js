@@ -24,12 +24,12 @@ const getBoolFilterQueries = (boolFilters) => {
     return queryStrings
 }
 
-const getProductsQueryString = ({ bool, cat, range, search, sort }, page, pageLength) => {
+const getProductsQueryString = ({ bool, cat, range, search, sort, page }) => {
     const queryStringArray = [
         ...getCategoricalFilterQueries(cat),
         ...getRangeFilterQueries(range),
         ...getBoolFilterQueries(bool),
-        `page=${page}&pageLength=${pageLength}&sort=${sort[0]}_${sort[1]}`
+        `page=${page}&sort=${sort[0]},${sort[1]}`
     ]
 
     if (search) {

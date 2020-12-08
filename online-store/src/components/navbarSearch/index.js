@@ -14,7 +14,7 @@ const NavbarSearch = () => {
 
     useEffect(() => {
         const query = parseQueryString(window.location.search)
-        if (query.searchTerm) {
+        if (query && query.searchTerm) {
             setSearchTerm(query.searchTerm)
         }
     }, [])

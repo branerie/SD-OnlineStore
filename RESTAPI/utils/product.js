@@ -56,7 +56,16 @@ const getImagePublicIdFromPath = (path) => {
 }
 
 const getAllCategories = () => {
-    return ['Shoes', 'Bags', 'T-shirts', 'Bathing suits', 'Dresses']
+    return [
+        'Shoes',
+        'Bags',
+        'T-shirts',
+        'Bathing suits',
+        'Dresses',
+        'Jeans',
+        'Jackets',
+        'Shirts',
+    ]
 }
 
 const parseMongoProducts = (mongoProducts) => {

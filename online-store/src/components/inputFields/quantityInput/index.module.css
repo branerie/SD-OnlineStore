@@ -11,12 +11,17 @@
     height: 2rem;
     max-width: 60px;
     text-align: center;
-    -webkit-appearance: none;
     padding: 0;
     -moz-appearance: textfield;
     border: none;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
+}
+
+.input-field::-webkit-outer-spin-button,
+.input-field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .sign {

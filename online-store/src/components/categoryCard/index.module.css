@@ -13,6 +13,7 @@
     max-width: 9.375rem;
     max-height: 13.5rem;
     color: white;
+    cursor: pointer;
 }
 
 .card:hover {

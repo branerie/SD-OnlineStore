@@ -4,6 +4,7 @@ import styles from './index.module.css'
 import CategoryCards from '../../components/categoryCards'
 import indexImage from '../../images/index.jpg'
 import HeaderHome from '../../components/headerHome'
+import HomeBottom from '../../components/homeBottom'
 import Footer from '../../components/footer'
 
 const HomePage = () => {
@@ -16,10 +17,11 @@ const HomePage = () => {
                     className={styles['home-image']}
                     alt='Girl in front of mirror' />
             </div>
-            <div>
+            <section>
                 <h3 className={styles['secondary-title']}>top categories</h3>
                 <CategoryCards />
-            </div>
+            </section>
+            <HomeBottom />
             <Footer />
         </>
     )

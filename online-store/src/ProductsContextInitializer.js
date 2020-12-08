@@ -2,22 +2,14 @@ import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
 import { getProductRanges, getProductsPage } from './services/product'
 import { getProductsQueryString } from './utils/product'
+import { parseQueryString } from './utils/url'
 
-const ProductsContextInitializer = ({ children, pageLength, search }) => {
+const ProductsContextInitializer = ({ children, pageLength }) => {
     const [productProps, setProductProps] = useState(null)
     const [productPage, setProductPage] = useState(null)
-    const [page, setPage] = useState(0)
     const [totalCount, setTotalCount] = useState(0)
-    
-    const filtersState = {
-        bool: [],
-        cat: {},
-        range: {},
-        search: search || '',
-        sort: ['addDate', 'desc']
-    }
 
-    const [filters, filtersDispatch] = useReducer(filtersReducer, filtersState)
+    const [filters, filtersDispatch] = useReducer(filtersReducer, getFiltersFromQuery())
 
     const getProductPropsRange = useCallback(async () => {
         const productPropRanges = await getProductRanges()
@@ -29,29 +21,35 @@ const ProductsContextInitializer = ({ children, pageLength, search }) => {
 	}, [setProductProps])
 
 	const getCurrentProductsPage = useCallback(async () => {
-        const queryString = getProductsQueryString(filters, page, pageLength)
-        
-        const result = await getProductsPage(queryString) 
+        const queryString = getProductsQueryString(filters)
+
+        window.history.replaceState({}, null, `${window.location.pathname}?${queryString}`)
+
+        const result = await getProductsPage(queryString, pageLength) 
         if (result.error) {
             //TODO: Handle errors
         }
 
         const { total, productInfo } = result
         
-        window.history.pushState({}, null, `${window.location.pathname}?${queryString}`)
 		setProductPage(productInfo)
         setTotalCount(total)
-    }, [setProductPage, setTotalCount, pageLength, filters, page])
+    }, [setProductPage, setTotalCount, pageLength, filters])
 
-	useEffect(() => {
+    // useEffect(() => {
+    //     const parsedQuery = parseQueryString(window.location.search)
+
+    //     const filtersState = getFiltersFromQuery(parsedQuery)
+    //     filtersDispatch({ type: 'reset', resetValue: filtersState })
+    // }, [])
+
+    useEffect(() => {
 		getProductPropsRange()
-    }, [getProductPropsRange, setProductPage])
+    }, [getProductPropsRange])
 
 	useEffect(() => {
 		getCurrentProductsPage()
-	}, [getCurrentProductsPage, page, filters])
-
-    useEffect(() => setPage(0), [filters])
+    }, [getCurrentProductsPage, filters])
 
     function filtersReducer(state, action) {
         const propName = action.propName
@@ -66,7 +64,7 @@ const ProductsContextInitializer = ({ children, pageLength, search }) => {
                     delete newCategoricalFilters[propName]
                 }
 
-                return {...state, cat: newCategoricalFilters }
+                return { ...state, cat: newCategoricalFilters }
             case 'range':
                 const newRangeFilters = { ...state.range }
                 newRangeFilters[propName] = action.value
@@ -81,11 +79,13 @@ const ProductsContextInitializer = ({ children, pageLength, search }) => {
                     newBoolFilters = newBoolFilters.filter(pn => pn !== propName)
                 }
 
-                return {...state, bool: newBoolFilters}
+                return { ...state, bool: newBoolFilters }
             case 'search':
-                return {...state, search: action.searchTerm}
+                return { ...state, search: action.searchTerm }
             case 'sort':
-                return {...state, sort: [action.property , action.direction]}
+                return { ...state, sort: [ action.property , action.direction ] }
+            case 'page':
+                return { ...state, page: action.newPage }
             case 'reset':
                 return action.resetValue
             default:
@@ -93,7 +93,19 @@ const ProductsContextInitializer = ({ children, pageLength, search }) => {
         }
     }
 
-    const handlePageChange = newPage => setPage(newPage)
+    function getFiltersFromQuery() {
+        const parsedQuery = parseQueryString(window.location.search)
+        const { bool, cat, range, searchTerm, sort, page } = parsedQuery
+
+        return {
+            bool: bool ? Object.keys(bool) : [],
+            cat: cat || {},
+            range: range || {},
+            search: searchTerm || '',
+            page: parseInt(page) || 0,
+            sort: (sort && sort.split(',')) || ['addDate', 'desc']
+        }
+    }
 
     const handleProductDelete = (productId) => {
         const newProductsList = productPage.filter(p => p.id !== productId)
@@ -104,11 +116,9 @@ const ProductsContextInitializer = ({ children, pageLength, search }) => {
         <ProductsContext.Provider value={{
             productProps,
             productPage,
-            page,
             totalCount,
             filters,
             filtersDispatch,
-            handlePageChange,
             handleProductDelete,
             updateFilters: getProductPropsRange,
             updateProductsPage: getCurrentProductsPage,
