@@ -33,7 +33,7 @@ const ProductCard = (props) => {
    }
 
     const imgSrc = isInFavorites ? favotiesImageFill : favotiesImageEmpty
-
+    
     return (
         <div className={styles.container}>
             <img src={cardFrame} className={styles.frame} alt={NO_IMAGES}/>
@@ -44,7 +44,11 @@ const ProductCard = (props) => {
                     <img onClick={changeFavorites} src={imgSrc} alt={NO_IMAGES} title={'Favorite collection'} className={styles['like-button']}/>                    
                 </div>
                 <div className={styles['price-container']}>
-                    <div className={styles.price}>{props.price}$</div>
+                        { props.discountPrice 
+                            ? <div className={styles['price-discount']}>{props.price}$</div>
+                            : <div className={styles.price}>{props.price}$</div>
+                        }
+                    
                     <div className={styles['discount-style']}>
                         { props.discountPrice ? discount : null}</div>
                 </div>
