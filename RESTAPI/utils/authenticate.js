@@ -1,7 +1,8 @@
 const { verifyToken } = require('./jwt')
 
-const ADMIN_RESTRICT_ERROR = { error: 'You must be logged in as an administrator.' }
-const INVALID_TOKEN_ERROR = { error: 'Your authorization token is invalid.' }
+const ADMIN_RESTRICT_ERROR = { error: 'User must be logged in as an administrator.' }
+const USER_RESTRICT_ERROR = { error: 'User must be logged in.' }
+const INVALID_TOKEN_ERROR = { error: 'User authorization token is invalid.' }
 
 async function restrictToAdmin(req, res, next) {
     const userData = req.user 
@@ -10,7 +11,17 @@ async function restrictToAdmin(req, res, next) {
         return next()
     }
 
-    res.status(403).send(ADMIN_RESTRICT_ERROR)
+    return res.status(403).send(ADMIN_RESTRICT_ERROR)
+}
+
+async function restrictToUser(req, res, next) {
+    const userData = req.user
+
+    if (userData) {
+        return next()
+    }
+
+    return res.status(403).send(USER_RESTRICT_ERROR)
 }
 
 async function attachCurrentUser(req, res, next) {
@@ -31,5 +42,6 @@ async function attachCurrentUser(req, res, next) {
 
 module.exports = {
     restrictToAdmin,
+    restrictToUser,
     attachCurrentUser
 }

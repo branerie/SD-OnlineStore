@@ -85,7 +85,9 @@ const parseMongoProducts = (mongoProducts) => {
                 : null,
             gender: p.gender,
             categories: p.categories,
-            discountPrice: p.discountPrice
+            discountPrice: p.discountPrice,
+            viewRatingStars: p.viewRatingStars,
+            viewRatingCount: p.viewRatingCount
         }
     })
 }
