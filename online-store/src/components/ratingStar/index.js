@@ -1,19 +1,57 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import styles from './index.module.css'
-import ratingStarEmpty from '../../images/ratingStarEmpty.svg'
-import ratingStarFill from '../../images/ratingStarFill.svg'
+import RatingIcon from '../ratingIcon'
+import { setRating } from '../../services/product'
 
-const RatingStars = () => {
+const NUM_INDEX_STARS = [1, 2, 3, 4, 5]
 
-    //TODO rating
-    
+const RatingStars = (props) => {
+    const [ratingStars, setRatingStars] = useState(props.ratingStars)
+    const [onHover , setOnHover] = useState(0)
+    const productId = props.productId
+    const [ratingCounter, setRatingCounter] = useState(props.ratingCounter)
+
+    const onMouseEnter = (indexOfStar) => {
+        setOnHover(indexOfStar)
+    }
+
+    const onMouseLeave = () => {
+        setOnHover(0)
+    }
+
+    const onSave = async (indexOfStar) => {
+        const response = await setRating(indexOfStar, productId)
+       
+        if(response.error) {
+            //TODO handle errors
+        }
+
+        setRatingCounter(response.counter)
+        setRatingStars(response.currentRating)
+
+        
+    }
+
     return (
         <div className={styles.container}>
-            <img src={ratingStarFill} alt={'Rating star'} className={styles['rating-star']} />
-            <img src={ratingStarFill} alt={'Rating star'} className={styles['rating-star']} />
-            <img src={ratingStarFill} alt={'Rating star'} className={styles['rating-star']} />
-            <img src={ratingStarEmpty} alt={'Rating star'} className={styles['rating-star']} />
-            <img src={ratingStarEmpty} alt={'Rating star'} className={styles['rating-star']} />
+            <div className={styles['star-container']} >
+                {NUM_INDEX_STARS.map(indexOfStar => {
+                    return (
+                        <RatingIcon 
+                            key={indexOfStar}
+                            indexOfStar={indexOfStar}
+                            onHover={onHover}
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                            onSave={onSave}
+                            ratingStars={ratingStars}
+                        />
+                    )
+                })}
+            </div>
+            <div className={styles.counter}>
+                ({ratingCounter})
+            </div>
         </div>
     )
 }

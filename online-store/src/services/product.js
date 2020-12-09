@@ -3,7 +3,8 @@ import {
     REST_API_URL,
     HTTP_HEADERS,
     JSON_CONTENT_TYPE,
-    CLOUDINARY_UPLOAD_PRESET
+    CLOUDINARY_UPLOAD_PRESET,
+    AUTH_COOKIE_NAME
 } from '../utils/constants'
 import { getImagePath } from '../utils/product'
 
@@ -74,10 +75,25 @@ const getCategories = async () => {
     return categories
 }
 
+const setRating = async (rating, productId) => {
+    const response = await fetch(`${PRODUCT_URL}/rating`, {
+        method: 'PATCH',
+        body: JSON.stringify({ rating , productId }),
+        headers:{
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    const newRating = await response.json()
+    return newRating
+
+}
 export {
     uploadImages,
     getProductImages,
     getProductsPage,
     getProductRanges,
-    getCategories
+    getCategories,
+    setRating
 }

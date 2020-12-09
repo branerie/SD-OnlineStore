@@ -66,7 +66,15 @@ const productSchema = new mongoose.Schema({
     likedBy: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }]
+    }],
+    rating: {
+        currentRating: {
+            type: Number
+        },
+        counter: {
+            type: Number
+        }
+    }
 })
 
 productSchema.pre('validate', preprocessDiscountOnCreate)
@@ -76,6 +84,14 @@ productSchema.pre('save', processAddDateOnCreate)
 
 productSchema.virtual('discountPrice').get(function () {
     return this.price * (1 - this.discount.percent)
+})
+
+productSchema.virtual('viewRatingStars').get(function() {
+    return Math.round(this.rating.currentRating / this.rating.counter)
+})
+
+productSchema.virtual('viewRatingCount').get(function() {
+    return this.rating.counter
 })
 
 // productSchema.index({ categories: 'text' })

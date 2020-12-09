@@ -53,7 +53,12 @@ const ProductCard = (props) => {
                         { props.discountPrice ? discount : null}</div>
                 </div>
                 <div className={styles['rating-view']}>
-                    <RatingStars />
+                    <RatingStars
+                        key={props.id}
+                        productId={props.id}
+                        ratingStars={props.viewRatingStars}
+                        ratingCounter={props.viewRatingCount}
+                    />
                     <Link to={''} className={styles.link}>VIEW</Link>
                 </div>
             </div>

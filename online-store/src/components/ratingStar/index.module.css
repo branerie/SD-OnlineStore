@@ -1,8 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
 .container {
     display: flex;
     padding-left: 2%;
+    align-items: center;
 }
 
-.rating-star {
-    padding-left: 5%;
+.star-container {
+    display: flex;
+    width: 8.5rem;
+}
+
+.counter {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 1.5rem;
+    color: #707070;
 }
