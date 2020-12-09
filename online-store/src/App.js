@@ -16,7 +16,7 @@ function App() {
       //TODO: handle errors
     }
 
-    setUser({ userId: userInfo.userId, isAdmin: userInfo.isAdmin, favorites: userInfo.favorites })
+    setUser({ userId: userInfo.userId, isAdmin: userInfo.isAdmin, favorites: userInfo.favorites || [] })
     setIsLoading(false)
   })
 

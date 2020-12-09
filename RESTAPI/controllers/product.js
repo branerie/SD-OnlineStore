@@ -3,7 +3,7 @@ const Product = require('../models/product')
 const { getDbProductsFilter, getSortCriteria } = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
 const { getSizeRange, sortSizes, getAllCategories, parseMongoProducts } = require('../utils/product')
-const { findById } = require('../models/product')
+const { restrictToUser } = require('../utils/authenticate')
 
 router.get('/ranges', async (req, res) => {
     const dbRequestFilter = getDbProductsFilter(req.query)
@@ -130,6 +130,7 @@ router.get('/search', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const id = req.params.id
+
     try {
         const currentProduct = await Product.findById(id)
         return res.send({
@@ -155,50 +156,44 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.patch('/rating', async (req, res) => {
-    const userId = req.user.id
-    
-    
-    if (userId) {
-        try {
-            const { rating , productId } = req.body
-            let product = await Product.findById(productId)
-            const numRating = Number(rating)
+router.patch('/rating', restrictToUser, async (req, res) => {
+    try {
+        const { rating , productId } = req.body
+        const product = await Product.findById(productId)
+        const numRating = Number(rating)
 
-            if (isNaN(numRating) || !Number.isInteger(numRating) || numRating < 0) {
-                return res.status(400).send({ error: 'Product rating must be a non-negative integer number.' })
-            }
-
-            if (rating > 5) {
-                return res.status(403).send({ error: `Product cannot be rated with ${rating} stars.` })
-            }
-
-            const oldRating = product.rating.currentRating || 0
-            const oldcount = product.rating.counter || 0
-            const count = oldcount + 1
-            const newRating = { currentRating : oldRating + numRating , counter : count }
-    
-            await product.updateOne({ $set: { rating : newRating }})
-           
-            return res.send({productId, currentRating: Math.round(newRating.currentRating/count) , counter: count })
-
-
-
-        } catch (error) {
-            if (isMongoError(error)) {
-                return res.status(403).send({ error: error.message })
-            }
-    
-            if (error.name === 'CastError') {
-                return res.status(403).send({ error: `Product with id ${id} does not exist.` })
-            }
-    
-            return res.status(500).send({ error: error.message })
+        if (isNaN(numRating) || !Number.isInteger(numRating) || numRating < 0) {
+            return res.status(400).send({ 
+                error: 'Product rating must be a non-negative integer number.' 
+            })
         }
-        
 
-    } else {
-        //TODO implement without login
+        if (rating > 5) {
+            return res.status(403).send({ error: `Product cannot be rated with ${rating} stars.` })
+        }
+
+        const oldRating = product.rating.currentRating || 0
+        const oldcount = product.rating.counter || 0
+        const count = oldcount + 1
+        const newRating = { currentRating : oldRating + numRating, counter : count }
+
+        await product.updateOne({ $set: { rating : newRating }})
+        
+        return res.send({
+            productId,
+            currentRating: Math.round(newRating.currentRating/count), 
+            counter: count 
+        })
+    } catch (error) {
+        if (isMongoError(error)) {
+            return res.status(403).send({ error: error.message })
+        }
+
+        if (error.name === 'CastError') {
+            return res.status(403).send({ error: `Product with id ${id} does not exist.` })
+        }
+
+        return res.status(500).send({ error: error.message })
     }
 })
 

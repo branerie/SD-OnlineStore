@@ -7,9 +7,9 @@ const NUM_INDEX_STARS = [1, 2, 3, 4, 5]
 
 const RatingStars = (props) => {
     const [ratingStars, setRatingStars] = useState(props.ratingStars)
-    const [onHover , setOnHover] = useState(0)
-    const productId = props.productId
+    const [onHover, setOnHover] = useState(0)
     const [ratingCounter, setRatingCounter] = useState(props.ratingCounter)
+    const productId = props.productId
 
     const onMouseEnter = (indexOfStar) => {
         setOnHover(indexOfStar)
@@ -24,12 +24,11 @@ const RatingStars = (props) => {
        
         if(response.error) {
             //TODO handle errors
+            return
         }
 
         setRatingCounter(response.counter)
         setRatingStars(response.currentRating)
-
-        
     }
 
     return (

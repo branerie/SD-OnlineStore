@@ -12,10 +12,10 @@ const NO_IMAGES = 'No image'
 
 const ProductCard = (props) => {
     let discount = null
-    const { user, setUser }= useContext(UserContext)
+    const { user, setUser } = useContext(UserContext)
     const isInFavorites = user.favorites.includes(props.id)
 
-    if(props.discount) {
+    if (props.discount) {
         const discPrice = props.discountPrice.toFixed(2)
         const discPercent = props.discount.percent
 
@@ -25,7 +25,7 @@ const ProductCard = (props) => {
    const changeFavorites = async () => {
         const response = await setFavorites(props.id)
 
-        if(response.error) {
+        if (response.error) {
             //TODO handle errors
         }
 
