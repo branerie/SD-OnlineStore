@@ -23,3 +23,9 @@
     font-size: 2rem;
     text-align: center;
 }
+
+.sort-position {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 3rem;
+}

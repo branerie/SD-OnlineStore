@@ -5,6 +5,7 @@ import NavButtons from '../navButtons'
 import ProductsFilter from '../productsFilter'
 import Pagination from '../pagination'
 import ProductCardsList from '../productCardsList'
+import SortCriteria from '../../components/sortCriteria'
 
 const ProductPageBody = ({ pageLength }) => {
     return (
@@ -15,6 +16,9 @@ const ProductPageBody = ({ pageLength }) => {
             <main className={styles['main-container']}>
                 <NavButtons />
                 <Pagination pageLength={pageLength}>
+                    <div className={styles['sort-position']} >
+                        <SortCriteria />
+                    </div>
                     <ProductCardsList />
                 </Pagination>
             </main>

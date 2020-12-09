@@ -59,9 +59,7 @@ const Pagination = ({ pageLength, children }) => {
             <div className={styles.pagination}>
                     page <span className={styles.current}>{page + 1}</span>
             </div>
-            <div>
-                {children}
-            </div>
+                {children}            
             <div className={[styles['pagination-container'], styles.pagination].join(' ')}>
                 <span
                     className={hasPrevious ? styles['page-nav'] : styles.hidden}
