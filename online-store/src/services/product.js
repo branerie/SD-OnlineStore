@@ -4,9 +4,11 @@ import {
     HTTP_HEADERS,
     JSON_CONTENT_TYPE,
     CLOUDINARY_UPLOAD_PRESET,
-    AUTH_COOKIE_NAME
+    AUTH_COOKIE_NAME,
+    USER_NOT_LOGGED_IN_ERROR
 } from '../utils/constants'
 import { getImagePath } from '../utils/product'
+import { isUserLoggedIn } from '../utils/user'
 
 const PRODUCT_URL = REST_API_URL + '/product'
 
@@ -76,6 +78,11 @@ const getCategories = async () => {
 }
 
 const setRating = async (rating, productId) => {
+    const isLoggedIn = isUserLoggedIn()
+    if (!isLoggedIn) {
+        return { error: USER_NOT_LOGGED_IN_ERROR }
+    }
+
     const response = await fetch(`${PRODUCT_URL}/rating`, {
         method: 'PATCH',
         body: JSON.stringify({ rating , productId }),
@@ -89,6 +96,7 @@ const setRating = async (rating, productId) => {
     return newRating
 
 }
+
 export {
     uploadImages,
     getProductImages,

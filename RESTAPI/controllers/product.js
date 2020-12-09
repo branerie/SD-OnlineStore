@@ -181,7 +181,7 @@ router.patch('/rating', restrictToUser, async (req, res) => {
         
         return res.send({
             productId,
-            currentRating: Math.round(newRating.currentRating/count), 
+            currentRating: Math.round(newRating.currentRating / count), 
             counter: count 
         })
     } catch (error) {
