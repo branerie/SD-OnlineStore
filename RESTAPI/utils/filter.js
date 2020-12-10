@@ -76,7 +76,7 @@ function getDbProductsFilter(query) {
 }
 
 function getSortCriteria(sortQuery) {
-    const [property, direction] = sortQuery.split('_')
+    const [property, direction] = sortQuery.split(',')
     return { [property] : direction }
 }
 

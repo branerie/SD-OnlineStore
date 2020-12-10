@@ -11,6 +11,7 @@ const SortCriteria = () => {
     const setSortCriteria = (criteria , direction) => {
 
         productsContext.filtersDispatch({ type: 'sort', property: criteria, direction: direction })
+        setIsVisible(!isVisible)
     }
 
 
