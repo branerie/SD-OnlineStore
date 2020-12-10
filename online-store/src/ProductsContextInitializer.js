@@ -64,12 +64,12 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
                     delete newCategoricalFilters[propName]
                 }
 
-                return { ...state, cat: newCategoricalFilters }
+                return { ...state, cat: newCategoricalFilters, page: 0 }
             case 'range':
                 const newRangeFilters = { ...state.range }
                 newRangeFilters[propName] = action.value
 
-                return {...state, range: newRangeFilters}
+                return {...state, range: newRangeFilters, page : 0}
             case 'bool':
                 let newBoolFilters = [...state.bool]
 
@@ -79,11 +79,11 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
                     newBoolFilters = newBoolFilters.filter(pn => pn !== propName)
                 }
 
-                return { ...state, bool: newBoolFilters }
+                return { ...state, bool: newBoolFilters, page: 0 }
             case 'search':
-                return { ...state, search: action.searchTerm }
+                return { ...state, search: action.searchTerm, page: 0 }
             case 'sort':
-                return { ...state, sort: [ action.property , action.direction ] }
+                return { ...state, sort: [ action.property , action.direction ], page: 0 }
             case 'page':
                 return { ...state, page: action.newPage }
             case 'reset':

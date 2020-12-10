@@ -45,9 +45,6 @@ const ProductsFilter = () => {
                         propName='price'
                         min={productProps.minPrice}
                         max={productProps.maxPrice} />
-                <ProductsBoolFilter
-                        title='Discount'
-                        propName='discount' />
             </div>
         </>
     )
