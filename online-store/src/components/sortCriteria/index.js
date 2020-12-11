@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef, useEffect} from 'react'
 import ProductsContext from '../../ProductsContext'
 import useVisible from '../../hooks/setVisible'
 import styles from './index.module.css'
+import sortByArrow from '../../images/sortByArrow.svg'
 
 const SortCriteria = () => {
     const productsContext = useContext(ProductsContext)
@@ -10,6 +11,7 @@ const SortCriteria = () => {
     const setSortCriteria = (criteria , direction) => {
 
         productsContext.filtersDispatch({ type: 'sort', property: criteria, direction: direction })
+        setIsVisible(!isVisible)
     }
 
 
@@ -17,7 +19,13 @@ const SortCriteria = () => {
 
     return (
         <div className={styles.dropDownMenu}>
-            <button className={styles.title} onClick={e => setIsVisible(!isVisible)}>Sort by:</button>
+            <button
+                className={styles.title}
+                onClick={e => setIsVisible(!isVisible)}
+            >
+                    Sort by
+                    <img src={sortByArrow} className={styles['sort-by-arrow']} />
+            </button>
             {isVisible ? 
                 ( 
                     <div className={styles.list} ref={ref}>                    

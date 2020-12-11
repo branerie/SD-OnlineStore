@@ -3,7 +3,6 @@ import React, { useContext } from 'react'
 import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
 import ProductsRangeFilter from '../productsRangeFilter'
-import ProductsBoolFilter from '../productsBoolFilter'
 import ProductContext from '../../ProductsContext'
 import ProductsRatingFilters from '../productsRatingFilters'
 
@@ -46,9 +45,6 @@ const ProductsFilter = () => {
                         propName='price'
                         min={productProps.minPrice}
                         max={productProps.maxPrice} />
-                {/* <ProductsBoolFilter
-                        title='Discount'
-                        propName='discount' /> */}
                 <ProductsRatingFilters propName='rating' />
             </div>
         </>

@@ -100,7 +100,7 @@ router.put('/:id', async (req, res) => {
 
         await Product.findOneAndUpdate({ _id: id }, { $set: updateProductObject })
 
-        return res.send(`Product with id ${id} successfully updated.`)
+        return res.send({productId: id })
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })

@@ -1,5 +1,5 @@
 .container {
-    width: 100%;
+    min-width: 20rem;
     margin: 10px 0 10px 0;
     height: auto;
     border: 1px solid #234465;
@@ -7,6 +7,7 @@
     background-color: bisque;
     display: flex;
     flex-direction: column;
+    margin-right: 1rem;
   }
 
 .confirmButton {
