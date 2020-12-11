@@ -7,7 +7,7 @@ const isProductSchemaField = (fieldName) => {
 
 const parseSizeFilters = (queryValues) => {
     const range = (start, stop, step = 1) =>
-        Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
+        Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => (x + y * step).toString())
 
     const sizeSet = []
     for (let queryValue of queryValues.split(',')) {
@@ -71,7 +71,7 @@ function getDbProductsFilter(query) {
                 $gte: minValue,
                 $lte: maxValue
             }
-        } else if (propType === 'is' && isBoolean(query[property])) {
+        } else if (propType === 'bool' && isBoolean(query[property])) {
             filter[propValue] = {
                 $exists: query[property] === 'true'
             }
@@ -89,21 +89,17 @@ function getSortCriteria(sortQuery) {
 
 function getProductsAggregationObject(productFilters, sortCriteria, page, pageLength) {
     const resultArray = []
-    const fullProducts = []
-    const totalCount = []
+    const shouldFilterByText = '$text' in productFilters 
 
-    if ('$text' in productFilters) {
-        const textMatch = { $match: { $text: productFilters.$text } }
-        const textScore = { $addFields: {score: {$meta: "textScore"}}}
-
-        resultArray.push(textMatch)
-        resultArray.push(textScore)
+    if (shouldFilterByText) {
+        const textMatchPhase = { $match: { $text: productFilters.$text } }
+        resultArray.push(textMatchPhase)
 
         productFilters = {...productFilters}
         delete productFilters.$text
     }
 
-    const fieldsToCreateForProducts = {
+    const addFieldsPhase = {
         $addFields: {
             discountPrice: {
                 $round: [
@@ -123,54 +119,25 @@ function getProductsAggregationObject(productFilters, sortCriteria, page, pageLe
             }
         }
     }
-
-    fullProducts.push(fieldsToCreateForProducts)
-
-    const fieldsToCreateForCount = { $addFields: { } }
-    let shouldCreateFields = false
-    if (productFilters.hasOwnProperty('discountPrice')) {
-        fieldsToCreateForCount.$addFields.discountPrice = 
-                    fieldsToCreateForProducts.$addFields.discountPrice
-        shouldCreateFields = true
-    }
-
-    if (productFilters.hasOwnProperty('ratingStars')) {
-        fieldsToCreateForCount.$addFields.ratingStars = 
-                    fieldsToCreateForProducts.$addFields.ratingStars
-        shouldCreateFields = true
-    }
-
-    if (shouldCreateFields) {
-        totalCount.push(fieldsToCreateForCount)
-    }
-
-    const matchPhase = { $match: productFilters }
     
-    fullProducts.push(matchPhase)
-    totalCount.push(matchPhase)
+    if (shouldFilterByText) {
+        addFieldsPhase.$addFields.score =  { $meta: "textScore" }
+    }
 
-    fullProducts.push({ $sort: sortCriteria })
-    fullProducts.push({ $skip: page * pageLength })
-    fullProducts.push({ $limit: pageLength })
-
-    totalCount.push({
-        $group: {
-            _id: null,
-            count: { $sum: 1 }
-        }
-    })
-
-    totalCount.push({
-        $project: {
-            _id: 0,
-            count: '$count'
-        }
-    })
+    resultArray.push(addFieldsPhase)
+    resultArray.push({ $match: productFilters })
 
     resultArray.push({
         $facet: {
-            fullProducts,
-            totalCount
+            fullProducts: [
+                { $sort: sortCriteria },
+                { $skip: page * pageLength },
+                { $limit: pageLength }
+            ],
+            totalCount: [
+                { $group: { _id: null, count: { $sum: 1 } } },
+                { $project: {  _id: 0, count: '$count' } }
+            ]
         }
     })
 

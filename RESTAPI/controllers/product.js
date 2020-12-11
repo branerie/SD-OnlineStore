@@ -81,14 +81,7 @@ router.get('/products', async (req, res) => {
         const [{ totalCount, fullProducts }] = await Product.aggregate(aggObj)
         const total = totalCount.length > 0 ? totalCount[0].count : 0
 
-        // const total = await Product.find(productFilters).countDocuments()
-        // const fullProducts = await Product.find(productFilters)
-        //                                   .sort(sortCriteria)
-        //                                   .skip(page * pageLength)
-        //                                   .limit(pageLength)
-
         const products = parseMongoProducts(fullProducts)
-        
         return res.send({ total: total, productInfo: products })
     } catch (error) {
         if (isMongoError(error)) {
