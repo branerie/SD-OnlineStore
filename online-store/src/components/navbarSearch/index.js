@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import ProductsContext from '../../ProductsContext'
 import styles from './index.module.css'
 
-import searchImage from '../../images/searchLink.svg'
 import { useHistory } from 'react-router-dom'
 import { parseQueryString } from '../../utils/url'
+import SearchIconLink from '../iconLinks/searchIconLink'
 
 const NavbarSearch = () => {
     const [searchTerm, setSearchTerm] = useState('')
@@ -41,7 +41,8 @@ const NavbarSearch = () => {
                 className={styles.input}
                 placeholder='Search' required
                 onChange={e => setSearchTerm(e.target.value)} />
-            <img src={searchImage} className={styles.image} onClick={() => ref.current.click()} />
+            {/* <img src={searchImage} className={styles.image} onClick={() => ref.current.click()} /> */}
+            <SearchIconLink onClick={() => ref.current.click()} />
             <input type='submit' ref={ref} className={styles['submit-btn']} />
         </form>
     )
