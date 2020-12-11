@@ -1,9 +1,10 @@
 const router = require('express').Router()
 const Product = require('../models/product')
-const { getDbProductsFilter, getSortCriteria } = require('../utils/filter')
+const { getDbProductsFilter, getSortCriteria, getProductsAggregationObject } = require('../utils/filter')
 const { isMongoError } = require('../utils/utils')
 const { getSizeRange, sortSizes, getAllCategories, parseMongoProducts } = require('../utils/product')
 const { restrictToUser } = require('../utils/authenticate')
+const product = require('../utils/product')
 
 router.get('/ranges', async (req, res) => {
     const dbRequestFilter = getDbProductsFilter(req.query)
@@ -71,20 +72,24 @@ router.get('/ranges', async (req, res) => {
 
 router.get('/products', async (req, res) => {
     try {
-        const page = Math.max(0, req.query.page)
-        const pageLength = Math.max(1, req.query.pageLength)
+        const page = Math.max(0, (req.query.page || 0))
+        const pageLength = Math.max(1, (req.query.pageLength || 0))
         const productFilters = getDbProductsFilter(req.query)
         const sortCriteria = getSortCriteria(req.query.sort)
 
-        const totalCount = await Product.find(productFilters).countDocuments()
-        const fullProducts = await Product.find(productFilters)
-            .sort(sortCriteria)
-            .skip(page * pageLength)
-            .limit(pageLength)
+        const aggObj = getProductsAggregationObject(productFilters, sortCriteria, page, pageLength)
+        const [{ totalCount, fullProducts }] = await Product.aggregate(aggObj)
+        const total = totalCount.length > 0 ? totalCount[0].count : 0
+
+        // const total = await Product.find(productFilters).countDocuments()
+        // const fullProducts = await Product.find(productFilters)
+        //                                   .sort(sortCriteria)
+        //                                   .skip(page * pageLength)
+        //                                   .limit(pageLength)
 
         const products = parseMongoProducts(fullProducts)
-
-        return res.send({ total: totalCount, productInfo: products })
+        
+        return res.send({ total: total, productInfo: products })
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })
@@ -100,31 +105,6 @@ router.get('/categories', (req, res) => {
         return res.send({ categories })
     } catch (error) {
         return res.status(500).send({ error: 'Internal Server Error' })
-    }
-})
-
-router.get('/search', async (req, res) => {
-    try {
-        let { searchTerm, page, pageLength } = req.query
-        page = Number(page)
-        pageLength = Number(pageLength)
-
-        const totalCount = await Product.find({ $text: { $search: searchTerm } })
-                                        .countDocuments()
-
-        const searchResult = await Product.find({ $text: { $search: searchTerm } })
-                                          .sort({ score: { $meta: 'textScore' } })
-                                          .skip((page || 0) * pageLength)
-                                          .limit(pageLength)
-
-        const productInfo = parseMongoProducts(searchResult)
-        return res.send({ total: totalCount, productInfo: productInfo})
-    } catch (error) {
-        if (isMongoError(error)) {
-            return res.status(403).send({ error: error.message })
-        }
-
-        return res.status(500).send({ error: error.message })
     }
 })
 

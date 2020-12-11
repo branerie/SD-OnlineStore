@@ -36,13 +36,6 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
         setTotalCount(total)
     }, [setProductPage, setTotalCount, pageLength, filters])
 
-    // useEffect(() => {
-    //     const parsedQuery = parseQueryString(window.location.search)
-
-    //     const filtersState = getFiltersFromQuery(parsedQuery)
-    //     filtersDispatch({ type: 'reset', resetValue: filtersState })
-    // }, [])
-
     useEffect(() => {
 		getProductPropsRange()
     }, [getProductPropsRange])

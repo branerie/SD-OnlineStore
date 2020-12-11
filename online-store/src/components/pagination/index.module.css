@@ -23,3 +23,7 @@
 .arrow {
     padding: 0 3px;
 }
+
+.current {
+    color: #EF696E;
+}

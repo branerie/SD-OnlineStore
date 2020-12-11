@@ -5,6 +5,7 @@ import ProductsCheckboxFilter from '../productsCheckboxFilter'
 import ProductsRangeFilter from '../productsRangeFilter'
 import ProductsBoolFilter from '../productsBoolFilter'
 import ProductContext from '../../ProductsContext'
+import ProductsRatingFilters from '../productsRatingFilters'
 
 const ProductsFilter = () => {
     const productsContext = useContext(ProductContext)
@@ -45,9 +46,10 @@ const ProductsFilter = () => {
                         propName='price'
                         min={productProps.minPrice}
                         max={productProps.maxPrice} />
-                <ProductsBoolFilter
+                {/* <ProductsBoolFilter
                         title='Discount'
-                        propName='discount' />
+                        propName='discount' /> */}
+                <ProductsRatingFilters propName='rating' />
             </div>
         </>
     )

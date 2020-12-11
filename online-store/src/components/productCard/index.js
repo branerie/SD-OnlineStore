@@ -56,8 +56,8 @@ const ProductCard = (props) => {
                     <RatingStars
                         key={props.id}
                         productId={props.id}
-                        ratingStars={props.viewRatingStars}
-                        ratingCounter={props.viewRatingCount}
+                        ratingStars={props.ratingStars}
+                        ratingCounter={props.ratingCount}
                     />
                     <Link to={''} className={styles.link}>VIEW</Link>
                 </div>

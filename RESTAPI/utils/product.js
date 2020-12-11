@@ -70,25 +70,32 @@ const getAllCategories = () => {
 
 const parseMongoProducts = (mongoProducts) => {
     return mongoProducts.map(p => {
-        return {
+        const parsedProduct = {
             id: p._id,
             sizes: p.sizes,
             price: p.price,
-            discount: p.discount.$isEmpty() ? null : {
-                percent: p.discount.percent * 100,
-                endDate: p.discount.endDate.toISOString().slice(0, 10)
-            },
             brand: p.brand,
             description: p.description,
-            images: p.images.length > 0
-                ? p.images.map(image => getImageUrl(image))
-                : null,
             gender: p.gender,
             categories: p.categories,
-            discountPrice: p.discountPrice,
-            viewRatingStars: p.viewRatingStars,
-            viewRatingCount: p.viewRatingCount
+            ratingStars: p.ratingStars,
+            ratingCount: p.rating.counter || 0
         }
+
+        if (p.discount) {
+            parsedProduct.discount = {
+                percent: p.discount.percent * 100,
+                endDate: p.discount.endDate.toISOString().slice(0, 10)
+            }
+
+            parsedProduct.discountPrice = p.discountPrice
+        }
+
+        if (p.images.length > 0) {
+            parsedProduct.images = p.images.map(image => getImageUrl(image))
+        }
+
+        return parsedProduct
     })
 }
 

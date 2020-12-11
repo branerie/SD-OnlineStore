@@ -10,7 +10,10 @@ module.exports = async function () {
             useCreateIndex: true
         })
 
-        // db.collections.products.createIndex({
+        // const indexes = await db.collections.products.indexes()
+        // await db.collections.products.dropIndex('brand_text_description_text_categories_text')
+
+        // await db.collections.products.createIndex({
         //     brand: 'text',
         //     description: 'text',
         //     categories: 'text'

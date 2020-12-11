@@ -87,6 +87,10 @@ productSchema.virtual('discountPrice').get(function () {
 })
 
 productSchema.virtual('viewRatingStars').get(function() {
+    if (this.rating.counter === 0) {
+        return 0
+    }
+
     return Math.round(this.rating.currentRating / this.rating.counter)
 })
 
