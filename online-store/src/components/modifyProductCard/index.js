@@ -46,6 +46,7 @@ const ModifyProductCard = (props) => {
         }
 
         productsContext.updateFilters()
+        productsContext.updateProductsPage()
     }
 
     return (
