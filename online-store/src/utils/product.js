@@ -18,7 +18,7 @@ const getRangeFilterQueries = (rangeFilters) => {
 
 const getBoolFilterQueries = (boolFilters) => {
     const queryStrings = boolFilters.map(propName => {
-        return `is_${propName}=${true}`
+        return `bool_${propName}=${true}`
     })
 
     return queryStrings
@@ -50,8 +50,60 @@ const getImagePublicId = (url) => {
     return imageName.split('.')[0]
 }
 
+function parseQueryString(queryString) {
+    if (!queryString) {
+        return {}
+    }
+
+    let queryPairs = queryString.replace('?', '').split('&')
+
+    if (queryPairs.length === 0 ||
+        (queryPairs.length === 1 && queryPairs[0] === '')) {
+        return {}
+    }
+    
+    const result = {}
+    for (let queryPair of queryPairs) {
+        const [key, value] = queryPair.split('=')
+
+        // if query key includes "_", then it must be a product filter
+        if (key.includes('_')) {
+            const [filterType, filterProp] = key.split('_')
+            const values = value.split(',')
+            
+
+            if (!result.hasOwnProperty(filterType)) {
+                result[[filterType]] = filterType === 'bool' ? [] : {}
+            }
+            
+            switch (filterType) {
+                case 'cat':
+                    result[[filterType]][[filterProp]] = values
+                    break
+                case 'rng':
+                    result[[filterType]][[filterProp]] = { 
+                        min: Number(values[0]), 
+                        max: Number(values[1])
+                    }
+
+                    break
+                case 'bool':
+                    result[[filterType]].push(filterProp)
+                    break
+                default:
+                    continue
+            }
+        } else {
+            result[[key]] = value
+        }
+    }
+
+    return result
+}
+
 export {
     getImagePath,
     getImagePublicId,
     getProductsQueryString,
+    parseQueryString
 }

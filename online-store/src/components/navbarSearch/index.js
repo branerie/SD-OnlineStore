@@ -3,7 +3,7 @@ import ProductsContext from '../../ProductsContext'
 import styles from './index.module.css'
 
 import { useHistory } from 'react-router-dom'
-import { parseQueryString } from '../../utils/url'
+import { parseQueryString } from '../../utils/product'
 import SearchIconLink from '../iconLinks/searchIconLink'
 
 const NavbarSearch = () => {
@@ -41,7 +41,6 @@ const NavbarSearch = () => {
                 className={styles.input}
                 placeholder='Search' required
                 onChange={e => setSearchTerm(e.target.value)} />
-            {/* <img src={searchImage} className={styles.image} onClick={() => ref.current.click()} /> */}
             <SearchIconLink onClick={() => ref.current.click()} />
             <input type='submit' ref={ref} className={styles['submit-btn']} />
         </form>

@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
 import { getProductRanges, getProductsPage } from './services/product'
-import { getProductsQueryString } from './utils/product'
-import { parseQueryString } from './utils/url'
+import { parseQueryString, getProductsQueryString } from './utils/product'
 
 const ProductsContextInitializer = ({ children, pageLength }) => {
     const [productProps, setProductProps] = useState(null)
@@ -88,10 +87,10 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
 
     function getFiltersFromQuery() {
         const parsedQuery = parseQueryString(window.location.search)
-        const { bool, cat, range, searchTerm, sort, page } = parsedQuery
+        const { bool, cat, rng: range, searchTerm, sort, page } = parsedQuery
 
         return {
-            bool: bool ? Object.keys(bool) : [],
+            bool: bool || [],
             cat: cat || {},
             range: range || {},
             search: searchTerm || '',

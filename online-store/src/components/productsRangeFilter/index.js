@@ -1,45 +1,43 @@
 import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
 import ProductsContext from '../../ProductsContext'
+import RangeInput from '../inputFields/rangeInput'
 
-const ProductsRangeFilter = (props) => {
-    const [minValue, setMinValue] = useState(props.min)
-    const [maxValue, setMaxValue] = useState(props.max)
-    const productsContext = useContext(ProductsContext)
-    
-    const capitalizedPropName = props.propName[0].toUpperCase() + props.propName.slice(1)
+const getInitialValues = (filters, propName, min, max) => {
+    const currentFilters = filters.range[propName]
 
-    const handleChange = () => {
-        productsContext.filtersDispatch({
+    if (currentFilters) {
+        return [currentFilters.min, currentFilters.max]
+    }
+
+    return [min, max]
+}
+
+const ProductsRangeFilter = ({ min, max, propName, title, step = 1 }) => {
+    const { filters, filtersDispatch } = useContext(ProductsContext)
+    const [value, setValue] = useState(getInitialValues(filters, propName, min, max))
+
+    const handleChange = (event, newValue) => {
+        filtersDispatch({
             type: 'range',
-            propName: props.propName,
-            value: { min: minValue, max: maxValue }
+            propName: propName,
+            value: { min: newValue[0], max: newValue[1] }
         })
+
+        setValue(newValue)
     }
 
     return (
         <div className={styles.container}>
-            <h3 className={styles.title}>{props.title}</h3>
-            <label>Min: </label>
-            <input
-                type="number"
-                name={`min${capitalizedPropName}`}
-                className={styles['range-input']}
-                value={minValue}
-                min="0"
-                max={props.max}
-                onChange={e => setMinValue(e.target.value)} 
-                onBlur={handleChange} />
-            <label>Max: </label>
-            <input
-                type="number"
-                name={`max${capitalizedPropName}`}
-                className={styles['range-input']}
-                value={maxValue}
-                min="0"
-                max={props.max}
-                onChange={e => setMaxValue(e.target.value)}
-                onBlur={handleChange} />
+            <h3 className={styles.title}>{title}</h3>
+            <RangeInput
+                value={value}
+                handleChange={handleChange}
+                rangeStart={min}
+                rangeEnd={max}
+                rangeStep={step}
+                units='$'
+            />
         </div>
     )
 }
