@@ -29,7 +29,8 @@ const RatingIcon = (props) => {
         <div className={styles.container}
             onClick={() => onSave(indexOfStar)}
             onMouseEnter={() => onMouseEnter(indexOfStar)}
-            onMouseLeave={() => onMouseLeave()}>
+            onMouseLeave={() => onMouseLeave()}
+        >
             <StarIcon fill={fill} />            
         </div>
     )

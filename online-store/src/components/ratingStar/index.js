@@ -33,7 +33,7 @@ const RatingStars = (props) => {
 
     return (
         <div className={styles.container}>
-            <div className={styles['star-container']} >
+            <div className={styles['star-container']}  >
                 {NUM_INDEX_STARS.map(indexOfStar => {
                     return (
                         <RatingIcon 
@@ -48,7 +48,7 @@ const RatingStars = (props) => {
                     )
                 })}
             </div>
-            <div className={styles.counter}>
+            <div className={styles.counter} data-testid='counter'>
                 ({ratingCounter})
             </div>
         </div>

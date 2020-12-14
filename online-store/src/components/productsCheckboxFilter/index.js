@@ -32,7 +32,9 @@ const ProductsCheckboxFilter = ({ propName, title, values }) => {
                             value={value}
                             name={propName}
                             checked={currValues.includes(value)}
-                            onChange={handleChange} />
+                            onChange={handleChange}
+                            data-testid={`${title.toLowerCase()}-${value.replace(' ', '_').toLowerCase()}`}
+                    />
                         <span className={styles.checkmark}></span>
                     </label>
                 )
