@@ -68,8 +68,8 @@ const Pagination = ({ pageLength, children }) => {
                     <img src={previousArrow} className={styles.arrow} />
                 </span>
                 {pagesToDisplay && pagesToDisplay.map(pageNumber => {
-                    return <PaginationElement pageNumber={pageNumber} />
-                })}
+                    >
+                })}return <PaginationElement pageNumber={pageNumber} /
                 <span
                     className={hasNext ? styles['page-nav'] : styles.hidden}
                     onClick={() => filtersDispatch({ type: 'page', newPage: page + 1 })}>

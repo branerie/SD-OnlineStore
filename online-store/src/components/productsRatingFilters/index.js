@@ -53,7 +53,9 @@ const ProductsRatingFilters = ({ propName }) => {
                             value={ratingStar}
                             name={`rating-${ratingStar}`}
                             checked={currValues.includes(ratingStar)}
-                            onChange={handleChange} />
+                            onChange={handleChange}
+                            data-testid={`rating-${ratingStar}`}
+                        />
                         <span className={styles.checkmark}></span>
                     </label>
                 )
