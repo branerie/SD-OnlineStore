@@ -5,7 +5,7 @@ import styles from './index.module.css'
 const DESCRIPTION_MAX_LENGTH = 1000
 
 const DescriptionInput = ({ value, onChange }) => {
-    const [isVisible, setIsVisible] = useState(value != undefined)
+    const [isVisible, setIsVisible] = useState(value ? true : false)
 
     const handleChange = useCallback((event) => {
         if (event.target.value.length > 0) {

@@ -8,7 +8,7 @@ import TextInput from '../../components/inputFields/textInput'
 import QuantityInput from '../../components/inputFields/quantityInput'
 import NumberInput from '../../components/inputFields/numberInput'
 import DescriptionInput from '../../components/inputFields/descriptionInput'
-import CategoriesInput from '../../components/inputFields/categoriesInput'
+import CategoriesInputWrapper from '../../components/inputFields/categoriesInputWrapper'
 
 import { createProduct, addImagesToProduct } from '../../services/adminProduct'
 import { uploadImages } from '../../services/product'
@@ -121,7 +121,7 @@ const AddProductCard = () => {
                         placeholder='Brand'
                         onChange={e => setBrand(e.target.value)}
                     />
-                    <CategoriesInput
+                    <CategoriesInputWrapper
                         addedCategories={categories}
                         handleAdd={cat => setCategories([...categories, cat])}
                         handleRemove={cat => setCategories(categories.filter(c => c !== cat))} />
