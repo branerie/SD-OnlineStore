@@ -4,53 +4,70 @@ import styles from './index.module.css'
 import UserContext from '../../Context'
 import { setFavorites } from '../../services/user.js'
 import cardFrame from '../../images/productCardFrame.svg'
-import favotiesImageEmpty from '../../images/favoritesLink.svg'
-import favotiesImageFill from '../../images/favoritesLinkFilled.svg'
+import favoritesImageEmpty from '../../images/favoritesLink.svg'
+import favoritesImageFilled from '../../images/favoritesLinkFilled.svg'
 import RatingStars from '../ratingStar'
 
-const NO_IMAGES = 'No image'
+const NO_IMAGES_TEXT = 'No image'
 
 const ProductCard = (props) => {
-    let discount = null
     const { user, setUser } = useContext(UserContext)
-    const isInFavorites = user.favorites.includes(props.id)
 
+    const isInFavorites = user.favorites.includes(props.id)
+    const currency = props.currency ? props.currency : '$'
+
+    let discount = null
     if (props.discount) {
         const discPrice = props.discountPrice.toFixed(2)
         const discPercent = props.discount.percent
 
-        discount = `-${parseInt(discPercent)}% = ${discPrice}$`
+        discount = `-${parseInt(discPercent)}% = ${discPrice}${currency}`
     }
-  
-   const changeFavorites = async () => {
+
+    const changeFavorites = async () => {
         const response = await setFavorites(props.id)
 
         if (response.error) {
             //TODO handle errors
         }
 
-        setUser({...user, favorites: response.favorites})
-   }
+        setUser({ ...user, favorites: response.favorites })
+    }
 
-    const imgSrc = isInFavorites ? favotiesImageFill : favotiesImageEmpty
-    
+    const imgSrc = isInFavorites ? favoritesImageFilled : favoritesImageEmpty
+
     return (
         <div className={styles.container}>
-            <img src={cardFrame} className={styles.frame} alt={NO_IMAGES}/>
-            <img src={props.images} alt={NO_IMAGES}  className={styles['product-image']}/>
+            <img
+                src={cardFrame}
+                className={styles.frame}
+                alt={NO_IMAGES_TEXT}
+            />
+            <img
+                src={props.images}
+                alt={NO_IMAGES_TEXT}
+                className={styles['product-image']}
+            />
             <div className={styles['text-container']}>
-                <div className={styles['brand-likeButton']}>                    
-                    <div className={styles.brand}>{props.brand}</div>
-                    <img onClick={changeFavorites} src={imgSrc} alt={NO_IMAGES} title={'Favorite collection'} className={styles['like-button']}/>                    
+                <div className={styles['brand-likeButton']}>
+                    <div className={styles.brand}>
+                        {props.brand}
+                    </div>
+                    <img
+                        onClick={changeFavorites}
+                        src={imgSrc} alt={NO_IMAGES_TEXT}
+                        title={'Favorite collection'}
+                        className={styles['like-button']} 
+                    />
                 </div>
                 <div className={styles['price-container']}>
-                        { props.discountPrice 
-                            ? <div className={styles['price-discount']}>{props.price}$</div>
-                            : <div className={styles.price}>{props.price}$</div>
-                        }
-                    
-                    <div className={styles['discount-style']}>
-                        { props.discountPrice ? discount : null}</div>
+                    <div className={props.discountPrice ? styles['price-discount'] : styles.price}>
+                        {props.price}{currency}
+                    </div>
+
+                    <div className={styles['discount-style']} data-testid={`discount-${props.id}`}>
+                        {props.discountPrice ? discount : null}
+                    </div>
                 </div>
                 <div className={styles['rating-view']}>
                     <RatingStars

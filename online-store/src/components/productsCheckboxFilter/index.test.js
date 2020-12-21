@@ -1,7 +1,7 @@
 import React from 'react'
-import { render, cleanup } from '@testing-library/react'
+import { render, cleanup, fireEvent } from '@testing-library/react'
 
-import ProductsContext from '../../ProductsContext'
+import MockProductsContext from '../test/mockProductsContext'
 import ProductsCheckboxFilter from './index'
 
 describe('ProductsChechboxFilter', () => {
@@ -10,16 +10,15 @@ describe('ProductsChechboxFilter', () => {
     let queryByText, getByTestId
     beforeEach(() => {
         const renderResult = render(
-            <ProductsContext.Provider value={{ 
-                filters: { cat: { brand: ['Armani', 'Gucci'], categories: ['Shoes'] } },
-                filtersDispatch: () => {}
-            }}>
+            <MockProductsContext
+                initialFilters={{ cat: { brand: ['Armani', 'Gucci'], categories: ['Shoes'] } }}
+            >
                 <ProductsCheckboxFilter
                     propName='brand'
                     title='Brand'
                     values={['Armani', 'D&G', 'Gucci', 'Louis Vitton']}
                 />
-            </ProductsContext.Provider>
+            </MockProductsContext>
         )
 
         queryByText = renderResult.queryByText
@@ -27,16 +26,16 @@ describe('ProductsChechboxFilter', () => {
     })
 
     it('should display correct title', () => {
-        expect(queryByText('Brand')).not.toEqual(null)
-        expect(queryByText('Categories')).toEqual(null)
+        expect(queryByText('Brand')).not.toBeNull()
+        expect(queryByText('Categories')).toBeNull()
     })
 
     it('should display correct options', () => {
-        expect(queryByText('Armani')).not.toEqual(null)
-        expect(queryByText('D&G')).not.toEqual(null)
-        expect(queryByText('Gucci')).not.toEqual(null)
-        expect(queryByText('Louis Vitton')).not.toEqual(null)
-        expect(queryByText('Shoes')).toEqual(null)
+        expect(queryByText('Armani')).not.toBeNull()
+        expect(queryByText('D&G')).not.toBeNull()
+        expect(queryByText('Gucci')).not.toBeNull()
+        expect(queryByText('Louis Vitton')).not.toBeNull()
+        expect(queryByText('Shoes')).toBeNull()
     })
 
     it('should display checkbox tick when clicked and no tick otherwise', () => {
@@ -51,5 +50,19 @@ describe('ProductsChechboxFilter', () => {
 
             expect(brandCheckbox.checked).toEqual(false)
         }
+    })
+
+    it('should change checkbox state on click', () => {
+        const clickedCheckbox = getByTestId('brand-armani')
+        const unclickedCheckbox = getByTestId('brand-louis_vitton')
+
+        fireEvent.click(clickedCheckbox)
+        fireEvent.click(unclickedCheckbox)
+
+        expect(clickedCheckbox.checked).toEqual(false)
+        expect(unclickedCheckbox.checked).toEqual(true)
+
+        fireEvent.click(clickedCheckbox)
+        expect(clickedCheckbox.checked).toEqual(true)
     })
 })

@@ -83,8 +83,10 @@ function getDbProductsFilter(query) {
 
 function getSortCriteria(sortQuery) {
     const [property, direction] = sortQuery.split(',')
+
+    const sortProperty = property ? property : 'addDate'
     const integerDirection = direction === 'asc' ? 1 : -1
-    return { [property]: integerDirection, _id: 1 }
+    return { [sortProperty]: integerDirection, _id: 1 }
 }
 
 function getProductsAggregationObject(productFilters, sortCriteria, page, pageLength) {

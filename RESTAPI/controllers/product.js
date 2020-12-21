@@ -4,7 +4,6 @@ const { getDbProductsFilter, getSortCriteria, getProductsAggregationObject } = r
 const { isMongoError } = require('../utils/utils')
 const { getSizeRange, sortSizes, getAllCategories, parseMongoProducts } = require('../utils/product')
 const { restrictToUser } = require('../utils/authenticate')
-const product = require('../utils/product')
 
 router.get('/ranges', async (req, res) => {
     const dbRequestFilter = getDbProductsFilter(req.query)
@@ -74,11 +73,11 @@ router.get('/products', async (req, res) => {
     try {
         const page = Math.max(0, (req.query.page || 0))
         const pageLength = Math.max(1, (req.query.pageLength || 0))
-        const productFilters = getDbProductsFilter(req.query)
-        const sortCriteria = getSortCriteria(req.query.sort)
+        const productFilters = getDbProductsFilter(req.query || '')
+        const sortCriteria = getSortCriteria(req.query.sort || '')
 
         const aggObj = getProductsAggregationObject(productFilters, sortCriteria, page, pageLength)
-        const [{ totalCount, fullProducts }] = await Product.aggregate(aggObj)
+        const [{ totalCount, fullProducts }] = await (await Product.aggregate(aggObj))
         const total = totalCount.length > 0 ? totalCount[0].count : 0
 
         const products = parseMongoProducts(fullProducts)

@@ -16,7 +16,7 @@ import MensPage from './pages/men'
 import WomensPage from './pages/women'
 import PromotionsPage from './pages/promotions'
 
-const PAGE_LENGTH = 15
+const PAGE_LENGTH = 3
 
 const Navigation = () => {
     const { user: { isAdmin, userId }} = useContext(UserContext)

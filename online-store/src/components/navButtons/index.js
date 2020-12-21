@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './index.module.css'
-import NavbarImageButton from '../navbarImageButton'
 import NavbarSearch from '../navbarSearch'
 
 import ShoppingCartIconLink from '../iconLinks/shoppingCartIconLink'

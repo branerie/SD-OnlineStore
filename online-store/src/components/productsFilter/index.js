@@ -7,17 +7,15 @@ import ProductContext from '../../ProductsContext'
 import ProductsRatingFilters from '../productsRatingFilters'
 
 const ProductsFilter = () => {
-    const productsContext = useContext(ProductContext)
+    const { productProps, productPage, totalCount } = useContext(ProductContext)
     
-    const { productProps, productPage } = productsContext
     if (!productProps || !productPage) {
         return (
             <div>Loading Filters...</div>
         )
     }
 
-    const { totalCount } = productsContext
-    const pageLength = productsContext.productPage.length
+    const pageLength = productPage.length
 
     return (
         <>

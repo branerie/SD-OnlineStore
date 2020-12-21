@@ -48,7 +48,7 @@ const CategoriesInput = ({ handleAdd, handleRemove, addedCategories }) => {
         <div className={styles.container}>
             <select
                 className={styles.select}
-                onChange={e => handleCategoryAdd(e.target.value)}>
+                onClick={e => handleCategoryAdd(e.target.value)}>
                 {categories && getSortedCategories().map(cat => {
                     return (
                         <option key={cat} value={cat}>

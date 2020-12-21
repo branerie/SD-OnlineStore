@@ -56,23 +56,27 @@ const Pagination = ({ pageLength, children }) => {
 
     return (
         <div>
-            <div className={styles.pagination}>
+            <div className={styles.pagination} data-testid='pagination-pageNumber'>
                     page <span className={styles.current}>{page + 1}</span>
             </div>
                 {children}            
             <div className={[styles['pagination-container'], styles.pagination].join(' ')}>
                 <span
                     className={hasPrevious ? styles['page-nav'] : styles.hidden}
-                    onClick={() => filtersDispatch({ type: 'page', newPage: page - 1 })}>
+                    onClick={() => filtersDispatch({ type: 'page', newPage: page - 1 })}
+                    data-testid='pagination-previous'
+                >
                     previous
                     <img src={previousArrow} className={styles.arrow} />
                 </span>
                 {pagesToDisplay && pagesToDisplay.map(pageNumber => {
-                    return <PaginationElement pageNumber={pageNumber} />
+                    return <PaginationElement key={pageNumber} pageNumber={pageNumber} />
                 })}
                 <span
                     className={hasNext ? styles['page-nav'] : styles.hidden}
-                    onClick={() => filtersDispatch({ type: 'page', newPage: page + 1 })}>
+                    onClick={() => filtersDispatch({ type: 'page', newPage: page + 1 })}
+                    data-testid='pagination-next'
+                >
                     <img src={nextArrow} className={styles.arrow} />
                     next
                 </span>

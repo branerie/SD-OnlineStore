@@ -46,8 +46,10 @@ const HomeBottom = () => {
                         <span>zillions of products</span>
                     </div>
                 </div>
-                <div className={styles['bottom-text']}>
-                    your <span className={styles['gray-text']}>fashion</span> identity is here
+                <div className={styles['bottom-left-container']}>
+                    <div className={styles['bottom-text']}>
+                        your <span className={styles['gray-text']}>fashion</span> identity is here
+                    </div>
                 </div>
             </div>
             <div className={styles['bottom-right']}>
@@ -57,7 +59,7 @@ const HomeBottom = () => {
                 </div>
             </div>
             <div className={styles['gray-bg']}></div>
-        </section>
+        </section >
     )
 }
 

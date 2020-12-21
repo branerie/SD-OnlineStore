@@ -8,7 +8,7 @@ import SearchIconLink from '../iconLinks/searchIconLink'
 
 const NavbarSearch = () => {
     const [searchTerm, setSearchTerm] = useState('')
-    const productsContext = useContext(ProductsContext)
+    const { filtersDispatch } = useContext(ProductsContext)
     const ref = useRef(null)
     const history = useHistory()
 
@@ -29,18 +29,19 @@ const NavbarSearch = () => {
             history.push(`/products?searchTerm=${searchTerm}`)
         }
 
-        productsContext.filtersDispatch({ type: 'search', searchTerm: searchTerm })
+        filtersDispatch({ type: 'search', searchTerm: searchTerm })
     }
 
     return (
-        <form noValidate onSubmit={handleSubmit} className={styles.container}>
+        <form noValidate onSubmit={handleSubmit} className={styles.container} data-testid='search-form'>
             <input
                 type='text'
                 name='search'
                 value={searchTerm}
                 className={styles.input}
                 placeholder='Search' required
-                onChange={e => setSearchTerm(e.target.value)} />
+                onChange={e => setSearchTerm(e.target.value)}
+            />
             <SearchIconLink onClick={() => ref.current.click()} />
             <input type='submit' ref={ref} className={styles['submit-btn']} />
         </form>

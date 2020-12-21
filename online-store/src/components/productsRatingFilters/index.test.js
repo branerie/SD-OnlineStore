@@ -1,7 +1,7 @@
 import React from 'react'
-import { render, cleanup } from '@testing-library/react'
+import { render, cleanup, fireEvent } from '@testing-library/react'
 
-import ProductsContext from '../../ProductsContext'
+import MockProductsContext from '../test/mockProductsContext'
 import ProductsRatingFilters from './index'
 
 describe('ProductsRatingFilters',  () => {
@@ -10,12 +10,11 @@ describe('ProductsRatingFilters',  () => {
     let queryByText, getByTestId
     beforeEach(() => {
         const renderResult = render(
-            <ProductsContext.Provider value={{
-                filters: { cat: { rating: [4, 5] } },
-                filtersDispatch: () => {}
-            }}>
+            <MockProductsContext
+                initialFilters={{ cat: { rating: [4, 5] } }}
+            >
                 <ProductsRatingFilters propName='rating' />
-            </ProductsContext.Provider>
+            </MockProductsContext>
         )
 
         queryByText = renderResult.queryByText
@@ -34,5 +33,16 @@ describe('ProductsRatingFilters',  () => {
 
             expect(ratingInput.checked).toEqual(false)
         }
+    })
+
+    it('should change checkbox state when clicked', () => {
+        const clickedCheckbox = getByTestId('rating-5')
+        const unclickedCheckbox = getByTestId('rating-1')
+
+        fireEvent.click(clickedCheckbox)
+        fireEvent.click(unclickedCheckbox)
+
+        expect(clickedCheckbox.checked).toEqual(false)
+        expect(unclickedCheckbox.checked).toEqual(true)
     })
 })

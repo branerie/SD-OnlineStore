@@ -10,7 +10,7 @@
 
 .bottom-left {
     flex-grow: 1;
-    max-width: 30%;
+    max-width: 50%;
     display: flex;
     flex-direction: column;
 }
@@ -56,6 +56,7 @@
     font-size: 2rem;
     padding: 0 3rem;
     margin-top: 2rem;
+    max-width: 50%;
 }
 
 .gray-text {
@@ -90,4 +91,9 @@
     bottom: 0;
     left: 0;
     z-index: -1;
+}
+
+.bottom-left-container {
+    display: flex;
+    justify-content: center;
 }

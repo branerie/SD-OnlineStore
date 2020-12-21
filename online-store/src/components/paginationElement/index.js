@@ -12,6 +12,7 @@ const PaginationElement = ({ pageNumber }) => {
     if (isSamePage) {
         return (
             <span key={pageNumber}
+                data-testid={`paginationElement-${pageNumber}`}
                 className={[styles['page-link'], styles.current].join(' ')}>
                 {displayedPageNumber}
             </span>
@@ -20,6 +21,7 @@ const PaginationElement = ({ pageNumber }) => {
 
     return (
         <span key={pageNumber}
+            data-testid={`paginationElement-${pageNumber}`}
             onClick={isNaN(pageNumber)
                         ? null
                         : () => filtersDispatch({ type: 'page', newPage: pageNumber })

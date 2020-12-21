@@ -76,10 +76,10 @@ const parseMongoProducts = (mongoProducts) => {
             price: p.price,
             brand: p.brand,
             description: p.description,
-            gender: p.gender,
+            gender: p.gender || 'U',
             categories: p.categories,
             ratingStars: p.ratingStars,
-            ratingCount: p.rating.counter || 0
+            ratingCount: p.rating ? (p.rating.counter || 0) : 0
         }
 
         if (p.discount) {

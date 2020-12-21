@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
 import { getProductRanges, getProductsPage } from './services/product'
-import { parseQueryString, getProductsQueryString } from './utils/product'
+import { parseQueryString, getProductsQueryString, filtersReducer } from './utils/product'
 
 const ProductsContextInitializer = ({ children, pageLength }) => {
     const [productProps, setProductProps] = useState(null)
@@ -42,48 +42,6 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
 	useEffect(() => {
 		getCurrentProductsPage()
     }, [getCurrentProductsPage, filters])
-
-    function filtersReducer(state, action) {
-        const propName = action.propName
-        
-        switch (action.type) {
-            case 'cat':
-                const newCategoricalFilters = { ...state.cat }
-
-                if (action.values.length > 0) {
-                    newCategoricalFilters[propName] = action.values
-                } else {
-                    delete newCategoricalFilters[propName]
-                }
-
-                return { ...state, cat: newCategoricalFilters, page: 0 }
-            case 'range':
-                const newRangeFilters = { ...state.range }
-                newRangeFilters[propName] = action.value
-
-                return {...state, range: newRangeFilters, page : 0}
-            case 'bool':
-                let newBoolFilters = [...state.bool]
-
-                if (action.isActivated) {
-                    newBoolFilters.push(propName)
-                } else {
-                    newBoolFilters = newBoolFilters.filter(pn => pn !== propName)
-                }
-
-                return { ...state, bool: newBoolFilters, page: 0 }
-            case 'search':
-                return { ...state, search: action.searchTerm, page: 0 }
-            case 'sort':
-                return { ...state, sort: [ action.property , action.direction ], page: 0 }
-            case 'page':
-                return { ...state, page: action.newPage }
-            case 'reset':
-                return action.resetValue
-            default:
-                return state
-        }
-    }
 
     function getFiltersFromQuery() {
         const parsedQuery = parseQueryString(window.location.search)

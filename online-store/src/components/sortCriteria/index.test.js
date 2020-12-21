@@ -9,10 +9,10 @@ describe('SortCriteria', () => {
     it('does not show options before click', () => {
         const { queryByText } = render(<SortCriteria />)
 
-        expect(queryByText('Newest Arrivals')).toEqual(null)
-        expect(queryByText('Price: Low to High')).toEqual(null)
-        expect(queryByText('Price: High to Low')).toEqual(null)
-        expect(queryByText('Bigger Discount')).toEqual(null)
+        expect(queryByText('Newest Arrivals')).toBeNull()
+        expect(queryByText('Price: Low to High')).toBeNull()
+        expect(queryByText('Price: High to Low')).toBeNull()
+        expect(queryByText('Bigger Discount')).toBeNull()
     })
 
     it('shows options on click', () => {
@@ -21,9 +21,9 @@ describe('SortCriteria', () => {
         const sortCriteriaButton = getByText('Sort by')
         fireEvent.click(sortCriteriaButton)
 
-        expect(queryByText('Newest Arrivals')).not.toEqual(null)
-        expect(queryByText('Price: Low to High')).not.toEqual(null)
-        expect(queryByText('Price: High to Low')).not.toEqual(null)
-        expect(queryByText('Bigger Discount')).not.toEqual(null)
+        expect(queryByText('Newest Arrivals')).not.toBeNull()
+        expect(queryByText('Price: Low to High')).not.toBeNull()
+        expect(queryByText('Price: High to Low')).not.toBeNull()
+        expect(queryByText('Bigger Discount')).not.toBeNull()
     })
 })

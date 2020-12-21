@@ -2,26 +2,28 @@ import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
 import ProductsContext from '../../ProductsContext'
 
-const ProductsBoolFilter = (props) => {
-    const [value, setValue] = useState(false)
-    const productsContext = useContext(ProductsContext)
+const ProductsBoolFilter = ({ propName, title }) => {
+    const { filters, filtersDispatch } = useContext(ProductsContext)
+    const [value, setValue] = useState(filters.bool.includes(propName))
 
     const handleChange = (event) => {
         const isActivated = event.target.checked
 
-        productsContext.filtersDispatch({ type: 'bool', propName: props.propName, isActivated })
+        filtersDispatch({ type: 'bool', propName: propName, isActivated })
         setValue(isActivated)
     }
 
     return (
         <div>
-            <h3 className={styles.title}>{props.title}</h3>
+            <h3 className={styles.title}>{title}</h3>
             <input
-            name={props.propName}
-            value={value}
-            type="checkbox"
-            onChange={handleChange}
-         />
+                name={propName}
+                value={value}
+                checked={value}
+                type="checkbox"
+                onChange={handleChange}
+                data-testid={`bool-${propName}`}
+            />
         </div>
     )
 }
