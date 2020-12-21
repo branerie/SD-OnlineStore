@@ -1,20 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styles from './index.module.css'
-import { getCategories } from '../../../services/product'
 
 const INITIAL_TEXT = '--- Add categories ---'
 
-const CategoriesInput = ({ handleAdd, handleRemove, addedCategories }) => {
-    const [categories, setCategories] = useState(null)
-
-    const getAllCategories = useCallback(async () => {
-        const result = await getCategories()
-        setCategories([INITIAL_TEXT, ...result.categories])
-    }, [])
-
-    useEffect(() => {
-        getAllCategories()
-    }, [getAllCategories])
+const CategoriesInput = ({ handleAdd, handleRemove, addedCategories, allCategories }) => {
+    const [categories, setCategories] = useState(allCategories)
 
     const getSortedCategories = useCallback(() => {
         if (categories) {

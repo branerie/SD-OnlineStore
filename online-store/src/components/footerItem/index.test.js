@@ -8,17 +8,16 @@ describe('FooterItem', () => {
     it('shows passed props', () => {
         const mockPropsText = 'Contact us'
         const mockChildText = 'About us'
-        const { queryByText } = render(<FooterItem text={mockPropsText} >About us</FooterItem>)
+        const { queryByText } = render(<FooterItem text={mockPropsText} >{mockChildText}</FooterItem>)
 
-        expect(queryByText('Contact us')).not.toEqual(null)
-        expect(queryByText('About us')).toEqual(null)
+        expect(queryByText('Contact us')).not.toBeNull()
+        expect(queryByText('About us')).toBeNull()
     })
 
     it('shows paased child', () => {
-        const mockChildText = 'About us'
         const { queryByText } = render(<FooterItem>About us</FooterItem>)
         
-        expect(queryByText('About us')).not.toEqual(null)
-        expect(queryByText('Contact us')).toEqual(null)
+        expect(queryByText('About us')).not.toBeNull()
+        expect(queryByText('Contact us')).toBeNull()
     })
 })

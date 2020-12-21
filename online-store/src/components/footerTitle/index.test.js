@@ -9,6 +9,6 @@ describe('FooterTitle', () => {
         const mockTitle = 'Hello title'
         const { queryByText } = render(<FooterTitle title={mockTitle} />)
 
-        expect(queryByText('Hello title')).not.toEqual(null)
+        expect(queryByText('Hello title')).not.toBeNull()
     })
 })

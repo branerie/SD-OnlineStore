@@ -13,7 +13,7 @@ const GenderInput = ({ currentGender, onChange }) => {
             {
                 genderInfos.map(gender => {
                     return (<label key={gender.value} className={styles['gender-label']}>
-                                <input
+                                <input data-testid={`gender-${gender.name.toLowerCase()}`}
                                     type="radio"
                                     value={gender.value}
                                     name="gender"
