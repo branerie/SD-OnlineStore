@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './index.module.css'
 import RatingIcon from '../ratingIcon'
 import { setRating } from '../../services/product'

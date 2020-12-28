@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
 .error {
     color: red;
 }
@@ -5,7 +7,6 @@
 .login-form {
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 .input {
@@ -16,6 +17,7 @@
     padding-left: 1rem;
     background-color: white;
     border: 1px solid lightgray;
+    border-radius: 0.8rem;
     box-sizing: border-box;
 }
 
@@ -34,21 +36,39 @@
 }
 
 .input-group {
-    width: 25%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
+    align-items: stretch;
 }
 
-.submit-btn {
-    width: 25%;
+.header {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2rem;
+    color: #735C74;
+    margin-bottom: 5px;
+    text-align: center;
+    font-weight: normal;
+}
+
+.btn {
     min-height: 3rem;
-    margin-top: 2rem;
-    padding-left: 1.5rem;
-    border: 1px solid lightgray;
-    background-color: black;
+    margin-top: 1rem;
     color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.8rem;
     text-decoration: none;
+    font-family: 'Architects Daughter', cursive;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-submit {
+    padding-left: 1.5rem;
+    background-color: #3D5344;
+}
+
+
+
+.icon {
+    height: 2rem;
 }

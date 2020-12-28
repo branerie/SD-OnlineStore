@@ -11,8 +11,8 @@ const NAME_MAX_LENGTH = 20
 const PASSWORD_MIN_LENGTH = 6
 const PASSWORD_MAX_LENGTH = 30
 const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`)
-const NAME_PATTERN = new RegExp(/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/)
-const EMAIL_PATTERN = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+// const NAME_PATTERN = new RegExp(/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/)
+// const EMAIL_PATTERN = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
 
 const RegisterPage = () => {
     const history = useHistory()

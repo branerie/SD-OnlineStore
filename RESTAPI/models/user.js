@@ -18,19 +18,19 @@ const userSchema = new mongoose.Schema({
     },
     firstName: {
         type: String,
-        required: [true, 'First name is required'],
+        // required: [true, 'First name is required'],
         match: [/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/ , 'Name can only contain Latin letters and dash (-).'],
         maxlength:[NAME_MAX_LENGTH , `Name must be shorter than ${NAME_MAX_LENGTH} symbols.`]
     },
     lastName: {
         type: String,
-        required: [true, 'Last name is required'],
+        // required: [true, 'Last name is required'],
         match: [/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/ , 'Name can only contain Latin letters and dash (-).'],
         maxlength:[NAME_MAX_LENGTH , `Name must be shorter than ${NAME_MAX_LENGTH} symbols.`]
     },
     password: {
         type: String,
-        required: [true, 'Password is required'],
+        // required: [true, 'Password is required'],
         minlength: [PASSWORD_MIN_LENGTH, `Minimun length of password is ${PASSWORD_MIN_LENGTH} symbols.`],
         maxlength: [PASSWORD_MAX_LENGTH, `Maximum length of password is ${PASSWORD_MAX_LENGTH} symbols.`]
     },

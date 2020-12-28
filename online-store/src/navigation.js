@@ -10,7 +10,6 @@ import HomePage from './pages/home'
 import AdminProductsPage from './pages/adminProducts'
 import AddProductPage from './pages/addProduct'
 import RegisterPage from './pages/register'
-import LoginPage from './pages/login'
 import ProductPage from './pages/product'
 import MensPage from './pages/men'
 import WomensPage from './pages/women'
@@ -40,9 +39,9 @@ const Navigation = () => {
             <Route path='/register'>
                 {userId ? (<Redirect to='/' />) : (<RegisterPage />) }
             </Route>
-            <Route path='/login'>
+            {/* <Route path='/login'>
                 {userId ? (<Redirect to='/' />) : (<LoginPage />)}
-            </Route>
+            </Route> */}
             <Route path='/admin/products/add'>
                 {isAdmin ? (<AddProductPage />) : (<Redirect to='/login' />) }
             </Route>

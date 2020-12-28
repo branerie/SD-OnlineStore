@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="52.844" height="49.636" viewBox="0 0 52.844 49.636">
-  <g id="Ellipse_2" data-name="Ellipse 2" transform="translate(16.758 14.636)" fill="none" stroke="#707070" stroke-width="1.5">
+  <g id="Ellipse_2" data-name="Ellipse 2" transform="translate(16.758 14.636)" fill="none" stroke="#707070" strokeWidth="1.5">
     <circle cx="9" cy="9" r="9" stroke="none"/>
     <circle cx="9" cy="9" r="8.25" fill="none"/>
   </g>
-  <path id="Path_21" data-name="Path 21" d="M1865.171,1120c-83.069,51.771,19.546,40,19.546,40" transform="translate(-1831.958 -1119.364)" fill="none" stroke="#707070" stroke-width="1.5"/>
+  <path id="Path_21" data-name="Path 21" d="M1865.171,1120c-83.069,51.771,19.546,40,19.546,40" transform="translate(-1831.958 -1119.364)" fill="none" stroke="#707070" strokeWidth="1.5"/>
   <g id="Polygon_2" data-name="Polygon 2" transform="translate(13.758 33.636)" fill="none">
     <path d="M12.5,0,25,16H0Z" stroke="none"/>
     <path d="M 12.5 2.436481475830078 L 3.075376510620117 14.5 L 21.92462348937988 14.5 L 12.5 2.436481475830078 M 12.5 0 L 25 16 L 0 16 L 12.5 0 Z" stroke="none" fill="#707070"/>

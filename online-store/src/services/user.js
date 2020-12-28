@@ -3,6 +3,11 @@ import getCookie from '../utils/cookie'
 
 const USER_URL = REST_API_URL + '/user'
 
+const setLoginCookieFromResponse = (response) => {
+    const token = response.headers.get(HTTP_HEADERS.AUTHORIZATION)
+    document.cookie = `${AUTH_COOKIE_NAME}=${token}`
+}
+
 const verifyUser = async () => {
     const response = await fetch(`${USER_URL}/verify`, {
         method: 'GET',
@@ -24,8 +29,9 @@ const logInUser = async (email, password) => {
         }
     })
 
-    const token = response.headers.get(HTTP_HEADERS.AUTHORIZATION)
-    document.cookie = `${AUTH_COOKIE_NAME}=${token};`
+    if (response.status === 200) {
+        setLoginCookieFromResponse(response)
+    }
 
     return await response.json()
 }
@@ -40,8 +46,42 @@ const registerUser = async (data) => {
     })
 
     if (response.status === 200) {
-        const token = response.headers.get('Authorization')
-        document.cookie = `x-auth-cookie=${token};`
+        setLoginCookieFromResponse(response)
+    }
+
+    return await response.json()
+}
+
+const loginWithGoogle = async (token, userEmail) => {
+    const response = await fetch(`${USER_URL}/login/google`, {
+        method: 'POST',
+        body: JSON.stringify({
+            token,
+            userEmail,
+        }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
+        }
+    })
+
+    if (response.status === 200) {
+        setLoginCookieFromResponse(response)
+    }
+
+    return await response.json()
+}
+
+const loginWithFacebook = async (userId, email, name, signedRequest) => {
+    const response = await fetch(`${USER_URL}/login/facebook`,  {
+        method: 'POST',
+        body: JSON.stringify({ userId, email, name, signedRequest }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
+        }
+    })
+
+    if (response.status === 200) {
+        setLoginCookieFromResponse(response)
     }
 
     return await response.json()
@@ -64,5 +104,7 @@ export {
     verifyUser,
     logInUser,
     registerUser,
+    loginWithFacebook,
+    loginWithGoogle,
     setFavorites
 }

@@ -1,9 +1,11 @@
 const router = require('express').Router()
-const { createToken, verifyToken } = require('../utils/jwt')
+const { createToken, verifyToken, verifyGoogleToken, verifyFacebookToken } = require('../utils/jwt')
 const { decode } = require('jsonwebtoken')
 const User = require('../models/user')
 const TokenBlackList = require('../models/tokenBlackList')
 const { isMongoError } = require('../utils/utils')
+
+const AUTHORIZATION_HEADER_NAME = 'Authorization'
 
 router.get('/verify' , async (req, res) => {
     const currentToken = req.headers.authorization
@@ -11,7 +13,11 @@ router.get('/verify' , async (req, res) => {
     if (currentToken) {
         try {
             const userInfo = await verifyToken(currentToken)
-            return res.send({ userId: userInfo.id, isAdmin: userInfo.isAdmin || false, favorites: userInfo.favorites })
+            return res.send({ 
+                userId: userInfo.id, 
+                isAdmin: userInfo.isAdmin || false, 
+                favorites: userInfo.favorites 
+            })
         } catch(error) {
             return res.status(403).send({
                 userId: null,
@@ -80,14 +86,83 @@ router.post('/login', async (req, res) => {
             return res.status(401).send({ error: 'Invalid email or password' })
         }
 
-        const token = createToken({ id: user._id, isAdmin: user.isAdmin, favorites: user.favorites })
-        res.header('Authorization', token)
-        res.send({ id: user._id, isAdmin: user.isAdmin, favorites: user.favorites })
+        const userInfo = { id: user._id, isAdmin: user.isAdmin, favorites: user.favorites }
+        const token = createToken(userInfo)
+
+        res.header(AUTHORIZATION_HEADER_NAME, token)
+        res.send(userInfo)
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })
         }
 
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.post('/login/google', async (req, res) => {
+    try {
+        const { token } = req.body
+
+        const userInfo = await verifyGoogleToken(token)
+        if (!userInfo) {
+            return res.status(401).send({ error: 'Missing or invalid Google authorization token' })
+        }
+
+        const { email, firstName, lastName } = userInfo
+
+        let user = await User.findOne({ email })
+        if (!user) { 
+            const userToCreate = { email }
+            if (firstName && lastName) {
+                userToCreate.firstName = firstName
+                userToCreate.lastName = lastName
+            }
+
+            user = await User.create(userToCreate)
+        }
+
+        const userData = { 
+            id: user._id,
+            isAdmin: user.isAdmin || false,
+            favorites: user.favorites || [] 
+        }
+
+        const internalToken = createToken(userData)
+        res.header(AUTHORIZATION_HEADER_NAME, internalToken)
+        res.send(userData)
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.post('/login/facebook', async (req, res) => {
+    try {
+        const { signedRequest, userId, email, name } = req.body
+        const isVerified = await verifyFacebookToken(signedRequest, userId)
+        if (!isVerified) {
+            return res.status(401).send({ error: 'Facebook token could not be verified' })
+        }
+
+        let user = await User.findOne({ email })
+        if (!user) {
+            let [firstName, ...lastName] = name.split(' ')
+            lastName = lastName.length > 0 ? lastName.join(' ') : ''
+
+            user = await User.create({ email, firstName, lastName })
+        }
+
+        const userData = { 
+            id: user._id,
+            isAdmin: user.isAdmin || false,
+            favorites: user.favorites || [] 
+        }
+
+        const internalToken = createToken(userData)
+
+        res.header(AUTHORIZATION_HEADER_NAME, internalToken)
+        res.send(userData)
+    } catch (error) {
         return res.status(500).send({ error: error.message })
     }
 })
@@ -98,7 +173,7 @@ router.post('/register', async (req, res) => {
     try {
         const createdUser = await User.create({ email, firstName, lastName, password })
         const token = createToken({ id: createdUser._id, favorites: [] })
-        res.header('Authorization', token)
+        res.header(AUTHORIZATION_HEADER_NAME, token)
         res.send({ id: createdUser._id })
     } catch (error) {
         if (isMongoError(error)) {
