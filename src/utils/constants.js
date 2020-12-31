@@ -1,7 +1,8 @@
 const AUTH_COOKIE_NAME = 'x-auth-cookie'
 const REST_API_URL = process.env.NODE_ENV === 'production'
-                            ? 'https://sd-onlinestore.herokuapp.com/api'
+                            ? '/api'
                             : 'http://localhost:3001/api'
+//https://sd-onlinestore.herokuapp.com
 const JSON_CONTENT_TYPE = 'application/json'
 
 
