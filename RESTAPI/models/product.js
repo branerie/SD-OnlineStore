@@ -27,7 +27,7 @@ const productSchema = new mongoose.Schema({
     discount: {
         percent: {
             type: Number,
-            min: [0, 'Negative discount is not allowed.'],
+            min: [0.01, 'Cannot have discount lower than 1%'],
             max: [1, 'Cannot have more than 100% discount']
         },
         endDate: {
@@ -77,9 +77,9 @@ const productSchema = new mongoose.Schema({
     }
 })
 
-productSchema.pre('validate', preprocessDiscountOnCreate)
-productSchema.pre('findOneAndUpdate', preprocessDiscountOnUpdate)
-productSchema.pre('update', preprocessDiscountOnUpdate)
+// productSchema.pre('validate', preprocessDiscountOnCreate)
+// productSchema.pre('findOneAndUpdate', preprocessDiscountOnUpdate)
+// productSchema.pre('update', preprocessDiscountOnUpdate)
 productSchema.pre('save', processAddDateOnCreate)
 
 productSchema.virtual('discountPrice').get(function () {
@@ -108,39 +108,39 @@ function processAddDateOnCreate(next) {
     return next()
 }
 
-function preprocessDiscountOnCreate(next) {
-    if (this.discount.$isEmpty() || !this.discount.isModified()){
-        return next()
-    }
+// function preprocessDiscountOnCreate(next) {
+//     if (this.discount.$isEmpty() || !this.discount.isModified()){
+//         return next()
+//     }
 
-    if (this.discount.hasOwnProperty('endDate') &&
-        this.discount.hasOwnProperty('percent')) {
-        if (this.discount.percent && this.discount.endDate) {
-            this.discount.percent /= 100
+//     if (this.discount.hasOwnProperty('endDate') &&
+//         this.discount.hasOwnProperty('percent')) {
+//         if (this.discount.percent && this.discount.endDate) {
+//             this.discount.percent /= 100
 
-            return next()  
-        }            
-    }
+//             return next()  
+//         }            
+//     }
 
-    throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
-}
+//     throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
+// }
 
-function preprocessDiscountOnUpdate(next) {
-    const update = this.getUpdate()
+// function preprocessDiscountOnUpdate(next) {
+//     const update = this.getUpdate()
 
-    if (update.hasOwnProperty('$set') &&
-        update.$set.hasOwnProperty('discount') &&
-        update.$set.discount.hasOwnProperty('percent')) {
+//     if (update.hasOwnProperty('$set') &&
+//         update.$set.hasOwnProperty('discount') &&
+//         update.$set.discount.hasOwnProperty('percent')) {
 
-        const discount = update.$set.discount
-        if (!discount.hasOwnProperty('endDate') || !discount.endDate) {
-            throw new SyntaxError('Product discount must have an end date.')
-        }
+//         const discount = update.$set.discount
+//         if (!discount.hasOwnProperty('endDate') || !discount.endDate) {
+//             throw new SyntaxError('Product discount must have an end date.')
+//         }
 
-        update.$set.discount.percent /= 100
-    }
+//         update.$set.discount.percent /= 100
+//     }
 
-    next()
-}
+//     next()
+// }
 
 module.exports = mongoose.model('Product', productSchema)

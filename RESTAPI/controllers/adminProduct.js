@@ -10,6 +10,22 @@ const PRODUCT_NOT_FOUND_ERROR = 'Product with id {id} does not exist.'
 
 router.use('/', restrictToAdmin)
 
+const preprocessDiscount = (discount) => {
+    if (!discount || typeof(discount) !== 'object') {
+        return null
+    }
+
+    if ((!discount.percent || isNaN(Number(discount.percent))) ||
+            !discount.endDate) {
+        throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
+    }
+
+    const preprocessedDiscount = { ...discount }
+    preprocessedDiscount.percent /= 100
+
+    return preprocessedDiscount
+}
+
 router.post('/', async (req, res) => {
     const {
         sizes,
@@ -22,10 +38,12 @@ router.post('/', async (req, res) => {
         categories
     } = req.body
     try {
+        const preprocessedDiscount = preprocessDiscount(discount)
+
         const createdProduct = await Product.create({
             sizes,
             price,
-            discount,
+            preprocessedDiscount,
             brand,
             description,
             images,
@@ -97,6 +115,7 @@ router.put('/:id', async (req, res) => {
             return acc
         }, {})
 
+        updateProductObject.discount = preprocessDiscount(updateProductObject.discount)
 
         await Product.findOneAndUpdate({ _id: id }, { $set: updateProductObject })
 

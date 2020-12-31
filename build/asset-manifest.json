@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.css": "/static/css/main.545ca1fd.chunk.css",
+    "main.js": "/static/js/main.905b8901.chunk.js",
+    "main.js.map": "/static/js/main.905b8901.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.1a3ff4a8.js",
+    "runtime-main.js.map": "/static/js/runtime-main.1a3ff4a8.js.map",
+    "static/js/2.bf5d00f2.chunk.js": "/static/js/2.bf5d00f2.chunk.js",
+    "static/js/2.bf5d00f2.chunk.js.map": "/static/js/2.bf5d00f2.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.545ca1fd.chunk.css.map": "/static/css/main.545ca1fd.chunk.css.map",
+    "static/js/2.bf5d00f2.chunk.js.LICENSE.txt": "/static/js/2.bf5d00f2.chunk.js.LICENSE.txt",
+    "static/media/dressesCategory.125a843d.jpg": "/static/media/dressesCategory.125a843d.jpg",
+    "static/media/facebookIcon.0d49c195.svg": "/static/media/facebookIcon.0d49c195.svg",
+    "static/media/fallingPrices.5c6f5d6f.svg": "/static/media/fallingPrices.5c6f5d6f.svg",
+    "static/media/fastDelivery.72615d64.svg": "/static/media/fastDelivery.72615d64.svg",
+    "static/media/favoritesLink.dc3d5166.svg": "/static/media/favoritesLink.dc3d5166.svg",
+    "static/media/favoritesLinkFilled.d4894a10.svg": "/static/media/favoritesLinkFilled.d4894a10.svg",
+    "static/media/freeReturn.ac06a0bd.svg": "/static/media/freeReturn.ac06a0bd.svg",
+    "static/media/index.db2e059a.jpg": "/static/media/index.db2e059a.jpg",
+    "static/media/instagramIcon.ea5ef451.svg": "/static/media/instagramIcon.ea5ef451.svg",
+    "static/media/jacketsCategory.9ad8ba63.jpg": "/static/media/jacketsCategory.9ad8ba63.jpg",
+    "static/media/jeansCategory.e80863c0.jpg": "/static/media/jeansCategory.e80863c0.jpg",
+    "static/media/mailIcon.28942bcc.svg": "/static/media/mailIcon.28942bcc.svg",
+    "static/media/masks.67b29574.jpg": "/static/media/masks.67b29574.jpg",
+    "static/media/phoneIcon.342a95e1.svg": "/static/media/phoneIcon.342a95e1.svg",
+    "static/media/pinterestIcon.1e65ebb0.svg": "/static/media/pinterestIcon.1e65ebb0.svg",
+    "static/media/productCardFrame.44ae7828.svg": "/static/media/productCardFrame.44ae7828.svg",
+    "static/media/shirtsCategory.fd508214.jpg": "/static/media/shirtsCategory.fd508214.jpg",
+    "static/media/sortByArrow.962e93e1.svg": "/static/media/sortByArrow.962e93e1.svg",
+    "static/media/tshirtsCategory.ec4b9194.jpg": "/static/media/tshirtsCategory.ec4b9194.jpg",
+    "static/media/twitterIcon.b215de00.svg": "/static/media/twitterIcon.b215de00.svg",
+    "static/media/youtubeIcon.fa4f55d3.svg": "/static/media/youtubeIcon.fa4f55d3.svg",
+    "static/media/zillionsOfProducts.b3fd0031.svg": "/static/media/zillionsOfProducts.b3fd0031.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1a3ff4a8.js",
+    "static/js/2.bf5d00f2.chunk.js",
+    "static/css/main.545ca1fd.chunk.css",
+    "static/js/main.905b8901.chunk.js"
+  ]
+}
