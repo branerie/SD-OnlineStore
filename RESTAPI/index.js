@@ -35,5 +35,5 @@ app.get('/*', function (req, res) {
 const configMongoose = require('./config/mongoose')
 configMongoose()
 
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 8080
 app.listen(port, console.log(`Listening on port ${port}!`))
