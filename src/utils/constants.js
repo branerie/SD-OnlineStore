@@ -1,5 +1,7 @@
 const AUTH_COOKIE_NAME = 'x-auth-cookie'
-const REST_API_URL = 'http://localhost:3001/api'
+const REST_API_URL = process.env.NODE_ENV === 'production'
+                            ? 'https://sd-onlinestore.herokuapp.com'
+                            : 'http://localhost:3001/api'
 const JSON_CONTENT_TYPE = 'application/json'
 
 const FACEBOOK_APP_ID = '1270748659962291'

@@ -44,7 +44,8 @@ const getProductRanges = async () => {
 }
 
 const getProductsPage = async (userQueryString, pageLength) => {    
-    const response = await fetch(`${PRODUCT_URL}/products?${userQueryString}&pageLength=${pageLength}`, 
+    const url = `${PRODUCT_URL}/products?${userQueryString}&pageLength=${pageLength}`
+    const response = await fetch(url, 
     {
         method: 'GET',
         headers: {
