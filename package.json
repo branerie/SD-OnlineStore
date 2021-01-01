@@ -21,7 +21,7 @@
     "build": "react-scripts build && (cd RESTAPI && npm install)",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "cd RESTAPI && npm start"
+    "start": "cd RESTAPI && node index.js"
   },
   "eslintConfig": {
     "extends": [

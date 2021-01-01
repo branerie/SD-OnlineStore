@@ -1,10 +1,9 @@
 const AUTH_COOKIE_NAME = 'x-auth-cookie'
-const REST_API_URL = process.env.NODE_ENV === 'production'
-                            ? '/api'
-                            : 'http://localhost:3001/api'
-//https://sd-onlinestore.herokuapp.com
+const REST_API_URL = process.env.NODE_ENV === 'development'
+                            ? 'http://localhost:3001/api'
+                            : '/api'
+// https://sd-onlinestore.herokuapp.com
 const JSON_CONTENT_TYPE = 'application/json'
-
 
 const FACEBOOK_APP_ID = '1270748659962291'
 const GOOGLE_CLIENT_ID = '765190029748-2kkc40ku90opksnnsa97givv1ka0td2j.apps.googleusercontent.com'

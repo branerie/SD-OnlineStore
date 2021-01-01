@@ -3,7 +3,7 @@ mongoose.set('runValidators', true)
 
 module.exports = async function () {
     try {
-        const connectionString = process.env.ENVIRONMENT === process.env.ENVIRONMENT_DEV
+        const connectionString = process.env.NODE_ENV === process.env.ENVIRONMENT_DEV
                                     ? process.env.DB_CONN_DEV
                                     : process.env.DB_CONN_PROD
         const { connection: db } = await mongoose.connect(connectionString, {
