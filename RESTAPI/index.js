@@ -24,17 +24,15 @@ app.use(cookieParser(process.env.COOKIE_SECRET))
 
 app.use('/', routes)
 
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '..', 'build')))
+app.use(express.static(path.join(__dirname, '..', 'build')))
 
-    app.get('/*', (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'build', 'index.html'), (err) => {
-            if (err) {
-                return res.status(500).send(err)
-            }
-        })
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'), (err) => {
+        if (err) {
+            return res.status(500).send(err)
+        }
     })
-}
+})
 
 const port = process.env.PORT || 3001
 app.listen(port, console.log(`Listening on port ${port}!`))

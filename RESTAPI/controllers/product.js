@@ -6,9 +6,9 @@ const { getSizeRange, sortSizes, getAllCategories, parseMongoProducts } = requir
 const { restrictToUser } = require('../utils/authenticate')
 
 router.get('/ranges', async (req, res) => {
-    const dbRequestFilter = getDbProductsFilter(req.query)
-
     try {
+        const dbRequestFilter = getDbProductsFilter(req.query)
+        
         let productRanges = await Product.aggregate([
             {
                 $match: dbRequestFilter
