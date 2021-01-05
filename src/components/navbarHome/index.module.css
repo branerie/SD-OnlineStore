@@ -1,16 +1,20 @@
 .site-nav {
     background-color: white;
-    min-height: 5rem; 
+    min-height: 3.4rem; 
     display: flex;
     justify-content: space-between;
     padding-top: 0.6rem;
 }
 
 .navbar-links {
+    margin-top: 0;
+    margin-bottom: 0;
     min-width: 50%;
     display: flex;
     justify-content: space-evenly;
     list-style-type: none;
+    padding-left: 5.5rem;
+    width: 100%;
 }
 
 .logo-space {

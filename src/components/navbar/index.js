@@ -68,16 +68,17 @@ const Navbar = ({ clickedName }) => {
             <ul className={styles['navbar-links']}>
                 { Object.values(state.links).map(link => {
                     return <NavbarImageLink
-                        key={link.name}
-                        linkKey={link.name}
-                        name={link.name}
-                        path={link.path}
-                        imageName={link.imageName}
-                        clicked={link.clicked}
-                        handleClick={() => stateDispatch({ type: 'click', name: link.name })}
-                        order={link.clicked 
-                                    ? link.clickedOrder 
-                                    : link.normalOrder} />
+                                key={link.name}
+                                linkKey={link.name}
+                                name={link.name}
+                                path={link.path}
+                                imageName={link.imageName}
+                                clicked={link.clicked}
+                                handleClick={() => stateDispatch({ type: 'click', name: link.name })}
+                                order={link.clicked 
+                                            ? link.clickedOrder 
+                                            : link.normalOrder}
+                            />
                 })}
 
                 {isAdmin &&
