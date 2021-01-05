@@ -1,4 +1,4 @@
-import React, { useContext,  useState } from 'react'
+import React, { useContext,  useReducer,  useState } from 'react'
 import styles from './index.module.css'
 
 import Input from '../input'
@@ -11,36 +11,53 @@ import { updateProduct } from '../../services/adminProduct'
 import NumberInput from '../inputFields/numberInput'
 
 const ModifyProductCard = (props) => {
-    const [brand, setBrand] = useState(props.brand)
-    const [price, setPrice] = useState(props.price)
-    const [discountPercent, setDiscountPercent] = useState(props.discount
-        ? props.discount.percent
-        : null)
-    const [discountEndDate, setDiscountEndDate] = useState(props.discount
-        ? props.discount.endDate
-        : null)
-    const [description, setDescription] = useState(props.description)
-    const [gender, setGender] = useState(props.gender)
-
     const productsContext = useContext(ProductsContext)
+    
+    const product = {
+        brand : props.brand,
+        price : props.price,
+        discount: {
+            percent : props.discount ? props.discount.percent : null,
+            endDate : props.discount ? props.discount.endDate : null
+        },
+        description : props.description,
+        gender : props.gender
+    }
+    
+    const [state, stateDispatch] = useReducer(productReducer , product)
+
+    function productReducer(state, action) {
+        const { value, type} = action
+        
+        switch(type) {
+            case 'brand':
+                return { ...state, brand: value }
+            case 'price':
+                //TODO const formattedPrice = parseFloat(value).toFixed(2)
+                return { ...state, price: value }
+            case 'discountPercent':
+                return { ...state, discount: { ...state.discount, percent: value }}
+            case 'discountEndDate':
+                return { ...state, discount: { ...state.discount, endDate: value } }
+            case 'description':
+                return { ...state, description: value }
+            case 'gender':
+                return { ...state, gender: value }
+            default:
+                return state
+        }
+    }
 
     const productId = props.id
 
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        const newProductProps = {
-            price,
-            brand,
-            description,
-            gender,
-            discount: { 
-                percent: discountPercent,
-                endDate: discountEndDate
-            }
+        if((state.discount.percent && !state.discount.endDate) || (!state.discount.percent && state.discount.endDate)) {
+            //TODO: handle errors
         }
 
-        const updateResult = await updateProduct(productId, newProductProps)
+        const updateResult = await updateProduct(productId, state)
         if (updateResult.error) {
             //TODO: handle errors
         }
@@ -56,53 +73,38 @@ const ModifyProductCard = (props) => {
                     type='text'
                     label='Brand'
                     id='brand'
-                    value={brand}
-                    onChange={e => setBrand(e.target.value)}
+                    value={state.brand}
+                    onChange={e => stateDispatch({ type: 'brand', value: e.target.value })}
                     maxLength='30'
                 />
-                {/* <Input
-                    type='number'
-                    label='Price'
-                    id='price'
-                    value={price}
-                    onChange={e => setPrice(e.target.value)}
-                    onBlur={() => {
-                        const formattedPrice = parseFloat(price).toFixed(2)
-                        setPrice(formattedPrice)
-                    }}
-                /> */}
                 <NumberInput
-                    value={price}
+                    value={state.price}
                     placeholder='Price'
                     min='0'
-                    onChange={e => setPrice(e.target.value)}
-                    onBlur={() => {
-                        const formattedPrice = parseFloat(price).toFixed(2)
-                        setPrice(formattedPrice)
-                    }}
+                    onChange={e => stateDispatch({ type: 'price' , value: e.target.value })}
                 />
                 <Input
                     type='number'
                     label='Discount in %'
                     id='discount'
-                    value={discountPercent}
-                    onChange={e => setDiscountPercent(Number(e.target.value))}
+                    value={state.discount.percent}
+                    onChange={e => stateDispatch({ type: 'discountPercent', value: Number(e.target.value) })}
                 />
                 <Input
                     type='date'
                     label='End date of discount'
                     id='discountEndDate'
-                    value={discountEndDate}
-                    onChange={e => setDiscountEndDate(e.target.value)}
+                    value={state.discount.endDate}
+                    onChange={e => stateDispatch({ type: 'discountEndDate', value: e.target.value })}
                 />
                 <Input
                     type='text'
                     label='Product description'
                     id='description'
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
+                    value={state.description}
+                    onChange={e => stateDispatch({ type: 'description', value: e.target.value })}
                 />
-                <GenderInput currentGender={gender} onChange={setGender} />
+                <GenderInput currentGender={state.gender} onChange={ e => stateDispatch({ type: 'gender', value: e.target.value })} />
                 <button type='submit'>SAVE</button>
             </form>
             <AdminSizes sizes={props.sizes} id={productId} />
