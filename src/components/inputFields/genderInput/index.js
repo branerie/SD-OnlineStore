@@ -18,7 +18,7 @@ const GenderInput = ({ currentGender, onChange }) => {
                                     value={gender.value}
                                     name="gender"
                                     checked={currentGender === gender.value}
-                                    onChange={(e) => onChange(e.target.value)} />
+                                    onChange={onChange} />
                                             {gender.name}
                             </label>)
                 })
