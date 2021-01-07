@@ -75,7 +75,7 @@ const Pagination = ({ pageLength, children }) => {
                     data-testid='pagination-previous'
                 >
                     previous
-                    <img src={previousArrow} className={styles.arrow} />
+                    <img src={previousArrow} className={styles.arrow} alt='Previous Page' />
                 </span>
                 {pagesToDisplay && pagesToDisplay.map(pageNumber => {
                     return <PaginationElement key={pageNumber} pageNumber={pageNumber} />
@@ -85,7 +85,7 @@ const Pagination = ({ pageLength, children }) => {
                     onClick={() => filtersDispatch({ type: 'page', newPage: page + 1 })}
                     data-testid='pagination-next'
                 >
-                    <img src={nextArrow} className={styles.arrow} />
+                    <img src={nextArrow} className={styles.arrow} alt='Next Page' />
                     next
                 </span>
             </div>

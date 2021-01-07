@@ -12,7 +12,7 @@ describe('ProductCard', () => {
     const discountCurrency = 'EUR'
     const discountPrice = 54
 
-    let queryByText, getByTestId
+    let queryByText, getByTestId, queryByTestId
     beforeEach(() => {
         const renderResult = render(
             <MockUserContext initialUser={{
@@ -44,15 +44,16 @@ describe('ProductCard', () => {
 
         queryByText = renderResult.queryByText
         getByTestId = renderResult.getByTestId
+        queryByTestId = renderResult.queryByTestId
     })
 
     it('should display price correctly', () => {
-        expect(queryByText('50$')).not.toBeNull()
-        expect(queryByText('60EUR')).not.toBeNull()
+        expect(queryByText('50.00$')).not.toBeNull()
+        expect(queryByText('60.00EUR')).not.toBeNull()
     })
 
     it('should display discount only if available', () => {
-        expect(getByTestId('discount-1').innerHTML).toEqual('')
+        expect(queryByTestId('discount-1')).toBeNull()
         expect(getByTestId('discount-2').innerHTML)
             .toMatch(new RegExp(`${discountPercent}%.+${discountPrice.toFixed(2)}${discountCurrency}`))
     })

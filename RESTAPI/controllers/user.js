@@ -3,22 +3,28 @@ const { createToken, verifyToken, verifyGoogleToken, verifyFacebookToken } = req
 const { decode } = require('jsonwebtoken')
 const User = require('../models/user')
 const TokenBlackList = require('../models/tokenBlackList')
-const { isMongoError } = require('../utils/utils')
+const { isMongoError } = require('../utils/general')
+const { sendConfirmationEmail } = require('../utils/user')
 
 const AUTHORIZATION_HEADER_NAME = 'Authorization'
 
-router.get('/verify' , async (req, res) => {
+const attachLoginCookie = (userInfo, response) => {
+    const token = createToken(userInfo)
+    response.header(AUTHORIZATION_HEADER_NAME, token)
+}
+
+router.get('/verify', async (req, res) => {
     const currentToken = req.headers.authorization
 
     if (currentToken) {
         try {
             const userInfo = await verifyToken(currentToken)
-            return res.send({ 
-                userId: userInfo.id, 
-                isAdmin: userInfo.isAdmin || false, 
-                favorites: userInfo.favorites 
+            return res.send({
+                userId: userInfo.id,
+                isAdmin: userInfo.isAdmin || false,
+                favorites: userInfo.favorites
             })
-        } catch(error) {
+        } catch (error) {
             return res.status(403).send({
                 userId: null,
                 isAdmin: false,
@@ -35,34 +41,34 @@ router.patch('/favorites', async (req, res) => {
     const currentToken = req.headers.authorization
     const productId = req.body.productId
 
-        if(currentToken) {
-            try {
-                const userInfo = await verifyToken(currentToken)
-                let user = await User.findById(userInfo.id)
+    if (currentToken) {
+        try {
+            const userInfo = await verifyToken(currentToken)
+            let user = await User.findById(userInfo.id)
 
-                if (user.favorites.includes(productId)) {               
-                    await user.updateOne({ $pull: { favorites: productId }})
+            if (user.favorites.includes(productId)) {
+                await user.updateOne({ $pull: { favorites: productId } })
 
-                } else {
-                    await user.updateOne({ $push: { favorites: productId }})
-                }
-
-                user = await User.findById(userInfo.id)
-                return res.send({ favorites: user.favorites , userId: user.id })
-
-            } catch (error) {
-                if (isMongoError(error)) {
-                    return res.status(403).send({ error: error.message })
-                }
-        
-                return res.status(500).send({ error: error.message })
+            } else {
+                await user.updateOne({ $push: { favorites: productId } })
             }
-        } else {
-            //TODO implement without login
-        }
 
-        
-    
+            user = await User.findById(userInfo.id)
+            return res.send({ favorites: user.favorites, userId: user.id })
+
+        } catch (error) {
+            if (isMongoError(error)) {
+                return res.status(403).send({ error: error.message })
+            }
+
+            return res.status(500).send({ error: error.message })
+        }
+    } else {
+        //TODO implement without login
+    }
+
+
+
 })
 
 router.post('/login', async (req, res) => {
@@ -86,10 +92,13 @@ router.post('/login', async (req, res) => {
             return res.status(401).send({ error: 'Invalid email or password' })
         }
 
-        const userInfo = { id: user._id, isAdmin: user.isAdmin, favorites: user.favorites }
-        const token = createToken(userInfo)
+        if (user.confirmationToken) {
+            return res.status(401).send({ error: 'User has not yet confirmed his/her email' })
+        }
 
-        res.header(AUTHORIZATION_HEADER_NAME, token)
+        const userInfo = { id: user._id, isAdmin: user.isAdmin, favorites: user.favorites }
+        attachLoginCookie(userInfo, res)
+
         res.send(userInfo)
     } catch (error) {
         if (isMongoError(error)) {
@@ -112,7 +121,7 @@ router.post('/login/google', async (req, res) => {
         const { email, firstName, lastName } = userInfo
 
         let user = await User.findOne({ email })
-        if (!user) { 
+        if (!user) {
             const userToCreate = { email }
             if (firstName && lastName) {
                 userToCreate.firstName = firstName
@@ -122,14 +131,13 @@ router.post('/login/google', async (req, res) => {
             user = await User.create(userToCreate)
         }
 
-        const userData = { 
+        const userData = {
             id: user._id,
             isAdmin: user.isAdmin || false,
-            favorites: user.favorites || [] 
+            favorites: user.favorites || []
         }
 
-        const internalToken = createToken(userData)
-        res.header(AUTHORIZATION_HEADER_NAME, internalToken)
+        attachLoginCookie(userData, res)
         res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })
@@ -152,15 +160,13 @@ router.post('/login/facebook', async (req, res) => {
             user = await User.create({ email, firstName, lastName })
         }
 
-        const userData = { 
+        const userData = {
             id: user._id,
             isAdmin: user.isAdmin || false,
-            favorites: user.favorites || [] 
+            favorites: user.favorites || []
         }
 
-        const internalToken = createToken(userData)
-
-        res.header(AUTHORIZATION_HEADER_NAME, internalToken)
+        attachLoginCookie(userData, res)
         res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })
@@ -172,8 +178,15 @@ router.post('/register', async (req, res) => {
 
     try {
         const createdUser = await User.create({ email, firstName, lastName, password })
-        const token = createToken({ id: createdUser._id, favorites: [] })
-        res.header(AUTHORIZATION_HEADER_NAME, token)
+        const confirmationToken = createToken({ userId: createdUser._id })
+        createdUser.confirmationToken = confirmationToken
+        await createdUser.save()
+
+        sendConfirmationEmail(firstName, lastName, email, confirmationToken)
+
+        const userData = { id: createdUser._id, favorites: [] }
+        attachLoginCookie(userData, res)
+
         res.send({ id: createdUser._id })
     } catch (error) {
         if (isMongoError(error)) {
@@ -210,7 +223,45 @@ router.post('/logout', async (req, res) => {
             return res.status(500).send({ error: error.message })
         }
     } else {
-        return res.status(401).send({ error : 'No one is logged in' })
+        return res.status(401).send({ error: 'No one is logged in' })
+    }
+})
+
+router.post('/confirm', async (req, res) => {
+    const INVALID_TOKEN_ERROR = 'Invalid user confirmation token'
+
+    try {
+        const { confirmationToken } = req.body
+        if (!confirmationToken) {
+            return res.status(400).send({ error: 'Missing user confirmation token' })
+        }
+
+        const { userId } = await verifyToken(confirmationToken)
+
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(401).send({ error: INVALID_TOKEN_ERROR })
+        }
+
+        if (!user.confirmationToken) {
+            return res.send({ status: 'User has already confirmed his/her email', userId })
+        }
+
+        if (user.confirmationToken !== confirmationToken) {
+            return res.status(403).send({ error: INVALID_TOKEN_ERROR })
+        }
+
+        user.set('confirmationToken', undefined, { strict: false })
+        await user.save()
+
+        if (!req.user || req.user.id !== userid) {
+            const userData = { id: user._id, favorites: user.favorites }
+            attachLoginCookie(userData, res)
+        }
+
+        return res.send({ status: 'User email has been successfully confirmed', userId })
+    } catch (error) {
+        return res.status(401).send({ error: INVALID_TOKEN_ERROR })
     }
 })
 

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import UserContext from './Context'
 import Navigation from './navigation'
-import getCookie from './utils/cookie'
 
 import { verifyUser } from './services/user'
 
@@ -18,7 +17,7 @@ function App() {
 
     setUser({ userId: userInfo.userId, isAdmin: userInfo.isAdmin, favorites: userInfo.favorites || [] })
     setIsLoading(false)
-  })
+  }, [])
 
   useEffect(() => {
     verifyCurrentUser()

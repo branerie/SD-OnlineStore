@@ -12,11 +12,12 @@ describe('Pagination', () => {
     const renderPagination = (currentPage) => {
         return render(
             <MockProductsContext
-                initialFilters={{ page: currentPage, totalCount: 20 }}
+                initialFilters={{ page: currentPage}}
                 initialFiltersDispatch={mockFiltersDispatch}
+                totalCount={20} 
             >
                 <Pagination pageLength={3}>
-                    <div></div>
+                    <div>Something</div>
                 </Pagination>
             </MockProductsContext>
         )

@@ -35,8 +35,12 @@ const verifyToken = async (token) => {
         throw new Error(BLACKLISTED_TOKEN_ERROR)
     }
 
-    const userInfo = await jwt.verify(token, process.env.JWT_SECRET)
-    return userInfo
+    try {
+        const tokenInfo = await jwt.verify(token, process.env.JWT_SECRET)
+        return tokenInfo
+    } catch (error) { 
+        return null
+    }
 }
 
 const verifyGoogleToken = async (tokenId) => {

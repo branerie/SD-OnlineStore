@@ -5,8 +5,9 @@ const EMAIL_MAX_LENGTH = 80
 const NAME_MAX_LENGTH = 20
 const PASSWORD_MIN_LENGTH = 6
 const PASSWORD_MAX_LENGTH = 30
-const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`);
+const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`)
 
+const PASSWORD_ERROR = `Password must be between ${PASSWORD_MIN_LENGTH} and ${PASSWORD_MAX_LENGTH} characters long and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.`
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -31,8 +32,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         // required: [true, 'Password is required'],
-        minlength: [PASSWORD_MIN_LENGTH, `Minimun length of password is ${PASSWORD_MIN_LENGTH} symbols.`],
-        maxlength: [PASSWORD_MAX_LENGTH, `Maximum length of password is ${PASSWORD_MAX_LENGTH} symbols.`]
+        // minlength: [PASSWORD_MIN_LENGTH, `Minimum length of password is ${PASSWORD_MIN_LENGTH} symbols.`],
+        // maxlength: [PASSWORD_MAX_LENGTH, `Maximum length of password is ${PASSWORD_MAX_LENGTH} symbols.`]
     },
     isAdmin: {
         type: Boolean
@@ -40,7 +41,10 @@ const userSchema = new mongoose.Schema({
     favorites: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
-    }]
+    }],
+    confirmationToken: {
+        type: String
+    },
 })
 
 userSchema.methods = {
@@ -58,7 +62,7 @@ userSchema.pre('save', async function(next) {
     if(this.isModified('password')){
 
         if(!PASSWORD_PATTERN.test(this.password)) {
-            throw new SyntaxError(`Password must be between ${PASSWORD_MIN_LENGTH} to ${PASSWORD_MAX_LENGTH} characters long and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.`)
+            throw new SyntaxError(PASSWORD_ERROR)
         }
 
        this.password = await bcrypt.hash(this.password, Number(process.env.BCRYPT_SALT))

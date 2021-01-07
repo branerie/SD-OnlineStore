@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styles from './index.module.css'
 import inputStyles from '../index.module.css'
 import InputWrapper from '../inputWrapper'
 

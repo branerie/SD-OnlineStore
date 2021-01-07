@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const Product = require('../models/product')
 const { getDbProductsFilter, getSortCriteria, getProductsAggregationObject } = require('../utils/filter')
-const { isMongoError } = require('../utils/utils')
+const { isMongoError } = require('../utils/general')
 const { getSizeRange, sortSizes, getAllCategories, parseMongoProducts } = require('../utils/product')
 const { restrictToUser } = require('../utils/authenticate')
 

@@ -20,6 +20,23 @@ const verifyUser = async () => {
     return await response.json()
 }
 
+const confirmUser = async  (confirmationToken) => {
+    const response = await fetch(`${USER_URL}/confirm`, {
+        method: 'POST',
+        body: JSON.stringify({ confirmationToken }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    if (response.status === 200 && response.headers.authorization) {
+        setLoginCookieFromResponse(response)
+    }
+
+    return await response.json()
+}
+
 const logInUser = async (email, password) => {
     const response = await fetch(`${USER_URL}/login`, {
         method: 'POST',
@@ -102,6 +119,7 @@ const setFavorites = async (productId) => {
 
 export {
     verifyUser,
+    confirmUser,
     logInUser,
     registerUser,
     loginWithFacebook,
