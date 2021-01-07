@@ -2,10 +2,12 @@ import React, { useState, useMemo, useContext, useCallback } from 'react'
 import styles from '../index.module.css'
 import UserContext from '../../../Context'
 import LoginWindow from '../../loginWindow'
+import RegisterWindow from '../../registerWindow'
 
 const ProfileIconLink = () => {
     const [isFilled, setIsFilled] = useState(false)
     const [isLoginRendered, setIsLoginRendered] = useState(false)
+    const [isRegisterRender, setIsRegisterRender] = useState(false)
 
     const { user } = useContext(UserContext)
 
@@ -15,7 +17,7 @@ const ProfileIconLink = () => {
             : 'none'
     }, [isFilled])
 
-    const handleWindowPopup = () => {
+    const handleLoginWindowPopup = () => {
         if (user.userId) {
             //TODO: Maybe display a message to user if already logged in?
             return
@@ -23,8 +25,19 @@ const ProfileIconLink = () => {
 
         setIsLoginRendered(true)
     }
+    
+    const handleRegisterWindowPopup = useCallback(() => {
+        if (user.userId) {
+            //TODO: Maybe display a message to user if already logged in?
+            return
+        }
 
-    const hideWindow = useCallback(() => setIsLoginRendered(false), [])
+        setIsLoginRendered(false)
+        setIsRegisterRender(true)
+    },[])
+    
+    const hideLoginWindow = useCallback(() => setIsLoginRendered(false), [])
+    const hideRegisterWindow = useCallback(() => setIsRegisterRender(false), [])
 
     return (
         <>
@@ -32,7 +45,7 @@ const ProfileIconLink = () => {
                 className={styles.container}
                 onMouseEnter={() => setIsFilled(true)}
                 onMouseLeave={() => setIsFilled(false)}
-                onClick={handleWindowPopup}
+                onClick={handleLoginWindowPopup}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 52.844 49.636">
                     <g id="Group_3" data-name="Group 3" transform="translate(-1814.241 -103.364)">
@@ -48,7 +61,8 @@ const ProfileIconLink = () => {
                     </g>
                 </svg>
             </div>
-            { isLoginRendered && <LoginWindow hideWindow={hideWindow} />}
+            { isLoginRendered && <LoginWindow hideWindow={hideLoginWindow} registerWindowPopup={handleRegisterWindowPopup} />}
+            { isRegisterRender && <RegisterWindow hideWindow={hideRegisterWindow}/> }
         </>
     )
 }

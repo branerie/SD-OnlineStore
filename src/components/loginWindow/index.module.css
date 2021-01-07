@@ -67,7 +67,19 @@
     background-color: #3D5344;
 }
 
+.register-link {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2rem;
+    color: #ef696e;
+    margin-bottom: 5px;
+    text-align: center;
+    font-weight: normal;
+    padding-bottom: 10px;
+}
 
+.register-link:hover {
+    cursor: pointer;
+}
 
 .icon {
     height: 2rem;

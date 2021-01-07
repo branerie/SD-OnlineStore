@@ -9,7 +9,6 @@ import UserContext from './Context'
 import HomePage from './pages/home'
 import AdminProductsPage from './pages/adminProducts'
 import AddProductPage from './pages/addProduct'
-import RegisterPage from './pages/register'
 import ProductPage from './pages/product'
 import MensPage from './pages/men'
 import WomensPage from './pages/women'
@@ -37,12 +36,6 @@ const Navigation = () => {
             <Route path='/products'>
                 <ProductPage pageLength={PAGE_LENGTH} />
             </Route>
-            <Route path='/register'>
-                {userId ? (<Redirect to='/' />) : (<RegisterPage />) }
-            </Route>
-            {/* <Route path='/login'>
-                {userId ? (<Redirect to='/' />) : (<LoginPage />)}
-            </Route> */}
             <Route path='/admin/products/add'>
                 {isAdmin ? (<AddProductPage />) : (<Redirect to='/login' />) }
             </Route>
