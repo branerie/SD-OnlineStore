@@ -14,8 +14,7 @@
 .inner-container {
     z-index: 9999;
     width: 25%;
-    padding: 5%;
-    padding-top: 0;
+    padding: 0% 5%;
     margin-top: 5%;
     background-color: #C3C9C5;
 }

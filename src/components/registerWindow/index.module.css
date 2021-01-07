@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+
+.error {
+    color: red;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    /* align-items: stretch; */
+}
+
+.input {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 15px;
+    min-height: 2rem;
+    padding-left: 1rem;
+    background-color: white;
+    border: 1px solid lightgray;
+    box-sizing: border-box;
+}
+
+.input:placeholder-shown {
+    background-color: rgb(230, 227, 227);
+    border: 1px solid rgb(230, 227, 227);
+}
+
+.input:hover {
+    border: 1px solid black;
+}
+
+.input-label {
+    display: inline-block;
+    width: 36%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.submit-btn {
+    min-height: 3rem;
+    margin-top: 2rem;
+    padding-left: 1.5rem;
+    border: 1px solid lightgray;
+    background-color: black;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.paragraph {
+    font-family: 'Lateef', cursive;
+    font-size: 1.2rem;
+}
+
+.container {
+    position: relative;
+}
+
+.checkbox-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 1.5rem;
+    width: 1.5rem;
+    right: 0rem;
+  }
+
+.checkmark {
+    position: absolute;
+    height: 1.5rem;
+    width: 1.5rem;
+    right: 0rem;
+    background-color: white;
+    border-radius: 7px;
+}
+
+.container:hover input ~ .checkmark {
+    background-color: #eee;
+    box-shadow: 0 0 0 0.15rem #fff, 0 0 0.25rem 0.25rem  #3D5344;
+}
+
+.container input:checked ~ .checkmark {
+    background-color: #3D5344;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}

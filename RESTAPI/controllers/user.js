@@ -172,9 +172,9 @@ router.post('/register', async (req, res) => {
 
     try {
         const createdUser = await User.create({ email, firstName, lastName, password })
-        const token = createToken({ id: createdUser._id, favorites: [] })
+        const token = createToken({ id: createdUser._id, favorites: createdUser.favorites })
         res.header(AUTHORIZATION_HEADER_NAME, token)
-        res.send({ id: createdUser._id })
+        res.send({ id: createdUser._id, favorites: createdUser.favorites })
     } catch (error) {
         if (isMongoError(error)) {
             if (error.message.includes('E11000')) {

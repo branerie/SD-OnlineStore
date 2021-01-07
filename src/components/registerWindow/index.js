@@ -1,8 +1,7 @@
 import React, { useContext } from 'react'
 import styles from './index.module.css'
+import WindowContainer from '../windowContainer'
 import { useForm } from 'react-hook-form'
-import { useHistory } from 'react-router-dom'
-
 import { registerUser } from '../../services/user'
 import UserContext from '../../Context'
 
@@ -14,15 +13,12 @@ const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA
 // const NAME_PATTERN = new RegExp(/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/)
 // const EMAIL_PATTERN = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
 
-const RegisterPage = () => {
-    const history = useHistory()
+const RegisterWindow = ({hideWindow}) => {
     const { register, errors, handleSubmit, setError } = useForm()
     const { setUser } = useContext(UserContext)
 
     //TODO: Move errors so that they are accessible by both front end and back end
     // and not copy-pasted
-
-    //TODO: Fix bug where user is redirected to home page when the form is invalid
 
     const registerNewUser = async (data) => {
         const registerResult = await registerUser(data)
@@ -36,14 +32,13 @@ const RegisterPage = () => {
             return
         } else if (!registerResult.error) {
             setUser(registerResult)
-
-            history.push('/')
+            hideWindow()
         }
 
     }
 
     return (
-        <div>
+        <WindowContainer hideWindow={hideWindow}>
             <form className={styles['register-form']} onSubmit={handleSubmit(registerNewUser)}>
             <div className={styles['input-group']}>
                     <input
@@ -143,12 +138,25 @@ const RegisterPage = () => {
                         })}
                     />
                     {errors.password && (<div className={styles.error}>{errors.password.message}</div>)}
-
                 </div>
+                <div>
+                <p className={styles.paragraph}>I wish to receive sale and other information relating to Find you</p>
+                {/* <span>
+                <label key='agreement' className={styles.container}>
+                        <input
+                            type="checkbox"
+                            value='accept'
+                            name='interest'
+                            className={styles['checkbox-input']}
+                    />
+                        <span className={styles.checkmark}></span>
+                </label>pesho
+                </span> */}
+                </div>    
                 <button type='submit' className={styles['submit-btn']}>Register</button>
             </form>
-        </div>
+        </WindowContainer>
     )
 }
 
-export default RegisterPage
+export default RegisterWindow

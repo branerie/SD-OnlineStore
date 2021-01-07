@@ -8,7 +8,8 @@ import WindowContainer from '../windowContainer'
 import FacebookLoginButton from './loginFacebookButton'
 import GoogleLoginButton from './loginGoogleButton'
 
-const LoginWindow = ({ hideWindow }) => {
+const LoginWindow = (props) => {
+    const { hideWindow, registerWindowPopup } = props
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
     const ref = useRef(null)
@@ -61,6 +62,8 @@ const LoginWindow = ({ hideWindow }) => {
                 <FacebookLoginButton setUserState={setNewUserState} text='facebook' />
                 <GoogleLoginButton setUserState={setNewUserState} text='google' />
             </form>
+                <h3 className={styles.header}>new customer</h3>
+                <div className={styles['register-link']} onClick={registerWindowPopup}>register now</div>                
         </WindowContainer>
     )
 }
