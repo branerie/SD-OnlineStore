@@ -18,7 +18,7 @@ const NavbarImageLink = ({ name, path, imageName, clicked, order, handleClick })
             <div className={
                 [styles['clicked-container'], styles[`order-${order}`]].join(' ')}>
 
-                <img src={`/images/${imageName}`} className={styles.image} />
+                <img src={`/images/${imageName}`} className={styles.image} alt='Link' />
                 <span className={[styles.link, styles['img-link']].join(' ')}>
                     {name}
                 </span>

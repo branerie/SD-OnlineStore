@@ -4,7 +4,6 @@ const chaiHttp = require('chai-http')
 const dbHandler = require('../dbHandler')
 const Product = require('../../models/product')
 const productController = require('../../controllers/product')
-const { create } = require('../../models/product')
 
 const app = express()
 app.use('/', productController)
@@ -32,7 +31,7 @@ const fillDatabase = async () => {
             description: 'Very cool Armani dress',
             gender: 'F',
             discount: {
-                percent: 10,
+                percent: 0.1,
                 endDate: new Date(2020, 12, 31)
             }
         },
@@ -58,7 +57,7 @@ const fillDatabase = async () => {
             description: 'Another very cool thing',
             gender: 'M',
             discount: {
-                percent: 40,
+                percent: 0.4,
                 endDate: new Date(2020, 12, 31)
             }
         },

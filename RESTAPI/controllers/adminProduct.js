@@ -4,7 +4,7 @@ const cloudinary = require('cloudinary').v2
 const Product = require('../models/product')
 
 const { restrictToAdmin } = require('../utils/authenticate')
-const { isMongoError } = require('../utils/utils')
+const { isMongoError } = require('../utils/general')
 
 const PRODUCT_NOT_FOUND_ERROR = 'Product with id {id} does not exist.'
 

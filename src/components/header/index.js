@@ -11,7 +11,7 @@ const Header = ({ clickedName }) => {
         <header>
             <PageTitle title="Find you here" />
             <Link to='/'>
-                <img src={logo} className={styles.logo} />
+                <img src={logo} className={styles.logo} alt='Company Logo' />
             </Link>
             <Navbar clickedName={clickedName} />
         </header>

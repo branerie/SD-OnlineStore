@@ -48,7 +48,7 @@ const AdminProductCard = (props) => {
                     <button onClick={changeEditingState}>Edit</button>
                     <button
                         onClick={e => handleDelete(e)}
-                        className={styles.confirmButton && styles.button3}>
+                        className={styles['delete-btn']}>
                         Delete
                     </button>
                 </div> : null}

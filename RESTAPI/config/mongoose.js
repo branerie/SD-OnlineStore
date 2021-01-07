@@ -13,14 +13,17 @@ module.exports = async function () {
             useCreateIndex: true
         })
 
-        // const indexes = await db.collections.products.indexes()
-        // await db.collections.products.dropIndex('brand_text_description_text_categories_text')
+        const textIndexName = 'brand_text_description_text_categories_text'
+        // await db.collections.products.dropIndex(textIndexName)
 
-        // await db.collections.products.createIndex({
-        //     brand: 'text',
-        //     description: 'text',
-        //     categories: 'text'
-        // })
+        const indexes = await db.collections.products.indexes()
+        if (!indexes.some(idx => idx.name === textIndexName)) {
+            await db.collections.products.createIndex({
+                brand: 'text',
+                description: 'text',
+                categories: 'text'
+            })
+        }
 
         console.log('Database is setup and running')
     } catch (err) {

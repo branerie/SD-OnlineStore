@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styles from './index.module.css'
 
 const INITIAL_TEXT = '--- Add categories ---'

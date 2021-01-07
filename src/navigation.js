@@ -13,6 +13,7 @@ import ProductPage from './pages/product'
 import MensPage from './pages/men'
 import WomensPage from './pages/women'
 import PromotionsPage from './pages/promotions'
+import UserConfirmation from './pages/userConfirmation'
 
 const PAGE_LENGTH = 3
 
@@ -43,7 +44,8 @@ const Navigation = () => {
                     ? <AdminProductsPage pageLength={PAGE_LENGTH} /> 
                     : <Redirect to='/login' />
                 }
-            </Route>            
+            </Route>
+            <Route path='/user/confirm/:confirmationToken' component={UserConfirmation} />         
             </Switch>
         </BrowserRouter>
 

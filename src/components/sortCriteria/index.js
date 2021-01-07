@@ -21,27 +21,27 @@ const SortCriteria = () => {
                 onClick={e => setIsVisible(!isVisible)}
             >
                 Sort by
-                    <img src={sortByArrow} className={styles['sort-by-arrow']} />
+                    <img src={sortByArrow} alt='Sort By' className={styles['sort-by-arrow']} />
             </button>
             {isVisible ?
                 (
                     <div className={styles.list} ref={ref}>
-                        <a className={styles.criteria}
+                        <button className={styles.criteria}
                             onClick={() => setSortCriteria('date', 'desc')}>
                             Newest Arrivals
-                        </a>
-                        <a className={styles.criteria}
+                        </button>
+                        <button className={styles.criteria}
                             onClick={() => setSortCriteria('price', 'asc')}>
                             Price: Low to High
-                        </a>
-                        <a className={styles.criteria}
+                        </button>
+                        <button className={styles.criteria}
                             onClick={() => setSortCriteria('price', 'desc')}>
                             Price: High to Low
-                        </a>
-                        <a className={styles.criteria}
+                        </button>
+                        <button className={styles.criteria}
                             onClick={() => setSortCriteria('discount', 'desc')}>
                             Bigger Discount
-                        </a>
+                        </button>
                     </div>
                 )
                 : null}

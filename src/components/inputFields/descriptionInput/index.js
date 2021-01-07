@@ -15,7 +15,7 @@ const DescriptionInput = ({ value, onChange }) => {
         }
 
         onChange(event)
-    })
+    }, [onChange])
 
     return (
         <InputWrapper isVisible={isVisible} placeholder='Description'>

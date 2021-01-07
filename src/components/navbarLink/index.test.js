@@ -18,7 +18,7 @@ describe('NavbarLink', () => {
 
         const aTag = document.getElementsByTagName('a')[0]
         if (!aTag) {
-            throw
+            throw new Error()
         }
 
         const fullExpectedHref = document.location.origin + '/products/new'
