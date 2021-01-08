@@ -13,7 +13,8 @@ import ProductPage from './pages/product'
 import MensPage from './pages/men'
 import WomensPage from './pages/women'
 import PromotionsPage from './pages/promotions'
-import UserConfirmation from './pages/userConfirmation'
+import UserConfirmationPage from './pages/userConfirmation'
+import PasswordResetPage from './pages/passwordReset'
 
 const PAGE_LENGTH = 3
 
@@ -23,29 +24,30 @@ const Navigation = () => {
     return (
         <BrowserRouter>
             <Switch>
-            <Route exact path='/' component={HomePage} />
-            <Route path='/products/men'>
-                <MensPage pageLength={PAGE_LENGTH} />
-            </Route>
-            <Route path='/products/women'>
-                <WomensPage pageLength={PAGE_LENGTH} />
-            </Route>
-            <Route path='/products/promotions'>
-                <PromotionsPage pageLength={PAGE_LENGTH} />
-            </Route>
-            <Route path='/products'>
-                <ProductPage pageLength={PAGE_LENGTH} />
-            </Route>
-            <Route path='/admin/products/add'>
-                {isAdmin ? (<AddProductPage />) : (<Redirect to='/login' />) }
-            </Route>
-            <Route path='/admin/products'>
-                { isAdmin 
-                    ? <AdminProductsPage pageLength={PAGE_LENGTH} /> 
-                    : <Redirect to='/login' />
-                }
-            </Route>
-            <Route path='/user/confirm/:confirmationToken' component={UserConfirmation} />         
+                <Route exact path='/' component={HomePage} />
+                <Route path='/products/men'>
+                    <MensPage pageLength={PAGE_LENGTH} />
+                </Route>
+                <Route path='/products/women'>
+                    <WomensPage pageLength={PAGE_LENGTH} />
+                </Route>
+                <Route path='/products/promotions'>
+                    <PromotionsPage pageLength={PAGE_LENGTH} />
+                </Route>
+                <Route path='/products'>
+                    <ProductPage pageLength={PAGE_LENGTH} />
+                </Route>
+                <Route path='/admin/products/add'>
+                    {isAdmin ? (<AddProductPage />) : (<Redirect to='/login' />) }
+                </Route>
+                <Route path='/admin/products'>
+                    { isAdmin 
+                        ? <AdminProductsPage pageLength={PAGE_LENGTH} /> 
+                        : <Redirect to='/login' />
+                    }
+                </Route>
+                <Route path='/user/confirm/:confirmationToken' component={UserConfirmationPage} /> 
+                <Route path='/user/password/reset/:resetToken' component={PasswordResetPage} />      
             </Switch>
         </BrowserRouter>
 

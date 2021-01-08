@@ -43,15 +43,6 @@
     align-items: stretch;
 }
 
-.header {
-    font-family: 'Architects Daughter', cursive;
-    font-size: 2rem;
-    color: #735C74;
-    margin-bottom: 5px;
-    text-align: center;
-    font-weight: normal;
-}
-
 .btn {
     min-height: 3rem;
     margin-top: 1rem;
@@ -61,11 +52,6 @@
     font-family: 'Architects Daughter', cursive;
     cursor: pointer;
     border: none;
-}
-
-.btn-submit {
-    padding-left: 1.5rem;
-    background-color: #3D5344;
 }
 
 .register-link {

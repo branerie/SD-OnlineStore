@@ -7,6 +7,8 @@ import TextInput from '../inputFields/textInput'
 import WindowContainer from '../windowContainer'
 import FacebookLoginButton from './loginFacebookButton'
 import GoogleLoginButton from './loginGoogleButton'
+import SectionTitle from '../sectionTitle'
+import SubmitButton from '../submitButton'
 
 const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) => {
     const [email, setEmail] = useState(null)
@@ -38,7 +40,7 @@ const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) =>
     return (
         <WindowContainer hideWindow={hideWindow}>
             <form className={styles['login-form']} onSubmit={event => loginNewUser(event)}>
-                <h3 className={styles.header}>log in</h3>
+                <SectionTitle title='log in' />
                 <div className={styles['input-group']}>
                     <TextInput
                         type='email'
@@ -60,14 +62,12 @@ const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) =>
                 >
                     Forgot your password?
                 </div>
-                <button type='submit' className={[styles['btn-submit'], styles.btn].join(' ')}>
-                    enter
-                </button>
-                <h3 className={styles.header}>log in with:</h3>
+                <SubmitButton text='enter' />
+                <SectionTitle title='log in with:' />
                 <FacebookLoginButton setUserState={setNewUserState} text='facebook' />
                 <GoogleLoginButton setUserState={setNewUserState} text='google' />
             </form>
-                <h3 className={styles.header}>new customer</h3>
+                <SectionTitle title='new customer' />
                 <div className={styles['register-link']} onClick={registerWindowPopup}>register now</div>                
         </WindowContainer>
     )

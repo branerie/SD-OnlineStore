@@ -28,7 +28,7 @@ const UserConfirmation = () => {
             )
         }
 
-        setUser({ id: result.userId, isAdmin: false, favorites: [] })
+        setUser({ id: result.userId, isAdmin: false, favorites: result.favorites })
     }, [setUser, confirmationToken])
 
     useEffect(() => {

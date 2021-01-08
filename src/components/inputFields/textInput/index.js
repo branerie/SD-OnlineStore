@@ -2,8 +2,17 @@ import React, { useState } from 'react'
 import inputStyles from '../index.module.css'
 import InputWrapper from '../inputWrapper'
 
-const TextInput = ({ value, onChange, onBlur, type, maxLength, placeholder, ref }) => {
-    const [isVisible, setIsVisible] = useState(value != undefined)
+const TextInput = ({
+    name,
+    value,
+    onChange,
+    onBlur,
+    type,
+    maxLength,
+    placeholder,
+    reference
+}) => {
+    const [isVisible, setIsVisible] = useState(value ? true : false)
 
     const handleChange = (event) => {
         if (event.target.value.length > 0) {
@@ -18,14 +27,16 @@ const TextInput = ({ value, onChange, onBlur, type, maxLength, placeholder, ref 
     return (
         <InputWrapper isVisible={isVisible} placeholder={placeholder} >
             <input
+                name={name}
                 type={type}
                 className={inputStyles.input}
-                ref={ref}
+                ref={reference}
                 value={value}
                 onChange={handleChange}
                 onBlur={onBlur}
                 maxLength={maxLength}
-                placeholder={placeholder} />
+                placeholder={placeholder}
+            />
         </InputWrapper>
     )
 }

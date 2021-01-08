@@ -50,11 +50,11 @@ const sendPasswordResetEmail = async (firstName, lastName, email, resetToken) =>
         text: `
         Dear ${firstName} ${lastName},
         
-        Someone has requested to reset the password of your account on ${server_url}.
-        If this was you, please the link below to a secure page where you can reset your password:
+        Someone has requested to reset the password of your account on ${server_url.split('//')[1]}.
+        If this was you, please follow the link below. It will take you to a secure page where you can reset your password. The page will expire in one hour.
         ${server_url}/user/password/reset/${resetToken}
 
-        If this request was not made by you, then please ignore this message.
+        Please ignore this message if the request was not made by you!
 
         Hope you have a good day and you keep finding yourself on our website :)
 

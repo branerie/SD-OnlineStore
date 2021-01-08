@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.title {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2rem;
+    color: #735C74;
+    margin-bottom: 5px;
+    text-align: center;
+    font-weight: normal;
+}
