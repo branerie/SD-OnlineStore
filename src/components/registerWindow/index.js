@@ -4,6 +4,7 @@ import WindowContainer from '../windowContainer'
 import { useForm } from 'react-hook-form'
 import { registerUser } from '../../services/user'
 import UserContext from '../../Context'
+import { Link } from 'react-router-dom'
 
 const EMAIL_MAX_LENGTH = 20
 const NAME_MAX_LENGTH = 20
@@ -40,6 +41,7 @@ const RegisterWindow = ({hideWindow}) => {
     return (
         <WindowContainer hideWindow={hideWindow}>
             <form className={styles['register-form']} onSubmit={handleSubmit(registerNewUser)}>
+            <h3 className={styles.header}>QUICK Secure SIGN UP</h3>
             <div className={styles['input-group']}>
                     <input
                         name='email'
@@ -139,21 +141,23 @@ const RegisterWindow = ({hideWindow}) => {
                     />
                     {errors.password && (<div className={styles.error}>{errors.password.message}</div>)}
                 </div>
-                <div>
-                <p className={styles.paragraph}>I wish to receive sale and other information relating to Find you</p>
-                {/* <span>
-                <label key='agreement' className={styles.container}>
-                        <input
-                            type="checkbox"
-                            value='accept'
-                            name='interest'
-                            className={styles['checkbox-input']}
-                    />
-                        <span className={styles.checkmark}></span>
-                </label>pesho
-                </span> */}
+                <div className={styles.container}>
+                    <p className={styles.paragraph}>I wish to receive sale and other information relating to Find you</p>
+                    <label className={styles['label-checkbox']}>
+                            <input
+                                className={styles['checkbox-input']}
+                                type="checkbox"
+                                name='interest'
+                                // ref={register} : TODO : comment was added to stop send the result of the checkbox
+                        />
+                            <span className={styles.checkmark}></span>
+                    </label>
                 </div>    
-                <button type='submit' className={styles['submit-btn']}>Register</button>
+                <p className={styles['paragraph-two']}>Find you would like to keep you up to date with news of products and services including store events, offers, promotions, and Sale information. Find you may use your contact details to get in touch by email, telephone, SMS or post. You can opt out at any time by amending your preferences in My Account. Your personal information will not be shared with other companies for their marketing purposes. To find out more, see our Privacy and Cookie Policy.</p>
+                <div className={styles['third-container']}>
+                    <p className={styles['paragraph-three']}>By clicking Register you agree to the Find You <Link>Terms and Conditions</Link> and <Link>Privacy&Cookie Policy</Link></p>
+                    <button type='submit' className={styles['submit-btn']}>Register</button>
+                </div>
             </form>
         </WindowContainer>
     )
