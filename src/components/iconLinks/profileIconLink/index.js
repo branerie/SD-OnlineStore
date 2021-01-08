@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useContext, useCallback } from 'react'
+import React, { useState, useMemo, useContext, useCallback, useEffect } from 'react'
 import styles from '../index.module.css'
+import { logOut } from '../../../services/user'
 import UserContext from '../../../Context'
 import LoginWindow from '../../loginWindow'
 import RegisterWindow from '../../registerWindow'
@@ -8,14 +9,36 @@ import PasswordResetFormWindow from '../../passwordResetFormWindow'
 const ProfileIconLink = () => {
     const [isFilled, setIsFilled] = useState(false)
     const [shownWindow, setShownWindow] = useState('')
+    
 
-    const { user } = useContext(UserContext)
+
+    const { user, setUser } = useContext(UserContext)
 
     const fillColor = useMemo(() => {
         return isFilled
             ? '#40e5eb'
             : 'none'
     }, [isFilled])
+
+    const checkUserId = async () => {
+        if (!user.id) {
+            setShownWindow('login')
+            return
+        }
+        
+        const result = await logOut()
+
+        if (result.error ) {
+            //TODO: handle error
+            return
+        }
+
+        setUser({
+            userId: null,
+            isAdmin: false,
+            favorites: []
+        })
+    }
 
     const handleWindowChange = (windowName) => {
         if (user.userId) {
@@ -36,7 +59,7 @@ const ProfileIconLink = () => {
                 className={styles.container}
                 onMouseEnter={() => setIsFilled(true)}
                 onMouseLeave={() => setIsFilled(false)}
-                onClick={() => setShownWindow('login')}
+                onClick={checkUserId}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 52.844 49.636">
                     <g id="Group_3" data-name="Group 3" transform="translate(-1814.241 -103.364)">

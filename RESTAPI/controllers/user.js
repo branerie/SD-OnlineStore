@@ -106,10 +106,6 @@ router.post('/login', async (req, res) => {
             return res.status(401).send({ error: 'Invalid email or password' })
         }
 
-        if (user.confirmationToken) {
-            return res.status(401).send({ error: 'User has not yet confirmed his/her email' })
-        }
-
         const userInfo = { id: user._id, isAdmin: user.isAdmin, favorites: user.favorites }
         attachLoginCookie(userInfo, res)
 
@@ -228,7 +224,7 @@ router.post('/logout', async (req, res) => {
             await TokenBlackList.create({ token: currentToken, expirationDate: exp * 1000 })
 
             delete req.headers.authorization
-            return res.send('Successfully logged out')
+            return res.send({ status : 'Successfully logged out' })
         } catch (error) {
             if (isMongoError(error)) {
                 return res.status(403).send({ error: error.message })

@@ -53,6 +53,22 @@ const logInUser = async (email, password) => {
     return await response.json()
 }
 
+const logOut = async () => {
+    const response = await fetch(`${USER_URL}/logout`, {
+        method: 'POST',
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    if(response.status === 200) {
+        document.cookie = `${AUTH_COOKIE_NAME}= ; expires = Thu, 01 Jan 1970 00:00:01 GMT;`
+    }
+
+    return await response.json()
+}
+
 const registerUser = async (data) => {
     const response = await fetch(`${USER_URL}/register`, {
         method: 'POST',
@@ -130,6 +146,7 @@ export {
     verifyUser,
     confirmUser,
     logInUser,
+    logOut,
     registerUser,
     loginWithFacebook,
     loginWithGoogle,
