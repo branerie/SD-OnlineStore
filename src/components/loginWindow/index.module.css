@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
 
 .error {
@@ -83,4 +84,11 @@
 
 .icon {
     height: 2rem;
+}
+
+.pass-reset-link {
+    color: #735C74;
+    font-family: 'Lateef', cursive;
+    text-align: right;
+    cursor: pointer;
 }

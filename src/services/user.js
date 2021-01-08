@@ -117,6 +117,15 @@ const setFavorites = async (productId) => {
     return await response.json()
 }
 
+const sendPasswordResetEmail = async (email) => {
+    const response = fetch(`${USER_URL}/password/reset/send`, {
+        method: 'POST',
+        body: JSON.stringify({ email })
+    })
+
+    return await response.json()
+}
+
 export {
     verifyUser,
     confirmUser,
@@ -124,5 +133,6 @@ export {
     registerUser,
     loginWithFacebook,
     loginWithGoogle,
-    setFavorites
+    setFavorites,
+    sendPasswordResetEmail
 }

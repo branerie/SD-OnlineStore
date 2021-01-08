@@ -9,12 +9,13 @@
     align-items: flex-start;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9998;
+    overflow-y: scroll;
 }
 
 .inner-container {
     z-index: 9999;
     width: 25%;
-    padding: 0% 5%;
+    padding: 2% 5%;
     margin-top: 5%;
     background-color: #C3C9C5;
 }

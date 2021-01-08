@@ -3,11 +3,11 @@ import styles from '../index.module.css'
 import UserContext from '../../../Context'
 import LoginWindow from '../../loginWindow'
 import RegisterWindow from '../../registerWindow'
+import PasswordResetFormWindow from '../../passwordResetFormWindow'
 
 const ProfileIconLink = () => {
     const [isFilled, setIsFilled] = useState(false)
-    const [isLoginRendered, setIsLoginRendered] = useState(false)
-    const [isRegisterRender, setIsRegisterRender] = useState(false)
+    const [shownWindow, setShownWindow] = useState('')
 
     const { user } = useContext(UserContext)
 
@@ -17,27 +17,18 @@ const ProfileIconLink = () => {
             : 'none'
     }, [isFilled])
 
-    const handleLoginWindowPopup = () => {
+    const handleWindowChange = (windowName) => {
         if (user.userId) {
             //TODO: Maybe display a message to user if already logged in?
             return
         }
 
-        setIsLoginRendered(true)
+        setShownWindow(windowName)
     }
-    
-    const handleRegisterWindowPopup = useCallback(() => {
-        if (user.userId) {
-            //TODO: Maybe display a message to user if already logged in?
-            return
-        }
 
-        setIsLoginRendered(false)
-        setIsRegisterRender(true)
-    },[])
-    
-    const hideLoginWindow = useCallback(() => setIsLoginRendered(false), [])
-    const hideRegisterWindow = useCallback(() => setIsRegisterRender(false), [])
+    const hideWindow = useCallback(() => setShownWindow(''), [])
+    const registerWindowPopup = useCallback(() => handleWindowChange('register'), [])
+    const passwordResetPopup = useCallback(() => handleWindowChange('passwordResetForm'), [])
 
     return (
         <>
@@ -45,7 +36,7 @@ const ProfileIconLink = () => {
                 className={styles.container}
                 onMouseEnter={() => setIsFilled(true)}
                 onMouseLeave={() => setIsFilled(false)}
-                onClick={handleLoginWindowPopup}
+                onClick={() => setShownWindow('login')}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 52.844 49.636">
                     <g id="Group_3" data-name="Group 3" transform="translate(-1814.241 -103.364)">
@@ -61,8 +52,24 @@ const ProfileIconLink = () => {
                     </g>
                 </svg>
             </div>
-            { isLoginRendered && <LoginWindow hideWindow={hideLoginWindow} registerWindowPopup={handleRegisterWindowPopup} />}
-            { isRegisterRender && <RegisterWindow hideWindow={hideRegisterWindow}/> }
+            { shownWindow === 'login'
+                ?
+                <LoginWindow
+                    hideWindow={hideWindow}
+                    registerWindowPopup={registerWindowPopup}
+                    passwordResetPopup={passwordResetPopup}
+                />
+                : null
+            }
+            { shownWindow === 'register'
+                ? <RegisterWindow hideWindow={hideWindow} />
+                : null
+            }
+            { shownWindow === 'passwordResetForm'
+                ?
+                <PasswordResetFormWindow hideWindow={hideWindow} /> 
+                : null
+            }
         </>
     )
 }

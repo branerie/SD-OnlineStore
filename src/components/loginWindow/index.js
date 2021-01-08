@@ -8,8 +8,7 @@ import WindowContainer from '../windowContainer'
 import FacebookLoginButton from './loginFacebookButton'
 import GoogleLoginButton from './loginGoogleButton'
 
-const LoginWindow = (props) => {
-    const { hideWindow, registerWindowPopup } = props
+const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) => {
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
     const ref = useRef(null)
@@ -55,6 +54,12 @@ const LoginWindow = (props) => {
                     />
                 </div>
                 <div className={styles.error} ref={ref}></div>
+                <div
+                    className={styles['pass-reset-link']}
+                    onClick={passwordResetPopup}
+                >
+                    Forgot your password?
+                </div>
                 <button type='submit' className={[styles['btn-submit'], styles.btn].join(' ')}>
                     enter
                 </button>

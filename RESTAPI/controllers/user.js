@@ -1,12 +1,18 @@
 const router = require('express').Router()
-const { createToken, verifyToken, verifyGoogleToken, verifyFacebookToken } = require('../utils/jwt')
+const { 
+    createToken, 
+    verifyToken, 
+    verifyGoogleToken, 
+    verifyFacebookToken 
+} = require('../utils/jwt')
 const { decode } = require('jsonwebtoken')
 const User = require('../models/user')
 const TokenBlackList = require('../models/tokenBlackList')
 const { isMongoError } = require('../utils/general')
-const { sendConfirmationEmail } = require('../utils/user')
+const { sendConfirmationEmail, sendPasswordResetEmail } = require('../utils/user')
 
 const AUTHORIZATION_HEADER_NAME = 'Authorization'
+const INVALID_TOKEN_ERROR = 'Invalid JWT token'
 
 const attachLoginCookie = (userInfo, response) => {
     const token = createToken(userInfo)
@@ -19,6 +25,10 @@ router.get('/verify', async (req, res) => {
     if (currentToken) {
         try {
             const userInfo = await verifyToken(currentToken)
+            if (!userInfo) {
+                return res.status(401).send(INVALID_TOKEN_ERROR)
+            }
+
             return res.send({
                 userId: userInfo.id,
                 isAdmin: userInfo.isAdmin || false,
@@ -44,6 +54,10 @@ router.patch('/favorites', async (req, res) => {
     if (currentToken) {
         try {
             const userInfo = await verifyToken(currentToken)
+            if (!userInfo) {
+                return res.status(401).send({ error: INVALID_TOKEN_ERROR })
+            }
+
             let user = await User.findById(userInfo.id)
 
             if (user.favorites.includes(productId)) {
@@ -236,8 +250,12 @@ router.post('/confirm', async (req, res) => {
             return res.status(400).send({ error: 'Missing user confirmation token' })
         }
 
-        const { userId } = await verifyToken(confirmationToken)
+        const userInfo = await verifyToken(confirmationToken)
+        if (!userInfo) {
+            return res.status(401).send({ error: INVALID_TOKEN_ERROR })
+        }
 
+        const { userId } = userInfo
         const user = await User.findById(userId)
         if (!user) {
             return res.status(401).send({ error: INVALID_TOKEN_ERROR })
@@ -262,6 +280,51 @@ router.post('/confirm', async (req, res) => {
         return res.send({ status: 'User email has been successfully confirmed', userId })
     } catch (error) {
         return res.status(401).send({ error: INVALID_TOKEN_ERROR })
+    }
+})
+
+router.post('/password/reset/send', async (req, res) => {
+    try {
+        const { email } = req.body
+        const user = await User.findOne({ email })
+
+        if (!user) {
+            return res.status(400).send({ error: `User with email ${email} does not exist` })
+        }
+
+        const resetToken = createToken({ userId: user._id })
+        sendPasswordResetEmail(user.firstName, user.lastName, email, resetToken)
+
+        return res.send({ status: 'Success', email })
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.post('/password/reset/confirm', async (req, res) => {
+    const INVALID_TOKEN_ERROR = 'Invalid reset password token'
+
+    try {
+        const { resetToken, newPassword } = req.body
+        if (!resetToken) {
+            return res.status(400).send({ error: 'Missing reset token' }) 
+        }
+        
+        const userInfo = verifyToken(resetToken)
+        if (!userInfo) {
+            return res.status(401).send({ error: INVALID_TOKEN_ERROR })
+        }
+
+        const { userId } = userInfo
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(401).send({ error: INVALID_TOKEN_ERROR })
+        }
+
+        user.set('password', newPassword)
+        await user.save()
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
     }
 })
 

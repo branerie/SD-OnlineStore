@@ -45,6 +45,9 @@ const userSchema = new mongoose.Schema({
     confirmationToken: {
         type: String
     },
+    passwordResetToken: {
+        type: String
+    }
 })
 
 userSchema.methods = {
