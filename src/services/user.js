@@ -118,10 +118,29 @@ const setFavorites = async (productId) => {
 }
 
 const sendPasswordResetEmail = async (email) => {
-    const response = fetch(`${USER_URL}/password/reset/send`, {
+    const response = await fetch(`${USER_URL}/password/reset/send`, {
         method: 'POST',
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
+        }
     })
+
+    return await response.json()
+}
+
+const resetUserPassword = async (newPassword, resetToken) => {
+    const response = await fetch(`${USER_URL}/password/reset/confirm`, {
+        method: 'POST',
+        body: JSON.stringify({ newPassword, resetToken }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
+        }
+    })
+
+    if (response.status === 200) {
+        setLoginCookieFromResponse(response)
+    }
 
     return await response.json()
 }
@@ -134,5 +153,6 @@ export {
     loginWithFacebook,
     loginWithGoogle,
     setFavorites,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    resetUserPassword
 }

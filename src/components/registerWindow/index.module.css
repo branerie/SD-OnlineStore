@@ -42,25 +42,6 @@
     align-items: stretch;
 }
 
-.submit-btn {
-    align-items: center;
-    font-family: 'Architects Daughter', cursive;
-    border: 1px solid lightgray;
-    background-color: #3D5344;
-    color: white;
-    font-size: 1.6rem;
-    text-decoration: none;
-    height: 50px;
-}
-
-.header {
-    font-family: 'Architects Daughter', cursive;
-    font-size: 2rem;
-    color: #735C74;
-    margin-bottom: 5px;
-    text-align: center;
-    font-weight: normal;
-}
 
 .paragraph {
     font-family: 'Lateef', cursive;

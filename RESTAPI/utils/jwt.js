@@ -6,8 +6,8 @@ const { OAuth2Client } = require('google-auth-library')
 const BLACKLISTED_TOKEN_ERROR = 'Authorization token is blacklisted'
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
-const createToken = (data) => {
-    return jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1w' });
+const createToken = (data, expiresIn = '1w') => {
+    return jwt.sign(data, process.env.JWT_SECRET, { expiresIn: expiresIn });
 }
 
 const prepareBase64UrlInput = (input) => {

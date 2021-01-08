@@ -5,8 +5,10 @@ import { useForm } from 'react-hook-form'
 import { registerUser } from '../../services/user'
 import UserContext from '../../Context'
 import { Link } from 'react-router-dom'
+import SectionTitle from '../sectionTitle'
+import SubmitButton from '../submitButton'
 
-const EMAIL_MAX_LENGTH = 20
+const EMAIL_MAX_LENGTH = 80
 const NAME_MAX_LENGTH = 20
 const PASSWORD_MIN_LENGTH = 6
 const PASSWORD_MAX_LENGTH = 30
@@ -41,7 +43,7 @@ const RegisterWindow = ({hideWindow}) => {
     return (
         <WindowContainer hideWindow={hideWindow}>
             <form className={styles['register-form']} onSubmit={handleSubmit(registerNewUser)}>
-            <h3 className={styles.header}>QUICK Secure SIGN UP</h3>
+            <SectionTitle title='QUICK Secure SIGN UP' />
             <div className={styles['input-group']}>
                     <input
                         name='email'
@@ -156,7 +158,7 @@ const RegisterWindow = ({hideWindow}) => {
                 <p className={styles['paragraph-two']}>Find you would like to keep you up to date with news of products and services including store events, offers, promotions, and Sale information. Find you may use your contact details to get in touch by email, telephone, SMS or post. You can opt out at any time by amending your preferences in My Account. Your personal information will not be shared with other companies for their marketing purposes. To find out more, see our Privacy and Cookie Policy.</p>
                 <div className={styles['third-container']}>
                     <p className={styles['paragraph-three']}>By clicking Register you agree to the Find You <Link>Terms and Conditions</Link> and <Link>Privacy&Cookie Policy</Link></p>
-                    <button type='submit' className={styles['submit-btn']}>Register</button>
+                    <SubmitButton text='Register' />
                 </div>
             </form>
         </WindowContainer>

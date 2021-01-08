@@ -277,7 +277,11 @@ router.post('/confirm', async (req, res) => {
             attachLoginCookie(userData, res)
         }
 
-        return res.send({ status: 'User email has been successfully confirmed', userId })
+        return res.send({
+            status: 'User email has been successfully confirmed',
+            userId,
+            favorites: user.favorites
+        })
     } catch (error) {
         return res.status(401).send({ error: INVALID_TOKEN_ERROR })
     }
@@ -292,7 +296,7 @@ router.post('/password/reset/send', async (req, res) => {
             return res.status(400).send({ error: `User with email ${email} does not exist` })
         }
 
-        const resetToken = createToken({ userId: user._id })
+        const resetToken = createToken({ userId: user._id }, '1h')
         sendPasswordResetEmail(user.firstName, user.lastName, email, resetToken)
 
         return res.send({ status: 'Success', email })
@@ -306,11 +310,8 @@ router.post('/password/reset/confirm', async (req, res) => {
 
     try {
         const { resetToken, newPassword } = req.body
-        if (!resetToken) {
-            return res.status(400).send({ error: 'Missing reset token' }) 
-        }
         
-        const userInfo = verifyToken(resetToken)
+        const userInfo = await verifyToken(resetToken)
         if (!userInfo) {
             return res.status(401).send({ error: INVALID_TOKEN_ERROR })
         }
@@ -323,6 +324,11 @@ router.post('/password/reset/confirm', async (req, res) => {
 
         user.set('password', newPassword)
         await user.save()
+
+        const userData = { id: user._id, favorites: user.favorites, isAdmin: user.isAdmin }
+        attachLoginCookie(userData, res)
+
+        return res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })
     }

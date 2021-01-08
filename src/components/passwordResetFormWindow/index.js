@@ -3,19 +3,21 @@ import styles from './index.module.css'
 import TextInput from '../inputFields/textInput'
 import WindowContainer from '../windowContainer'
 import { sendPasswordResetEmail } from '../../services/user'
+import SectionTitle from '../sectionTitle'
+import SubmitButton from '../submitButton'
 
 const PasswordResetFormWindow = ({ hideWindow }) => {
     const [email, setEmail] = useState(null)
     const [isSent, setIsSent] = useState(false)
 
     const handleSubmit = async (event) => {
-        event.stopPropagation()
+        event.preventDefault()
 
-        // const result = await sendPasswordResetEmail(email)
-        // if (result.error) {
-        //     //TODO: handle errors
-        //     return
-        // }
+        const result = await sendPasswordResetEmail(email)
+        if (result.error) {
+            //TODO: handle errors
+            return
+        }
         
         setIsSent(true)
     }
@@ -25,7 +27,7 @@ const PasswordResetFormWindow = ({ hideWindow }) => {
             { isSent
                 ?
                 <>
-                    <h3 className={styles.title}>success!</h3>
+                    <SectionTitle title='SUCCESS!' />
                     <div className={styles.message}>
                         An email has been sent to {email}. Please follow the link inside to
                         get to a password reset page.
@@ -33,7 +35,7 @@ const PasswordResetFormWindow = ({ hideWindow }) => {
                 </>
                 :
                 <>
-                    <h3 className={styles.title}>reset your password</h3>
+                    <SectionTitle title='RESET YOUR PASSWORD' />
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <TextInput
                             name='email'
@@ -48,7 +50,7 @@ const PasswordResetFormWindow = ({ hideWindow }) => {
                             <br />
                             A link will be sent which will allow you to reset your password.
                         </div>
-                            <button type='submit' className={styles['submit-btn']}>Send</button>
+                            <SubmitButton text='Send' />
                         </div>
                     </form>
                 </>

@@ -12,18 +12,6 @@
     text-transform: uppercase;
 }
 
-.submit-btn {
-    flex-basis: 30%;
-    height: 2.33rem;
-    font-family: 'Architects Daughter', cursive;
-    font-size: 1.8rem;
-    background-color: #3D5344;
-    color: white;
-    border-radius: 0.3rem;
-    border: 1px solid #3D5344;
-    cursor: pointer;
-}
-
 .inner-container {
     display: flex;
 }
