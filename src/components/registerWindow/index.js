@@ -16,7 +16,7 @@ const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA
 // const NAME_PATTERN = new RegExp(/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/)
 // const EMAIL_PATTERN = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
 
-const RegisterWindow = ({hideWindow}) => {
+const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
     const { register, errors, handleSubmit, setError } = useForm()
     const { setUser } = useContext(UserContext)
 
@@ -142,6 +142,12 @@ const RegisterWindow = ({hideWindow}) => {
                         })}
                     />
                     {errors.password && (<div className={styles.error}>{errors.password.message}</div>)}
+                </div>
+                <div
+                    className={styles['login-btn']}
+                    onClick={loginWindowPopup}
+                >
+                    Continue with login
                 </div>
                 <div className={styles.container}>
                     <p className={styles.paragraph}>I wish to receive sale and other information relating to Find you</p>

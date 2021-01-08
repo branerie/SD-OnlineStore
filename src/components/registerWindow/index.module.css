@@ -42,6 +42,14 @@
     align-items: stretch;
 }
 
+.login-btn {
+        font-family: 'Architects Daughter', cursive;
+        background-color: #3D5344;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+        margin-top: 1vw;
+}
 
 .paragraph {
     font-family: 'Lateef', cursive;

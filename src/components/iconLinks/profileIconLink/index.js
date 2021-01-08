@@ -52,6 +52,7 @@ const ProfileIconLink = () => {
     const hideWindow = useCallback(() => setShownWindow(''), [])
     const registerWindowPopup = useCallback(() => handleWindowChange('register'), [])
     const passwordResetPopup = useCallback(() => handleWindowChange('passwordResetForm'), [])
+    const loginWindowPopup = useCallback(() => handleWindowChange('login'),[])
 
     return (
         <>
@@ -85,7 +86,11 @@ const ProfileIconLink = () => {
                 : null
             }
             { shownWindow === 'register'
-                ? <RegisterWindow hideWindow={hideWindow} />
+                ? 
+                <RegisterWindow
+                    hideWindow={hideWindow}
+                    loginWindowPopup={loginWindowPopup}
+                />
                 : null
             }
             { shownWindow === 'passwordResetForm'
