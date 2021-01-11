@@ -18,3 +18,9 @@
 .cards-container {
     margin: 0 7rem 0 7rem;
 }
+
+@media (max-width: 550px) {
+    .cards-container {
+        margin: 0 2rem;
+    }
+}

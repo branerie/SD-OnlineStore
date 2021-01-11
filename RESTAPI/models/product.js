@@ -1,34 +1,42 @@
 const mongoose = require('mongoose')
 const { getAllCategories } = require('../utils/product')
 
-const SIZE_MIN_LENGTH = 1
-const SIZE_MAX_LENGTH = 4
-const BRAND_MAX_LENGTH = 30
-const DESCRIPTION_MAX_LENGTH = 1000
+const getValidationConstants = require('../utils/validationContasts')
+const vc = getValidationConstants('product')
+
+// const SIZE_MIN_LENGTH = 1
+// const SIZE_MAX_LENGTH = 30
+// const BRAND_MAX_LENGTH = 30
+// const DESCRIPTION_MAX_LENGTH = 1000
 
 const productSchema = new mongoose.Schema({
     sizes: [{
         sizeName: {
             type: String,
-            required: true,
-            match: [/^[A-Z0-9]{1,4}$/, `Size can only contain capital letters and digits and must be between ${SIZE_MIN_LENGTH} and ${SIZE_MAX_LENGTH} symbols`],
+            required: [vc.sizes.sizeName.required.value, vc.sizes.sizeName.required.message],
+            minlength: [vc.sizes.sizeName.minLength.value, vc.sizes.sizeName.minLength.message],
+            maxlength: [vc.sizes.sizeName.maxLength.value, vc.sizes.sizeName.maxLength.message]
         },
         count: {
             type: Number,
-            required: true,
-            min: [0, 'Negative product count is not allowed.']
+            required: [vc.sizes.count.required.value, vc.sizes.count.required.message],
+            min: [vc.sizes.count.min.value, vc.sizes.count.min.message],
+            validate : {
+                validator : Number.isInteger,
+                message   : '{VALUE} is not an integer value'
+            }
         }
     }],
     price: {
         type: Number,
-        required: true,
-        min: [0, 'Negative price is not allowed.']
+        required: [vc.price.required.value, vc.price.required.message],
+        min: [vc.price.min.value, vc.price.min.message]
     },
     discount: {
         percent: {
             type: Number,
-            min: [0.01, 'Cannot have discount lower than 1%'],
-            max: [1, 'Cannot have more than 100% discount']
+            min: [vc.discount.percent.min.value, vc.discount.percent.min.message],
+            max: [vc.discount.percent.max.value, vc.discount.percent.max.message]
         },
         endDate: {
             validate: {
@@ -40,13 +48,13 @@ const productSchema = new mongoose.Schema({
     },
     brand: {
         type: String,
-        required: true,
-        maxlength: [BRAND_MAX_LENGTH, `Please rename your brand. Maximum ${BRAND_MAX_LENGTH} symbols allowed.`]
+        required: [vc.brand.required.value, vc.brand.required.message],
+        maxlength: [vc.brand.maxLength.value, vc.brand.maxLength.message]
     },
     description: {
         type: String,
-        required: true,
-        max: [DESCRIPTION_MAX_LENGTH, `Description cannot be longer than ${DESCRIPTION_MAX_LENGTH} symbols.`]
+        required: [vc.description.required.value, vc.description.required.message],
+        maxlength: [vc.description.maxLength.value, vc.description.maxLength.message]
     },
     images: [{
         type: String,
@@ -69,10 +77,16 @@ const productSchema = new mongoose.Schema({
     }],
     rating: {
         currentRating: {
-            type: Number
+            type: Number,
+            min: 0
         },
         counter: {
-            type: Number
+            type: Number,
+            min: 0,
+            validate : {
+                validator : Number.isInteger,
+                message   : '{VALUE} is not an integer value'
+            }
         }
     }
 })

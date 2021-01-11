@@ -12,15 +12,18 @@ const GenderInput = ({ currentGender, onChange }) => {
         <div className={styles.container}>
             {
                 genderInfos.map(gender => {
-                    return (<label key={gender.value} className={styles['gender-label']}>
-                                <input data-testid={`gender-${gender.name.toLowerCase()}`}
-                                    type="radio"
-                                    value={gender.value}
-                                    name="gender"
-                                    checked={currentGender === gender.value}
-                                    onChange={onChange} />
-                                            {gender.name}
-                            </label>)
+                    return (
+                        <label key={gender.value} className={styles['gender-label']}>
+                            <input data-testid={`gender-${gender.name.toLowerCase()}`}
+                                type="radio"
+                                value={gender.value}
+                                name="gender"
+                                checked={currentGender === gender.value}
+                                onChange={() => onChange(gender.value)}
+                            />
+                            {gender.name}
+                        </label>
+                    )
                 })
             }
         </div>

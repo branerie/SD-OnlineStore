@@ -111,6 +111,7 @@ const AdminSizesEdit = ({
                 <QuantityInput
                     value={addSizeCount}
                     name='sizeQuantity'
+                    label='sizeQuantity'
                     max={99999}
                     setNewValue={handleCountAdd}
                 />

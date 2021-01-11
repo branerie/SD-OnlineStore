@@ -2,7 +2,7 @@ import React from 'react'
 
 import styles from './index.module.css'
 
-const QuantityInput = ({ value, name, setNewValue, max }) => {
+const QuantityInput = ({ value, name, label, setNewValue, max, reference }) => {
     const changeValue = (newValue) => {
         let numberValue = Number(newValue)
         if (!numberValue && numberValue !== 0) {
@@ -18,7 +18,7 @@ const QuantityInput = ({ value, name, setNewValue, max }) => {
 
     return (
         <div className={styles.container}>
-            <label className={styles.label}>{name}</label>
+            <label className={styles.label}>{label}</label>
             <button
                 type="button"
                 className={[styles.sign, styles['btn-left']].join(' ')}
@@ -29,8 +29,9 @@ const QuantityInput = ({ value, name, setNewValue, max }) => {
                 min='0'
                 max={max}
                 value={value}
-                className={[styles['input-field']].join(' ')}
+                className={styles['input-field']}
                 pattern='[0-9]+'
+                ref={reference}
                 onChange={e => setNewValue(e.target.value)} />
             <button
                 type="button"

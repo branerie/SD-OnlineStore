@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
         const createdProduct = await Product.create({
             sizes,
             price,
-            preprocessedDiscount,
+            discount: preprocessedDiscount,
             brand,
             description,
             images,

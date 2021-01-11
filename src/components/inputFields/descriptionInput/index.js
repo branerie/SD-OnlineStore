@@ -4,7 +4,7 @@ import styles from './index.module.css'
 
 const DESCRIPTION_MAX_LENGTH = 1000
 
-const DescriptionInput = ({ value, onChange }) => {
+const DescriptionInput = ({ name, value, onChange, reference }) => {
     const [isVisible, setIsVisible] = useState(value ? true : false)
 
     const handleChange = useCallback((event) => {
@@ -14,16 +14,20 @@ const DescriptionInput = ({ value, onChange }) => {
             setIsVisible(false)
         }
 
-        onChange(event)
+        if (onChange) {
+            onChange(event)
+        }
     }, [onChange])
 
     return (
         <InputWrapper isVisible={isVisible} placeholder='Description'>
             <textarea
+                name={name}
                 rows="5"
                 value={value}
                 placeholder='Description'
                 onChange={handleChange}
+                ref={reference}
                 className={styles['description-area']}
                 maxLength={DESCRIPTION_MAX_LENGTH}>
             </textarea>

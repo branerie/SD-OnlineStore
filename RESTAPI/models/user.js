@@ -1,33 +1,38 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
-const EMAIL_MAX_LENGTH = 80
-const NAME_MAX_LENGTH = 20
-const PASSWORD_MIN_LENGTH = 6
-const PASSWORD_MAX_LENGTH = 30
-const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`)
+const getValidationConstants = require('../utils/validationContasts')
+const vc = getValidationConstants('user')
 
-const PASSWORD_ERROR = `Password must be between ${PASSWORD_MIN_LENGTH} and ${PASSWORD_MAX_LENGTH} characters long and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.`
+// const EMAIL_MAX_LENGTH = 80
+// const NAME_MAX_LENGTH = 20
+// const PASSWORD_MIN_LENGTH = 6
+// const PASSWORD_MAX_LENGTH = 30
+// const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`)
+
+// const PASSWORD_ERROR = `Password must be between ${PASSWORD_MIN_LENGTH} and ${PASSWORD_MAX_LENGTH} characters long and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.`
+const PASSWORD_PATTERN = vc.password.pattern.value
+const PASSWORD_ERROR = vc.password.pattern.message
 
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
-        required: [true, 'Email is required'],
+        required: [vc.email.required.value, vc.email.required.message],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ , 'Invalid email'],
-        maxlength: [EMAIL_MAX_LENGTH , `Email must be shorter than ${EMAIL_MAX_LENGTH} symbols.`]
+        maxlength: [vc.email.maxLength.value , vc.email.maxLength.message]
     },
     firstName: {
         type: String,
         // required: [true, 'First name is required'],
-        match: [/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/ , 'Name can only contain Latin letters and dash (-).'],
-        maxlength:[NAME_MAX_LENGTH , `Name must be shorter than ${NAME_MAX_LENGTH} symbols.`]
+        match: [vc.firstName.pattern.value , vc.firstName.pattern.message],
+        maxlength: [vc.firstName.maxLength.value , vc.firstName.maxLength.message]
     },
     lastName: {
         type: String,
         // required: [true, 'Last name is required'],
-        match: [/^[A-Za-z]+[-A-Za-z]?[A-Za-z]+$/ , 'Name can only contain Latin letters and dash (-).'],
-        maxlength:[NAME_MAX_LENGTH , `Name must be shorter than ${NAME_MAX_LENGTH} symbols.`]
+        match: [vc.lastName.pattern.value , vc.lastName.pattern.message],
+        maxlength: [vc.lastName.maxLength.value , vc.lastName.maxLength.message]
     },
     password: {
         type: String,
@@ -43,9 +48,6 @@ const userSchema = new mongoose.Schema({
         ref: 'Product'
     }],
     confirmationToken: {
-        type: String
-    },
-    passwordResetToken: {
         type: String
     }
 })

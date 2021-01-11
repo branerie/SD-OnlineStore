@@ -9,6 +9,7 @@
     margin: 25px auto;
     width: auto;
     max-width: 33%;
+    min-width: 300px;
     height: auto;
     max-height: 90%;
 }
