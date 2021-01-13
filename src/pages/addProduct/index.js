@@ -1,5 +1,6 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import styles from './index.module.css'
 import Input from '../../components/input'
 import DragAndDrop from '../../components/dragAndDrop'
@@ -12,20 +13,29 @@ import CategoriesInputWrapper from '../../components/inputFields/categoriesInput
 
 import { createProduct, addImagesToProduct } from '../../services/adminProduct'
 import { uploadImages } from '../../services/product'
+import { getValidationConstants } from '../../services/info'
+import ValidationErrorMessage from '../../components/validationErrorMessage'
 
 const AddProductCard = () => {
     const history = useHistory()
-    const [brand, setBrand] = useState('')
     const [categories, setCategories] = useState([])
-    const [sizeName, setSizeName] = useState(null)
     const [sizeCount, setSizeCount] = useState(0)
-    const [price, setPrice] = useState(0)
     const [discountInPercent, setDiscountInPercent] = useState('')
     const [discountEndDate, setDiscountEndDate] = useState(null)
-    const [description, setDescription] = useState('')
     const [gender, setGender] = useState('U')
-
+    const [validationConstants, setValidationConstants] = useState(null)
+    
+    const { register, errors, handleSubmit, setError } = useForm()
     const [images, imagesDispatch] = useReducer(reducer, [])
+
+    const getProductValidationConstants = useCallback(async () => {
+        const constants = await getValidationConstants('product')
+        setValidationConstants(constants)
+    }, [setValidationConstants])
+
+    useEffect(() => {
+        getProductValidationConstants()
+    }, [getProductValidationConstants])
 
     function reducer(state, action) {
         switch (action.type) {
@@ -41,8 +51,22 @@ const AddProductCard = () => {
         }
     }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault()
+    if (!validationConstants) {
+        return null
+    }
+
+    const handleFormSubmit = async ({ 
+        brand,
+        price,
+        description, 
+        discountPercent,
+        sizeName,
+        sizeCount
+    }) => {
+        if (categories.length === 0) {
+            setError('categories', { message: 'Product be part of at least one category' })
+            return
+        }
 
         const newProduct = {
             brand,
@@ -53,8 +77,8 @@ const AddProductCard = () => {
             categories,
         }
 
-        if (discountInPercent !== '' && discountEndDate !== null) {
-            newProduct.discount = { percent: discountInPercent, endDate: discountEndDate }
+        if (discountPercent !== '' && discountEndDate !== null) {
+            newProduct.discount = { percent: discountPercent, endDate: discountEndDate }
         }
 
         const productCreationResult = await createProduct(newProduct)
@@ -114,53 +138,67 @@ const AddProductCard = () => {
                 <button type="button" onClick={handleImageBrowseClick}>Add Image</button>
             </div>
             <div className={styles['input-fields']}>
-                <form className={styles.form} onSubmit={handleSubmit} onKeyPress={preventEnterSubmit}>
+                <form
+                    className={styles.form}
+                    onSubmit={handleSubmit(handleFormSubmit)}
+                    onKeyPress={preventEnterSubmit}>
                     <TextInput
+                        name='brand'
                         type='text'
-                        id='brand'
                         placeholder='Brand'
-                        onChange={e => setBrand(e.target.value)}
+                        reference={register(validationConstants.brand)}
                     />
+                    { errors.brand && <ValidationErrorMessage message={errors.brand.message} /> }
                     <CategoriesInputWrapper
                         addedCategories={categories}
                         handleAdd={cat => setCategories([...categories, cat])}
                         handleRemove={cat => setCategories(categories.filter(c => c !== cat))} />
+                    { errors.categories && <ValidationErrorMessage message={errors.categories.message} /> }
                     <NumberInput
+                        name='price'
                         placeholder='Price'
-                        min='0.01'
-                        onChange={e => setPrice(Number(e.target.value).toFixed(2))}
+                        reference={register(validationConstants.price)}
                         unitsPlaceholder='$'
                     />
+                    { errors.price && <ValidationErrorMessage message={errors.price.message} /> }
                     <div className={styles['input-group']}>
                         <TextInput
+                            name='sizeName'
                             type='text'
-                            id='sizeName'
                             placeholder='Initial size name'
-                            onChange={e => setSizeName(e.target.value)}
+                            reference={register(validationConstants.sizes.sizeName)}
                         />
                         <QuantityInput
-                            value={sizeCount}
-                            name='Initial size count'
+                            name='sizeCount'
+                            label='Initial size count'
                             max={99999}
+                            value={sizeCount}
+                            reference={register(validationConstants.sizes.count)}
                             setNewValue={setSizeCount}
                         />
                     </div>
                     <div className={styles['input-group']}>
                         <QuantityInput
+                            name='discountPercent'
+                            label='Discount in %'
                             value={discountInPercent}
-                            name='Discount in %'
+                            reference={register(validationConstants.discount.percent)}
                             setNewValue={setDiscountInPercent}
                         />
                         <Input
                             type='date'
                             label='End date of discount'
-                            id='discountEndDate'
                             onChange={e => setDiscountEndDate(e.target.value)}
                         />
+                        { errors.discountPercent &&
+                            <ValidationErrorMessage message={errors.discountPercent.message} />}
                     </div>
                     <DescriptionInput
-                        value={description}
-                        onChange={e => setDescription(e.target.value)} />
+                        name='description'
+                        reference={register(validationConstants.description)}
+                    />
+                    {errors.description && 
+                        <ValidationErrorMessage message={errors.description.message} />}
                     <GenderInput currentGender={gender} onChange={setGender} />
                     <button className={styles.button} type='submit'>SAVE</button>
                 </form>

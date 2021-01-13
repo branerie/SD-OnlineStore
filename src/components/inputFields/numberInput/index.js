@@ -3,7 +3,18 @@ import styles from './index.module.css'
 import inputStyles from '../index.module.css'
 import InputWrapper from '../inputWrapper'
 
-const NumberInput = ({ value, placeholder, min, max, onChange, onBlur, ref, unitsPlaceholder }) => {
+const NumberInput = ({ 
+    name,
+    value,
+    placeholder,
+    min,
+    max,
+    onChange,
+    onBlur,
+    reference,
+    
+    unitsPlaceholder
+}) => {
     const [isVisible, setIsVisible] = useState(value != undefined)
 
     const handleChange = (event) => {
@@ -13,15 +24,19 @@ const NumberInput = ({ value, placeholder, min, max, onChange, onBlur, ref, unit
             setIsVisible(false)
         }
 
-        onChange(event)
+        if (onChange) {
+            onChange(event)
+        }
     }
     
     return (
         <InputWrapper isVisible={isVisible} placeholder={placeholder}>
             <div className={styles.container}>
                 <input
+                    name={name}
                     type='number'
                     className={[styles['number-input'], inputStyles.input].join(' ')}
+                    ref={reference}
                     value={value}
                     placeholder={placeholder}
                     min={min}
@@ -29,7 +44,6 @@ const NumberInput = ({ value, placeholder, min, max, onChange, onBlur, ref, unit
                     max={max}
                     onChange={handleChange}
                     onBlur={onBlur}
-                    ref={ref}
                 />
                 <span className={styles.units}>
                     <span>

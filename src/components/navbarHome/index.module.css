@@ -2,7 +2,7 @@
     background-color: white;
     min-height: 3.4rem; 
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding-top: 0.6rem;
 }
 

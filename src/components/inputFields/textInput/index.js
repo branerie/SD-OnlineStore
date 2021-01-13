@@ -21,7 +21,9 @@ const TextInput = ({
             setIsVisible(false)
         }
 
-        onChange(event)
+        if (onChange) {
+            onChange(event)
+        }
     }
 
     return (
