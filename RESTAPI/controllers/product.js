@@ -105,16 +105,7 @@ router.get('/:id', async (req, res) => {
 
     try {
         const currentProduct = await Product.findById(id)
-        return res.send({
-            sizes: currentProduct.sizes,
-            price: currentProduct.price,
-            discount: currentProduct.discount,
-            brand: currentProduct.brand,
-            description: currentProduct.description,
-            images: currentProduct.images,
-            gender: currentProduct.gender,
-            categories: currentProduct.categories
-        })
+        return res.send(parseMongoProducts([currentProduct])[0])
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })

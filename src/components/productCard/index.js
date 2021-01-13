@@ -5,6 +5,7 @@ import { setFavorites } from '../../services/user.js'
 import favoritesImageEmpty from '../../images/favoritesLink.svg'
 import favoritesImageFilled from '../../images/favoritesLinkFilled.svg'
 import RatingStars from '../ratingStar'
+import { Link } from 'react-router-dom'
 
 const NO_IMAGES_TEXT = 'No image'
 
@@ -36,11 +37,13 @@ const ProductCard = (props) => {
 
     return (
         <div className={styles.container}>
+            <Link to={`/product/details/${props.id}`}>
             <img
                 src={props.images && props.images[0]}
                 alt={NO_IMAGES_TEXT}
                 className={styles['product-image']}
             />
+            </Link>
             <div className={styles['text-container']}>
                 <div className={styles['brand-likeButton']}>
                     <div className={styles.brand}>
