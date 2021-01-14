@@ -4,9 +4,11 @@ const UserContext = React.createContext({
     user: {
         userId: null,
         isAdmin: false,
-        favorites: []
+        favorites: [],
+        cart: []
     },
-    setUser: () => {}
+    setNewUser: () => {},
+    addToCart: () => {}
 })
 
 export default UserContext

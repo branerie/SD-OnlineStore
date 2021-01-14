@@ -1,0 +1,45 @@
+.container {
+    display: flex;
+    width: 60%;
+    margin: 0 2.5%;
+    border: 1px solid lightgray;
+    margin-top: -1px;
+    padding: 1.5rem;
+}
+
+.img-container {
+    height: 12rem;
+    position: relative;
+}
+
+.info-container {
+    width: 100%;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-container-overview {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.image {
+    height: 100%;
+}
+
+.brand {
+    margin-top: 0;
+}
+
+.info {
+    min-width: 8rem;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

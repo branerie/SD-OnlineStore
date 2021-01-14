@@ -14,14 +14,14 @@ const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) =>
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
     const ref = useRef(null)
-    const { user, setUser } = useContext(UserContext)
+    const { user, setNewUser } = useContext(UserContext)
 
     const setNewUserState = useCallback((userState) => {
-        setUser(userState)
+        setNewUser(userState)
         hideWindow()
-    }, [hideWindow, setUser])
+    }, [hideWindow, setNewUser])
 
-    if (user.id) {
+    if (user.userId) {
         return null
     }
 

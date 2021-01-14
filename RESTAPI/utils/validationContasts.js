@@ -29,7 +29,7 @@ const validationConstants = {
             executionSide: {
                 backend: {
                     pattern: {
-                        value: PASSWORD_PATTERN,
+                        value: new RegExp(PASSWORD_PATTERN),
                         message: `Password must be between ${PASSWORD_MIN_LENGTH} and ${PASSWORD_MAX_LENGTH} characters long, contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.`
                     }
                 },
@@ -75,7 +75,7 @@ const validationConstants = {
                         message: NAME_LENGTH_ERROR
                     },
                     pattern: {
-                        value: NAME_PATTERN, 
+                        value: new RegExp(NAME_PATTERN), 
                         message: NAME_PATTERN_ERROR
                     }
                 },
@@ -103,7 +103,7 @@ const validationConstants = {
                         message: NAME_LENGTH_ERROR
                     },
                     pattern: {
-                        value: NAME_PATTERN, 
+                        value: new RegExp(NAME_PATTERN), 
                         message: NAME_PATTERN_ERROR
                     }
                 },

@@ -1,4 +1,4 @@
-import getCookie from './cookie'
+import { getCookie } from './cookie'
 import { AUTH_COOKIE_NAME } from './constants'
 import { FACEBOOK_APP_ID } from './constants'
 

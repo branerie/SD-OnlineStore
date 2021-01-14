@@ -1,17 +1,12 @@
 import React, { useContext } from 'react'
 import styles from './index.module.css'
 import UserContext from '../../Context'
-import { setFavorites } from '../../services/user.js'
-import favoritesImageEmpty from '../../images/favoritesLink.svg'
-import favoritesImageFilled from '../../images/favoritesLinkFilled.svg'
 import RatingStars from '../ratingStar'
-
-const NO_IMAGES_TEXT = 'No image'
+import FavoritesIcon from '../favoritesIcon'
 
 const ProductCard = (props) => {
-    const { user, setUser } = useContext(UserContext)
+    const { addToCart } = useContext(UserContext)
 
-    const isInFavorites = user.favorites.includes(props.id)
     const currency = props.currency ? props.currency : '$'
 
     let discount = null
@@ -22,23 +17,11 @@ const ProductCard = (props) => {
         discount = `-${parseInt(discPercent)}% = ${discPrice}${currency}`
     }
 
-    const changeFavorites = async () => {
-        const response = await setFavorites(props.id)
-
-        if (response.error) {
-            //TODO handle errors
-        }
-
-        setUser({ ...user, favorites: response.favorites })
-    }
-
-    const imgSrc = isInFavorites ? favoritesImageFilled : favoritesImageEmpty
-
     return (
         <div className={styles.container}>
             <img
                 src={props.images && props.images[0]}
-                alt={NO_IMAGES_TEXT}
+                alt='No image'
                 className={styles['product-image']}
             />
             <div className={styles['text-container']}>
@@ -46,14 +29,7 @@ const ProductCard = (props) => {
                     <div className={styles.brand}>
                         {props.brand}
                     </div>
-                    <div className={styles['like-container']}>
-                        <img
-                            onClick={changeFavorites}
-                            src={imgSrc} alt={NO_IMAGES_TEXT}
-                            title={'Favorite collection'}
-                            className={styles['like-button']}
-                        />
-                    </div>
+                    <FavoritesIcon productId={props.id} />
                 </div>
                 <div className={styles['price-container']}>
                     <div className={props.discountPrice ? styles['price-discount'] : styles.price}>
@@ -77,6 +53,9 @@ const ProductCard = (props) => {
                         ratingStars={props.ratingStars}
                         ratingCounter={props.ratingCount}
                     />
+                    <button onClick={() => addToCart(props.id, 'M', 1)}>
+                        Add to Cart
+                    </button>
                     {/* <Link to={''} className={styles.link}>VIEW</Link> */}
                 </div>
             </div>

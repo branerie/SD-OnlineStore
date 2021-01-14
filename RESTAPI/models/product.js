@@ -97,7 +97,9 @@ const productSchema = new mongoose.Schema({
 productSchema.pre('save', processAddDateOnCreate)
 
 productSchema.virtual('discountPrice').get(function () {
-    return this.price * (1 - this.discount.percent)
+    return this.discount.percent
+        ? parseFloat((this.price * (1 - this.discount.percent)).toFixed(2))
+        : this.price
 })
 
 productSchema.virtual('viewRatingStars').get(function() {

@@ -2,15 +2,15 @@ import React from 'react'
 
 import styles from './index.module.css'
 
-const QuantityInput = ({ value, name, label, setNewValue, max, reference }) => {
+const QuantityInput = ({ value, name, label, setNewValue, max, reference, min=0 }) => {
     const changeValue = (newValue) => {
         let numberValue = Number(newValue)
         if (!numberValue && numberValue !== 0) {
             return
         }
 
-        if (newValue < 0) {
-            numberValue = 0
+        if (newValue < min) {
+            numberValue = min
         }
 
         setNewValue(numberValue)
@@ -18,7 +18,7 @@ const QuantityInput = ({ value, name, label, setNewValue, max, reference }) => {
 
     return (
         <div className={styles.container}>
-            <label className={styles.label}>{label}</label>
+            {label && <label className={styles.label}>{label}</label>}
             <button
                 type="button"
                 className={[styles.sign, styles['btn-left']].join(' ')}
@@ -26,7 +26,7 @@ const QuantityInput = ({ value, name, label, setNewValue, max, reference }) => {
             <input
                 type='number'
                 name={name}
-                min='0'
+                min={min}
                 max={max}
                 value={value}
                 className={styles['input-field']}

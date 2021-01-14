@@ -21,7 +21,7 @@ const PasswordResetPage = () => {
     const [isSent, setIsSent] = useState(false)
     const { resetToken } = useParams()
     const { register, errors, handleSubmit, setError } = useForm()
-    const { setUser } = useContext(UserContext)
+    const { setNewUser } = useContext(UserContext)
 
     const handleFormSubmit = async ({ password }) => {
         const result = await resetUserPassword(password, resetToken)
@@ -31,7 +31,7 @@ const PasswordResetPage = () => {
             return
         }
 
-        setUser({ id: result.id, isAdmin: result.isAdmin, favorites: result.favorites })
+        setNewUser(result)
         setIsSent(true)
     }
 

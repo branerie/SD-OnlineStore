@@ -1,0 +1,8 @@
+.like-container {
+    flex-basis: 25%;
+}
+
+.like-button {
+    width: 2rem;
+    cursor: pointer;
+}

@@ -1,4 +1,4 @@
-import getCookie from '../utils/cookie'
+import { getCookie } from '../utils/cookie'
 import {
     REST_API_URL,
     HTTP_HEADERS,
@@ -96,7 +96,12 @@ const setRating = async (rating, productId) => {
 
     const newRating = await response.json()
     return newRating
+}
 
+const getProductDetailsMain = async (productIds) => {
+    const response = await fetch(`${PRODUCT_URL}/details/main?pid=${productIds.join(',')}`)
+
+    return await response.json()
 }
 
 export {
@@ -104,6 +109,7 @@ export {
     getProductImages,
     getProductsPage,
     getProductRanges,
+    getProductDetailsMain,
     getCategories,
     setRating
 }

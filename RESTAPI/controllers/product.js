@@ -1,9 +1,20 @@
 const router = require('express').Router()
 const Product = require('../models/product')
-const { getDbProductsFilter, getSortCriteria, getProductsAggregationObject } = require('../utils/filter')
+const { 
+    getDbProductsFilter, 
+    getSortCriteria, 
+    getProductsAggregationObject 
+} = require('../utils/filter')
+const { 
+    getSizeRange, 
+    sortSizes, 
+    getAllCategories, 
+    parseFullMongoProducts,
+    parseCartMongoProducts
+} = require('../utils/product')
 const { isMongoError } = require('../utils/general')
-const { getSizeRange, sortSizes, getAllCategories, parseMongoProducts } = require('../utils/product')
 const { restrictToUser } = require('../utils/authenticate')
+const { Types: { ObjectId } } = require('mongoose')
 
 router.get('/ranges', async (req, res) => {
     try {
@@ -80,7 +91,7 @@ router.get('/products', async (req, res) => {
         const [{ totalCount, fullProducts }] = await (await Product.aggregate(aggObj))
         const total = totalCount.length > 0 ? totalCount[0].count : 0
 
-        const products = parseMongoProducts(fullProducts)
+        const products = parseFullMongoProducts(fullProducts)
         return res.send({ total: total, productInfo: products })
     } catch (error) {
         if (isMongoError(error)) {
@@ -105,21 +116,12 @@ router.get('/:id', async (req, res) => {
 
     try {
         const currentProduct = await Product.findById(id)
-        return res.send({
-            sizes: currentProduct.sizes,
-            price: currentProduct.price,
-            discount: currentProduct.discount,
-            brand: currentProduct.brand,
-            description: currentProduct.description,
-            images: currentProduct.images,
-            gender: currentProduct.gender,
-            categories: currentProduct.categories
-        })
+        
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })
         }
-
+        
         if (error.name === 'CastError') {
             return res.status(403).send({ error: `Product with id ${id} does not exist.` })
         }
@@ -165,6 +167,25 @@ router.patch('/rating', restrictToUser, async (req, res) => {
             return res.status(403).send({ error: `Product with id ${id} does not exist.` })
         }
 
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.get('/details/main', async (req, res) => {
+    try {
+        const { pid: productStringIds } = req.query
+
+        if (!productStringIds) {
+            return res.status(400).send({ error: 'Missing product ids' })
+        }
+
+        const productIds = productStringIds.split(',').map(id => new ObjectId(id))
+
+        const fullProductsInCart = await Product.find({ _id: { $in: productIds } })
+        const productDetailsMain = parseCartMongoProducts(fullProductsInCart)
+
+        return res.send(productDetailsMain)
+    } catch (error) {
         return res.status(500).send({ error: error.message })
     }
 })

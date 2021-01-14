@@ -20,19 +20,19 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: [vc.email.required.value, vc.email.required.message],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ , 'Invalid email'],
-        maxlength: [vc.email.maxLength.value , vc.email.maxLength.message]
+        maxlength: [vc.email.maxLength.value, vc.email.maxLength.message]
     },
     firstName: {
         type: String,
         // required: [true, 'First name is required'],
-        match: [vc.firstName.pattern.value , vc.firstName.pattern.message],
-        maxlength: [vc.firstName.maxLength.value , vc.firstName.maxLength.message]
+        match: [vc.firstName.pattern.value, vc.firstName.pattern.message],
+        maxlength: [vc.firstName.maxLength.value, vc.firstName.maxLength.message]
     },
     lastName: {
         type: String,
         // required: [true, 'Last name is required'],
-        match: [vc.lastName.pattern.value , vc.lastName.pattern.message],
-        maxlength: [vc.lastName.maxLength.value , vc.lastName.maxLength.message]
+        match: [vc.lastName.pattern.value, vc.lastName.pattern.message],
+        maxlength: [vc.lastName.maxLength.value, vc.lastName.maxLength.message]
     },
     password: {
         type: String,
@@ -49,7 +49,23 @@ const userSchema = new mongoose.Schema({
     }],
     confirmationToken: {
         type: String
-    }
+    },
+    cart: [{
+        productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true
+        },
+        sizeName: {
+            type: String,
+            required: true
+        },
+        quantity: {
+            type: Number,
+            min: 1,
+            required: true
+        }
+    }]
 })
 
 userSchema.methods = {

@@ -1,9 +1,9 @@
 const router = require('express').Router()
-const { 
-    createToken, 
-    verifyToken, 
-    verifyGoogleToken, 
-    verifyFacebookToken 
+const {
+    createToken,
+    verifyToken,
+    verifyGoogleToken,
+    verifyFacebookToken
 } = require('../utils/jwt')
 const { decode } = require('jsonwebtoken')
 const User = require('../models/user')
@@ -14,9 +14,25 @@ const { sendConfirmationEmail, sendPasswordResetEmail } = require('../utils/user
 const AUTHORIZATION_HEADER_NAME = 'Authorization'
 const INVALID_TOKEN_ERROR = 'Invalid JWT token'
 
-const attachLoginCookie = (userInfo, response) => {
-    const token = createToken(userInfo)
+const attachLoginCookie = (userId, response) => {
+    const token = createToken({ userId })
     response.header(AUTHORIZATION_HEADER_NAME, token)
+}
+
+const getUserData = (user) => {
+    return user
+        ? {
+            userId: user._id,
+            isAdmin: user.isAdmin || false,
+            favorites: user.favorites || [],
+            cart: user.cart || []
+        }
+        : {
+            userId: null,
+            isAdmin: false,
+            favorites: [],
+            cart: []
+        }
 }
 
 router.get('/verify', async (req, res) => {
@@ -26,25 +42,18 @@ router.get('/verify', async (req, res) => {
         try {
             const userInfo = await verifyToken(currentToken)
             if (!userInfo) {
-                return res.status(401).send(INVALID_TOKEN_ERROR)
+                return res.status(401).send({ error: INVALID_TOKEN_ERROR })
             }
 
-            return res.send({
-                userId: userInfo.id,
-                isAdmin: userInfo.isAdmin || false,
-                favorites: userInfo.favorites
-            })
+            const user = await User.findById(userInfo.userId)
+
+            return res.send(getUserData(user))
         } catch (error) {
-            return res.status(403).send({
-                userId: null,
-                isAdmin: false,
-                favorites: [],
-                error: error.message
-            })
+            return res.status(403).send(getUserData())
         }
     }
 
-    return res.send({ userId: null, isAdmin: false, favorites: [] })
+    return res.send(getUserData())
 })
 
 router.patch('/favorites', async (req, res) => {
@@ -58,7 +67,7 @@ router.patch('/favorites', async (req, res) => {
                 return res.status(401).send({ error: INVALID_TOKEN_ERROR })
             }
 
-            let user = await User.findById(userInfo.id)
+            let user = await User.findById(userInfo.userId)
 
             if (user.favorites.includes(productId)) {
                 await user.updateOne({ $pull: { favorites: productId } })
@@ -67,8 +76,8 @@ router.patch('/favorites', async (req, res) => {
                 await user.updateOne({ $push: { favorites: productId } })
             }
 
-            user = await User.findById(userInfo.id)
-            return res.send({ favorites: user.favorites, userId: user.id })
+            user = await User.findById(userInfo.userId)
+            return res.send({ favorites: user.favorites, userId: user._id })
 
         } catch (error) {
             if (isMongoError(error)) {
@@ -106,9 +115,9 @@ router.post('/login', async (req, res) => {
             return res.status(401).send({ error: 'Invalid email or password' })
         }
 
-        const userInfo = { id: user._id, isAdmin: user.isAdmin, favorites: user.favorites }
-        attachLoginCookie(userInfo, res)
+        const userInfo = getUserData(user)
 
+        attachLoginCookie(user._id, res)
         res.send(userInfo)
     } catch (error) {
         if (isMongoError(error)) {
@@ -141,13 +150,9 @@ router.post('/login/google', async (req, res) => {
             user = await User.create(userToCreate)
         }
 
-        const userData = {
-            id: user._id,
-            isAdmin: user.isAdmin || false,
-            favorites: user.favorites || []
-        }
+        const userData = getUserData(user)
 
-        attachLoginCookie(userData, res)
+        attachLoginCookie(user._id, res)
         res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })
@@ -170,13 +175,9 @@ router.post('/login/facebook', async (req, res) => {
             user = await User.create({ email, firstName, lastName })
         }
 
-        const userData = {
-            id: user._id,
-            isAdmin: user.isAdmin || false,
-            favorites: user.favorites || []
-        }
+        const userData = getUserData(user)
 
-        attachLoginCookie(userData, res)
+        attachLoginCookie(user._id, res)
         res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })
@@ -188,16 +189,16 @@ router.post('/register', async (req, res) => {
 
     try {
         const createdUser = await User.create({ email, firstName, lastName, password })
-        const confirmationToken = createToken({ userId: createdUser._id })
+        const userData = { userId: createdUser._id }
+
+        const confirmationToken = createToken(userData)
         createdUser.confirmationToken = confirmationToken
         await createdUser.save()
 
         sendConfirmationEmail(firstName, lastName, email, confirmationToken)
 
-        const userData = { id: createdUser._id, favorites: [] }
-        attachLoginCookie(userData, res)
-
-        res.send({ id: createdUser._id })
+        attachLoginCookie(createdUser._id, res)
+        res.send(userData)
     } catch (error) {
         if (isMongoError(error)) {
             if (error.message.includes('E11000')) {
@@ -224,7 +225,7 @@ router.post('/logout', async (req, res) => {
             await TokenBlackList.create({ token: currentToken, expirationDate: exp * 1000 })
 
             delete req.headers.authorization
-            return res.send({ status : 'Successfully logged out' })
+            return res.send({ status: 'Successfully logged out' })
         } catch (error) {
             if (isMongoError(error)) {
                 return res.status(403).send({ error: error.message })
@@ -234,6 +235,37 @@ router.post('/logout', async (req, res) => {
         }
     } else {
         return res.status(401).send({ error: 'No one is logged in' })
+    }
+})
+
+router.post('/:userId/cart', async (req, res) => {
+    try {
+        const { userId } = req.params
+        const { productId, sizeName, quantity } = req.body
+
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(400).send({ error: `User with id ${userId} does not exist` })
+        }
+
+        const parsedQuantity = parseInt(quantity)
+        if (isNaN(parsedQuantity)) {
+            return res.status(400).send({ error: 'Invalid quantity parameter' })
+        }
+
+        const itemInCart = user.cart.find(i =>
+            i.productId === productId && i.sizeName === sizeName)
+
+        if (itemInCart) {
+            itemInCart.quantity += parsedQuantity
+        } else {
+            user.cart.push({ productId, sizeName, quantity })
+        }
+
+        await user.save()
+        return res.send({ status: 'Success' })
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
     }
 })
 
@@ -268,9 +300,8 @@ router.post('/confirm', async (req, res) => {
         user.set('confirmationToken', undefined, { strict: false })
         await user.save()
 
-        if (!req.user || req.user.id !== userid) {
-            const userData = { id: user._id, favorites: user.favorites }
-            attachLoginCookie(userData, res)
+        if (!req.user || req.user.userId !== userid) {
+            attachLoginCookie({ userId: user._id }, res)
         }
 
         return res.send({
@@ -306,7 +337,7 @@ router.post('/password/reset/confirm', async (req, res) => {
 
     try {
         const { resetToken, newPassword } = req.body
-        
+
         const userInfo = await verifyToken(resetToken)
         if (!userInfo) {
             return res.status(401).send({ error: INVALID_TOKEN_ERROR })

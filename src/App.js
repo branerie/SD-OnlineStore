@@ -3,35 +3,75 @@ import './App.css'
 import UserContext from './Context'
 import Navigation from './navigation'
 
-import { verifyUser } from './services/user'
+import { addToShoppingCart, verifyUser } from './services/user'
+import { CART_COOKIE_NAME } from './utils/constants'
+import { getCookie, setCookie } from './utils/cookie'
+
+const GUEST_USER = { userId: null, isAdmin: false, favorites: [], cart: [] }
 
 function App() {
-  const [user, setUser] = useState({ userId: null, isAdmin: false, favorites: [] })
-  const [isLoading, setIsLoading] = useState(true)
+	const [user, setUser] = useState(GUEST_USER)
 
-  const verifyCurrentUser = useCallback(async () => {
-    const userInfo = await verifyUser()
-    if (userInfo.error) {
-      //TODO: handle errors
-    }
+	const verifyCurrentUser = useCallback(async () => {
+		const userInfo = await verifyUser()
+		if (userInfo.error) {
+			//TODO: handle errors
+		}
 
-    setUser({ userId: userInfo.userId, isAdmin: userInfo.isAdmin, favorites: userInfo.favorites || [] })
-    setIsLoading(false)
-  }, [])
+		if (!userInfo.userId) {
+			const savedCartString = getCookie(CART_COOKIE_NAME)
+			if (savedCartString) {
+				userInfo.cart = JSON.parse(savedCartString)
+			} else {
+				userInfo.cart = []
+			}
+		}
 
-  useEffect(() => {
-    verifyCurrentUser()
-  }, [])
+		setUser(userInfo)
+	}, [])
 
-  if (isLoading) {
-    return null
-  }
+	useEffect(() => {
+		verifyCurrentUser()
+	}, [])
 
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <Navigation />
-    </UserContext.Provider>
-  )
+	const addToCart = useCallback(async (productId, sizeName, quantity) => {
+		const cart = [...user.cart]
+
+		const itemInCart = cart.find(i => 
+							i.productId === productId && i.sizeName === sizeName)
+
+		if (itemInCart) {
+			itemInCart.quantity += quantity
+		} else {
+			cart.push({ productId, sizeName, quantity })
+		}
+
+		setUser({...user, cart: cart})
+
+		if (user.userId) {
+			const result = await addToShoppingCart(user.userId, productId, sizeName, quantity)
+
+			if (result.error) {
+				//TODO: handle errors
+			}
+		} else {
+			setCookie(CART_COOKIE_NAME, JSON.stringify(cart), '10d')
+		}
+	}, [user])
+
+	const setNewUser = (userProps = {}) =>  {
+		setUser({...GUEST_USER, ...userProps})
+	}
+
+	if (!user) {
+		return null
+	}
+
+	return (
+		<UserContext.Provider value={{ user, setNewUser, addToCart }}>
+			<Navigation />
+		</UserContext.Provider>
+	)
 }
 
 export default App

@@ -10,9 +10,7 @@ const ProfileIconLink = () => {
     const [isFilled, setIsFilled] = useState(false)
     const [shownWindow, setShownWindow] = useState('')
     
-
-
-    const { user, setUser } = useContext(UserContext)
+    const { user, setNewUser } = useContext(UserContext)
 
     const fillColor = useMemo(() => {
         return isFilled
@@ -21,7 +19,7 @@ const ProfileIconLink = () => {
     }, [isFilled])
 
     const checkUserId = async () => {
-        if (!user.id) {
+        if (!user.userId) {
             setShownWindow('login')
             return
         }
@@ -33,11 +31,7 @@ const ProfileIconLink = () => {
             return
         }
 
-        setUser({
-            userId: null,
-            isAdmin: false,
-            favorites: []
-        })
+        setNewUser()
     }
 
     const handleWindowChange = (windowName) => {

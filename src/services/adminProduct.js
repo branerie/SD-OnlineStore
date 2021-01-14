@@ -1,5 +1,5 @@
 import { AUTH_COOKIE_NAME, REST_API_URL, HTTP_HEADERS, JSON_CONTENT_TYPE } from '../utils/constants'
-import getCookie from '../utils/cookie'
+import { getCookie } from '../utils/cookie'
 
 const ADMIN_PRODUCT_URL = REST_API_URL + '/admin/product'
 

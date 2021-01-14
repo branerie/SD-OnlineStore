@@ -5,7 +5,7 @@ const MockUserContext = ({ initialUser, children }) => {
     const [user, setUser] = useState(initialUser)
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setNewUser: setUser }}>
             {children}
         </UserContext.Provider>
     )

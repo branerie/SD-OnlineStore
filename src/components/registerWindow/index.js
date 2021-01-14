@@ -14,7 +14,7 @@ import ValidationErrorMessage from '../validationErrorMessage'
 const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
     const [validationConstants, setValidationConstants] = useState(null)
     const { register, errors, handleSubmit, setError } = useForm()
-    const { setUser } = useContext(UserContext)
+    const { setNewUser } = useContext(UserContext)
 
     const getUserValidationConstants = useCallback(async () => {
         const userConstants = await getValidationConstants('user')
@@ -40,7 +40,7 @@ const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
 
             return
         } else if (!registerResult.error) {
-            setUser(registerResult)
+            setNewUser(registerResult)
             hideWindow()
         }
     }

@@ -1,9 +1,9 @@
+const NUMBER_REGEX = /\d+/
+
 const getSizeRange = (size) => {
     const rangeCeiling = Math.ceil(size / 5) * 5
     return `${rangeCeiling - 4} - ${rangeCeiling}`
 }
-
-const numberRegex = /\d+/
 
 const sortSizes = (a, b) => {
     const firstSizeFirstDigit = Number(a[0])
@@ -11,8 +11,8 @@ const sortSizes = (a, b) => {
 
     if (!isNaN(firstSizeFirstDigit) && !isNaN(secondSizeFirstDigit)) {
         // in case both sizes are number ranges, we sort them as numbers
-        const firstRangeFirstNumber = Number(numberRegex.exec(a))
-        const secondRangeFirstNumber = Number(numberRegex.exec(b))
+        const firstRangeFirstNumber = Number(NUMBER_REGEX.exec(a))
+        const secondRangeFirstNumber = Number(NUMBER_REGEX.exec(b))
 
         return firstRangeFirstNumber - secondRangeFirstNumber
     }
@@ -68,7 +68,7 @@ const getAllCategories = () => {
     ]
 }
 
-const parseMongoProducts = (mongoProducts) => {
+const parseFullMongoProducts = (mongoProducts) => {
     return mongoProducts.map(p => {
         const parsedProduct = {
             id: p._id,
@@ -99,11 +99,24 @@ const parseMongoProducts = (mongoProducts) => {
     })
 }
 
+const parseCartMongoProducts = (mongoProducts) => {
+    return mongoProducts.map(p => {
+        return {
+            productId: p._id,
+            brand: p.brand,
+            description: p.description,
+            price: p.discountPrice,
+            image: p.images.length > 0 ? getImageUrl(p.images[0]) : null
+        }
+    })
+}
+
 module.exports = {
     getSizeRange,
     sortSizes,
     getImageUrl,
     getImagePublicIdFromPath,
     getAllCategories,
-    parseMongoProducts
+    parseFullMongoProducts,
+    parseCartMongoProducts
 }

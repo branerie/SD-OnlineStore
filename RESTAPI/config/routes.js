@@ -1,10 +1,10 @@
 const router = require('express').Router()
-const { 
-    infoController,
-    userController,
-    productController, 
+const {
     adminProductController,
-    adminUserController
+    adminUserController,
+    infoController,
+    productController,
+    userController
 } = require('../controllers')
 const { attachCurrentUser } = require('../utils/authenticate')
 

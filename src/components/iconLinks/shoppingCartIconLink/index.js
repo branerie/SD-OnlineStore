@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react'
+import { useHistory } from 'react-router-dom'
 import styles from '../index.module.css'
 
 const ShoppingCartIconLink = () => {
     const [isFilled, setIsFilled] = useState(false)
+    const history = useHistory()
 
     const fillColor = useMemo(() => {
         return isFilled
@@ -13,6 +15,7 @@ const ShoppingCartIconLink = () => {
     return (
         <div
             className={styles.container}
+            onClick={() => history.push('/user/cart')}
             onMouseEnter={() => setIsFilled(true)}
             onMouseLeave={() => setIsFilled(false)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 50.777 43.976">

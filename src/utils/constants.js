@@ -1,4 +1,5 @@
 const AUTH_COOKIE_NAME = 'x-auth-cookie'
+const CART_COOKIE_NAME = 'cart'
 const REST_API_URL = process.env.NODE_ENV === 'development'
                             ? 'http://localhost:3001/api'
                             : '/api'
@@ -20,6 +21,7 @@ const HTTP_HEADERS = {
 
 export {
     AUTH_COOKIE_NAME,
+    CART_COOKIE_NAME,
     CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_UPLOAD_PRESET,
     FACEBOOK_APP_ID,

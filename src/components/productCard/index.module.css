@@ -52,11 +52,6 @@
     /* transform: translateX(13%); */
 }
 
-.like-button {
-    width: 2rem;
-    cursor: pointer;
-}
-
 .price-container {
     display: flex;
     font-family: 'Architects Daughter', cursive;
@@ -111,10 +106,6 @@
 
 .link:hover {
     color: #EF696E;
-}
-
-.like-container {
-    flex-basis: 25%;
 }
 
 

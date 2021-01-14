@@ -15,6 +15,7 @@ import WomensPage from './pages/women'
 import PromotionsPage from './pages/promotions'
 import UserConfirmationPage from './pages/userConfirmation'
 import PasswordResetPage from './pages/passwordReset'
+import ShoppingCartPage from './pages/shoppingCart'
 
 const PAGE_LENGTH = 3
 
@@ -47,7 +48,8 @@ const Navigation = () => {
                     }
                 </Route>
                 <Route path='/user/confirm/:confirmationToken' component={UserConfirmationPage} /> 
-                <Route path='/user/password/reset/:resetToken' component={PasswordResetPage} />      
+                <Route path='/user/password/reset/:resetToken' component={PasswordResetPage} /> 
+                <Route path='/user/cart' component={ShoppingCartPage} />     
             </Switch>
         </BrowserRouter>
 

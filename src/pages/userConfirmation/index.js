@@ -8,7 +8,7 @@ const INVALID_TOKEN_MESSAGE = 'Invalid user confirmation token'
 
 const UserConfirmation = () => {
     const { confirmationToken } = useParams()
-    const { setUser } = useContext(UserContext)
+    const { setNewUser } = useContext(UserContext)
 
     const handleUserConfirmation = useCallback(async () => {
         if (!confirmationToken) {
@@ -28,8 +28,8 @@ const UserConfirmation = () => {
             )
         }
 
-        setUser({ id: result.userId, isAdmin: false, favorites: result.favorites })
-    }, [setUser, confirmationToken])
+        setNewUser(result)
+    }, [setNewUser, confirmationToken])
 
     useEffect(() => {
         handleUserConfirmation()
