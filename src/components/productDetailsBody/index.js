@@ -6,7 +6,7 @@ import ImageGrid from '../imageGrid'
 
 const ProductDetailsBody = ({ product }) => {
     const images = product.images
-    const [selectedImg, setSelectedImg] = useState(images[0])
+    const [selectedImg, setSelectedImg] = useState(images && images[0])
 
     const setCurrentImg = useCallback((selectedUrl) => setSelectedImg(selectedUrl))
 

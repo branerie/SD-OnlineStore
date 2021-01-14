@@ -82,7 +82,7 @@ const parseFullMongoProducts = (mongoProducts) => {
             ratingCount: p.rating ? (p.rating.counter || 0) : 0
         }
 
-        if (p.discount) {
+        if (p.discount && p.discount.percent) {
             parsedProduct.discount = {
                 percent: p.discount.percent * 100,
                 endDate: p.discount.endDate.toISOString().slice(0, 10)

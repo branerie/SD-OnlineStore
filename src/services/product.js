@@ -104,7 +104,7 @@ const getProductDetailsMain = async (productIds) => {
     return await response.json()
 }
 
-const getProductForDetails = async (id) => {
+const getProductDetails = async (id) => {
     const response = await fetch(`${PRODUCT_URL}/${id}`, {
         method: 'GET',
         headers:{
@@ -125,5 +125,5 @@ export {
     getProductDetailsMain,
     getCategories,
     setRating,
-    getProductForDetails
+    getProductDetails
 }
