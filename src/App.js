@@ -3,7 +3,7 @@ import './App.css'
 import UserContext from './Context'
 import Navigation from './navigation'
 
-import { addToShoppingCart, verifyUser } from './services/user'
+import { changeShoppingCart, verifyUser } from './services/user'
 import { CART_COOKIE_NAME } from './utils/constants'
 import { getCookie, setCookie } from './utils/cookie'
 
@@ -34,22 +34,36 @@ function App() {
 		verifyCurrentUser()
 	}, [])
 
-	const addToCart = useCallback(async (productId, sizeName, quantity) => {
-		const cart = [...user.cart]
-
-		const itemInCart = cart.find(i => 
-							i.productId === productId && i.sizeName === sizeName)
-
-		if (itemInCart) {
-			itemInCart.quantity += quantity
-		} else {
-			cart.push({ productId, sizeName, quantity })
+	const editShoppingCart = useCallback(async (productId, sizeName, quantityChange) => {
+		if (quantityChange === 0) {
+			return
 		}
 
-		setUser({...user, cart: cart})
+		let cart = [...user.cart]
+
+		const itemInCart = cart.find(i =>
+			i.productId === productId && i.sizeName === sizeName)
+
+		let newQuantity = quantityChange
+		if (itemInCart) {
+			newQuantity += itemInCart.quantity
+
+			if (newQuantity > 0) {
+				itemInCart.quantity = newQuantity
+			} else {
+				cart = cart.filter(i => i.productId !== productId && i.sizeName !== sizeName)
+			}
+		} else if (quantityChange > 0) {
+			cart.push({ productId, sizeName, newQuantity })
+		} else {
+			return
+		}
+
+		setUser({ ...user, cart })
+		newQuantity = Math.max(0, newQuantity)
 
 		if (user.userId) {
-			const result = await addToShoppingCart(user.userId, productId, sizeName, quantity)
+			const result = await changeShoppingCart(user.userId, productId, sizeName, newQuantity)
 
 			if (result.error) {
 				//TODO: handle errors
@@ -59,8 +73,8 @@ function App() {
 		}
 	}, [user])
 
-	const setNewUser = (userProps = {}) =>  {
-		setUser({...GUEST_USER, ...userProps})
+	const setNewUser = (userProps = {}) => {
+		setUser({ ...GUEST_USER, ...userProps })
 	}
 
 	if (!user) {
@@ -68,7 +82,7 @@ function App() {
 	}
 
 	return (
-		<UserContext.Provider value={{ user, setNewUser, addToCart }}>
+		<UserContext.Provider value={{ user, setNewUser, editShoppingCart }}>
 			<Navigation />
 		</UserContext.Provider>
 	)

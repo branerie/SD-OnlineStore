@@ -14,7 +14,7 @@
 
 .info-container {
     width: 100%;
-    padding: 0 2rem;
+    padding-left: 2rem;
     display: flex;
     justify-content: space-between;
 }
@@ -42,4 +42,17 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 5rem;
+}
+
+.btn-remove {
+    position: relative;
+    width: 2.1rem;
+    opacity: 0.8;
+    cursor: pointer;
 }

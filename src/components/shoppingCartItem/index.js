@@ -3,6 +3,8 @@ import styles from './index.module.css'
 import QuantityInput from '../inputFields/quantityInput'
 import FavoritesIcon from '../favoritesIcon'
 
+import removeIcon from '../../images/delete.png'
+
 const ShoppingCartItem = ({
     productId,
     brand,
@@ -34,8 +36,14 @@ const ShoppingCartItem = ({
                     />
                 </div>
                 <div className={styles.column}>
-                    <div>
+                    <div className={styles['btn-container']}>
                         <FavoritesIcon productId={productId} />
+                        <img
+                            src={removeIcon}
+                            alt='Remove'
+                            className={styles['btn-remove']}
+                            
+                        />
                     </div>
                     <div>
                         {price.toFixed(2)}$

@@ -6,7 +6,7 @@ import RatingStars from '../ratingStar'
 import FavoritesIcon from '../favoritesIcon'
 
 const ProductCard = (props) => {
-    const { addToCart } = useContext(UserContext)
+    const { editShoppingCart } = useContext(UserContext)
 
     const currency = props.currency ? props.currency : '$'
 
@@ -56,7 +56,7 @@ const ProductCard = (props) => {
                         ratingStars={props.ratingStars}
                         ratingCounter={props.ratingCount}
                     />
-                    <button onClick={() => addToCart(props.id, 'M', 1)}>
+                    <button onClick={() => editShoppingCart(props.id, 'M', 1)}>
                         Add to Cart
                     </button>
                     {/* <Link to={''} className={styles.link}>VIEW</Link> */}

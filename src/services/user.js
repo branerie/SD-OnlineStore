@@ -188,9 +188,9 @@ const getShoppingCart = async (userId) => {
     return cart
 }
 
-const addToShoppingCart = async (userId, productId, sizeName, quantity) => {
+const changeShoppingCart = async (userId, productId, sizeName, quantity) => {
     const response = await fetch(`${USER_URL}/${userId}/cart`, {
-        method: 'POST',
+        method: 'PATCH',
         body: JSON.stringify({ productId, sizeName, quantity }),
         headers: {
             [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
@@ -212,5 +212,5 @@ export {
     sendPasswordResetEmail,
     resetUserPassword,
     getShoppingCart,
-    addToShoppingCart
+    changeShoppingCart
 }

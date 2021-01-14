@@ -14,8 +14,8 @@ const { sendConfirmationEmail, sendPasswordResetEmail } = require('../utils/user
 const AUTHORIZATION_HEADER_NAME = 'Authorization'
 const INVALID_TOKEN_ERROR = 'Invalid JWT token'
 
-const attachLoginCookie = (userId, response) => {
-    const token = createToken({ userId })
+const attachLoginCookie = (user, response) => {
+    const token = createToken({ userId: user._id, isAdmin: user.isAdmin || false })
     response.header(AUTHORIZATION_HEADER_NAME, token)
 }
 
@@ -89,9 +89,41 @@ router.patch('/favorites', async (req, res) => {
     } else {
         //TODO implement without login
     }
+})
 
+router.patch('/:userId/cart', async (req, res) => {
+    try {
+        const { userId } = req.params
+        const { productId, sizeName, quantity } = req.body
 
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(400).send({ error: `User with id ${userId} does not exist` })
+        }
 
+        const parsedQuantity = parseInt(quantity)
+        if (isNaN(parsedQuantity)) {
+            return res.status(400).send({ error: 'Invalid quantity parameter' })
+        }
+
+        const itemInCart = user.cart.find(i =>
+            i.productId === productId && i.sizeName === sizeName)
+
+        if (itemInCart) {
+            if (parsedQuantity === 0) {
+                user.cart.pull({ productId, sizeName })
+            } else {
+                itemInCart.quantity = parsedQuantity
+            }
+        } else if (quantity > 0) {
+            user.cart.push({ productId, sizeName, quantity })
+        }
+
+        await user.save()
+        return res.send({ status: 'Success' })
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
 })
 
 router.post('/login', async (req, res) => {
@@ -117,7 +149,7 @@ router.post('/login', async (req, res) => {
 
         const userInfo = getUserData(user)
 
-        attachLoginCookie(user._id, res)
+        attachLoginCookie(user, res)
         res.send(userInfo)
     } catch (error) {
         if (isMongoError(error)) {
@@ -152,7 +184,7 @@ router.post('/login/google', async (req, res) => {
 
         const userData = getUserData(user)
 
-        attachLoginCookie(user._id, res)
+        attachLoginCookie(user, res)
         res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })
@@ -177,7 +209,7 @@ router.post('/login/facebook', async (req, res) => {
 
         const userData = getUserData(user)
 
-        attachLoginCookie(user._id, res)
+        attachLoginCookie(user, res)
         res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })
@@ -197,7 +229,7 @@ router.post('/register', async (req, res) => {
 
         sendConfirmationEmail(firstName, lastName, email, confirmationToken)
 
-        attachLoginCookie(createdUser._id, res)
+        attachLoginCookie(createdUser, res)
         res.send(userData)
     } catch (error) {
         if (isMongoError(error)) {
@@ -238,37 +270,6 @@ router.post('/logout', async (req, res) => {
     }
 })
 
-router.post('/:userId/cart', async (req, res) => {
-    try {
-        const { userId } = req.params
-        const { productId, sizeName, quantity } = req.body
-
-        const user = await User.findById(userId)
-        if (!user) {
-            return res.status(400).send({ error: `User with id ${userId} does not exist` })
-        }
-
-        const parsedQuantity = parseInt(quantity)
-        if (isNaN(parsedQuantity)) {
-            return res.status(400).send({ error: 'Invalid quantity parameter' })
-        }
-
-        const itemInCart = user.cart.find(i =>
-            i.productId === productId && i.sizeName === sizeName)
-
-        if (itemInCart) {
-            itemInCart.quantity += parsedQuantity
-        } else {
-            user.cart.push({ productId, sizeName, quantity })
-        }
-
-        await user.save()
-        return res.send({ status: 'Success' })
-    } catch (error) {
-        return res.status(500).send({ error: error.message })
-    }
-})
-
 router.post('/confirm', async (req, res) => {
     const INVALID_TOKEN_ERROR = 'Invalid user confirmation token'
 
@@ -301,7 +302,7 @@ router.post('/confirm', async (req, res) => {
         await user.save()
 
         if (!req.user || req.user.userId !== userid) {
-            attachLoginCookie({ userId: user._id }, res)
+            attachLoginCookie(user, res)
         }
 
         return res.send({
@@ -353,7 +354,7 @@ router.post('/password/reset/confirm', async (req, res) => {
         await user.save()
 
         const userData = { id: user._id, favorites: user.favorites, isAdmin: user.isAdmin }
-        attachLoginCookie(userData, res)
+        attachLoginCookie(user, res)
 
         return res.send(userData)
     } catch (error) {
