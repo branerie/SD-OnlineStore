@@ -16,6 +16,7 @@ import PromotionsPage from './pages/promotions'
 import UserConfirmationPage from './pages/userConfirmation'
 import PasswordResetPage from './pages/passwordReset'
 import ShoppingCartPage from './pages/shoppingCart'
+import ProductDetailsPage from './pages/productDetails'
 
 const PAGE_LENGTH = 3
 
@@ -37,6 +38,9 @@ const Navigation = () => {
                 </Route>
                 <Route path='/products'>
                     <ProductPage pageLength={PAGE_LENGTH} />
+                </Route>
+                <Route path='/product/details/:id' >
+                    <ProductDetailsPage />
                 </Route>
                 <Route path='/admin/products/add'>
                     {isAdmin ? (<AddProductPage />) : (<Redirect to='/login' />) }

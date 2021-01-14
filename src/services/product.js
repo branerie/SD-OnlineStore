@@ -104,6 +104,19 @@ const getProductDetailsMain = async (productIds) => {
     return await response.json()
 }
 
+const getProductForDetails = async (id) => {
+    const response = await fetch(`${PRODUCT_URL}/${id}`, {
+        method: 'GET',
+        headers:{
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
+        }
+    })
+
+    const currentProduct = await response.json()
+    return currentProduct
+
+}
+
 export {
     uploadImages,
     getProductImages,
@@ -111,5 +124,6 @@ export {
     getProductRanges,
     getProductDetailsMain,
     getCategories,
-    setRating
+    setRating,
+    getProductForDetails
 }

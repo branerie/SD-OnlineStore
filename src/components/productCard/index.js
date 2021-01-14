@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import styles from './index.module.css'
 import UserContext from '../../Context'
 import RatingStars from '../ratingStar'
@@ -19,11 +20,13 @@ const ProductCard = (props) => {
 
     return (
         <div className={styles.container}>
-            <img
-                src={props.images && props.images[0]}
-                alt='No image'
-                className={styles['product-image']}
-            />
+            <Link to={`/product/details/${props.id}`}>
+                <img
+                    src={props.images && props.images[0]}
+                    alt='No image'
+                    className={styles['product-image']}
+                />
+            </Link>
             <div className={styles['text-container']}>
                 <div className={styles['brand-likeButton']}>
                     <div className={styles.brand}>

@@ -1,0 +1,15 @@
+.img-grid {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    overflow-y: auto;
+}
+
+.img-list {
+    margin: 10px;
+}
+
+.img-img {
+    height: 90%;
+    width: 90%;
+}
