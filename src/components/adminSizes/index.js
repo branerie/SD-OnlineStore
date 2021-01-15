@@ -10,7 +10,7 @@ const AdminSizes = ({ sizes, productId }) => {
     const [modifiedSizes, setModifiedSizes] = useState([])
     const [editedSizeName, setEditedSizeName] = useState('')
 
-    const { updateFilters } = useContext(ProductsContext)
+    const { updateFilters, updateProductsPage } = useContext(ProductsContext)
 
     const handleDelete = useCallback((sizeName) => {
         const sizeToDelete = currentProductSizes.find(ps => ps.sizeName === sizeName)
@@ -41,6 +41,7 @@ const AdminSizes = ({ sizes, productId }) => {
 
         setModifiedSizes([])
         updateFilters()
+        updateProductsPage()
     }
 
     return (

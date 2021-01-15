@@ -10,7 +10,7 @@ import { getCookie, setCookie } from './utils/cookie'
 const GUEST_USER = { userId: null, isAdmin: false, favorites: [], cart: [] }
 
 function App() {
-	const [user, setUser] = useState(GUEST_USER)
+	const [user, setUser] = useState(null)
 
 	const verifyCurrentUser = useCallback(async () => {
 		const userInfo = await verifyUser()

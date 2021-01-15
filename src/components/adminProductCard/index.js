@@ -40,7 +40,7 @@ const AdminProductCard = (props) => {
             {isEditing
                 ? <ModifyProductCard
                         key={props.id}
-                        {...props}  />
+                        {...props} />
                 : <ProductCard key={props.id} {...props} />}
 
             {isAdmin ?

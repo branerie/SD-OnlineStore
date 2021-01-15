@@ -1,6 +1,5 @@
 import React, { useState, useCallback} from 'react'
 import styles from './index.module.css'
-import NavButtons from '../navButtons'
 import BackIconLink from '../iconLinks/backIconLink'
 import ImageGrid from '../imageGrid'
 import ProductDetailsAside from '../productDetailsAside'

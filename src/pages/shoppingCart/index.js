@@ -6,6 +6,7 @@ import ShoppingCartItem from '../../components/shoppingCartItem'
 import HeaderHome from '../../components/headerHome'
 import Footer from '../../components/footer'
 import ShoppingCartCheckout from '../../components/shoppingCartCheckout'
+import BackIconLink from '../../components/iconLinks/backIconLink'
 
 const ShoppingCartPage = () => {
     const [productsInCart, setProductsInCart] = useState([])
@@ -13,6 +14,7 @@ const ShoppingCartPage = () => {
 
     const getItemsInCart = useCallback(async () => {
         if (cart.length === 0) {
+            setProductsInCart([])
             return
         }
 
@@ -41,21 +43,29 @@ const ShoppingCartPage = () => {
         getItemsInCart()
     }, [getItemsInCart, cart])
 
-    if (productsInCart.length === 0) {
-        return <span>Your shopping cart is empty</span>
-    }
-
     return (
         <>
             <HeaderHome />
-            <h2 className={styles['page-title']}>your shopping cart</h2>
-            <div className={styles.container}>
-                <div className={styles.items}>
-                    {productsInCart.map(item =>
-                        <ShoppingCartItem key={item.productId} {...item} />)}
-                </div>
-                <ShoppingCartCheckout productsInCart={productsInCart} />
-            </div>
+            { productsInCart.length > 0
+                ?
+                <>
+                    <h2 className={styles['page-title']}>your shopping cart</h2>
+                    <div className={styles.container}>
+                        <div className={styles.items}>
+                            {productsInCart.map(item =>
+                                <ShoppingCartItem key={item.productId} {...item} />)}
+                        </div>
+                        <ShoppingCartCheckout productsInCart={productsInCart} />
+                    </div>
+                </>
+                :
+                <>
+                    <h2 className={styles['page-title']} style={{ marginBottom: '3rem' }}>
+                        your shopping cart is empty
+                    </h2>
+                    <BackIconLink />
+                </>
+            }
             <Footer />
         </>
     )

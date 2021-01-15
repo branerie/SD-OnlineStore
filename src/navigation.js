@@ -18,10 +18,10 @@ import PasswordResetPage from './pages/passwordReset'
 import ShoppingCartPage from './pages/shoppingCart'
 import ProductDetailsPage from './pages/productDetails'
 
-const PAGE_LENGTH = 3
+const PAGE_LENGTH = 6
 
 const Navigation = () => {
-    const { user: { isAdmin, userId }} = useContext(UserContext)
+    const { user } = useContext(UserContext)
 
     return (
         <BrowserRouter>
@@ -43,12 +43,12 @@ const Navigation = () => {
                     <ProductDetailsPage />
                 </Route>
                 <Route path='/admin/products/add'>
-                    {isAdmin ? (<AddProductPage />) : (<Redirect to='/login' />) }
+                    { user && user.isAdmin ? (<AddProductPage />) : (<Redirect to='/' />) }
                 </Route>
                 <Route path='/admin/products'>
-                    { isAdmin 
+                    { user && user.isAdmin 
                         ? <AdminProductsPage pageLength={PAGE_LENGTH} /> 
-                        : <Redirect to='/login' />
+                        : <Redirect to='/' />
                     }
                 </Route>
                 <Route path='/user/confirm/:confirmationToken' component={UserConfirmationPage} /> 
