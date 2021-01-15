@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Header from '../../components/header'
 import Footer from '../../components/footer'
 import ProductDetailsBody from '../../components/productDetailsBody'
+import HeaderHome from '../../components/headerHome'
 import { useParams } from 'react-router-dom'
 import { getProductDetails } from '../../services/product'
 
@@ -30,7 +30,7 @@ const ProductDetails = () => {
 
     return (
         <>
-            <Header />
+            <HeaderHome />
             <ProductDetailsBody product={currentProduct} />
             <Footer />
         </>

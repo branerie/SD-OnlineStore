@@ -8,7 +8,7 @@ const ProductDetailsBody = ({ product }) => {
     const images = product.images
     const [selectedImg, setSelectedImg] = useState(images && images[0])
 
-    const setCurrentImg = useCallback((selectedUrl) => setSelectedImg(selectedUrl))
+    const setCurrentImg = useCallback((selectedUrl) => setSelectedImg(selectedUrl),[])
 
     return (
         <div className={styles.container}>
@@ -16,9 +16,6 @@ const ProductDetailsBody = ({ product }) => {
                 <h2>ASIDE</h2>
             </aside>
             <main className={styles['main-container']}>
-                <div className={styles['button-wrapper']}>
-                    <NavButtons />
-                </div>
                 <div className={styles['img-container']}>
                     <div className={styles['img-selected']}>
                         <img 
@@ -27,7 +24,7 @@ const ProductDetailsBody = ({ product }) => {
                             className={styles['product-image']}
                         />
                     </div>
-                    <ImageGrid src={images} setCurrentImage={setCurrentImg}/>
+                    <ImageGrid imgCollection={images} setCurrentImage={setCurrentImg}/>
                 </div>
                 <BackIconLink />
             </main>
