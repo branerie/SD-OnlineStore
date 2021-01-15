@@ -36,6 +36,6 @@ const parseValidationConstants = (constants) => {
     return parsedConstants
 }
 
-module.exports = {
+export {
     parseValidationConstants
 }
