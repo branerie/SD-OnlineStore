@@ -15,9 +15,6 @@ const ProductDetailsBody = ({ product }) => {
         <div className={styles.container}>
             <ProductDetailsAside {...product} />
             <main className={styles['main-container']}>
-                <div className={styles['button-wrapper']}>
-                    <NavButtons />
-                </div>
                 <div className={styles['img-container']}>
                     <div className={styles['img-selected']}>
                         <img 
@@ -26,7 +23,7 @@ const ProductDetailsBody = ({ product }) => {
                             className={styles['product-image']}
                         />
                     </div>
-                    <ImageGrid src={images} setCurrentImage={setCurrentImg}/>
+                    <ImageGrid imgCollection={images} setCurrentImage={setCurrentImg}/>
                 </div>
                 <BackIconLink />
             </main>
