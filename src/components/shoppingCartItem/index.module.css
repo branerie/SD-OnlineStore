@@ -1,10 +1,15 @@
 .container {
     display: flex;
-    width: 60%;
-    margin: 0 2.5%;
+    margin-left: 2.5%;
     border: 1px solid lightgray;
     margin-top: -1px;
     padding: 1.5rem;
+}
+
+@media(max-width: 1024px) {
+    .container {
+        margin-left: 0;
+    }
 }
 
 .img-container {
@@ -42,6 +47,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: flex-end;
 }
 
 .btn-container {
@@ -55,4 +61,17 @@
     width: 2.1rem;
     opacity: 0.8;
     cursor: pointer;
+}
+
+.price {
+    position: relative;
+    font-size: 2rem;
+    text-align: right;
+    color: #EF696E;
+}
+
+.price-original {
+    font-size: 1.5rem;
+    opacity: 0.6;
+    color: #735C74;
 }

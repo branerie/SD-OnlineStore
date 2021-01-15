@@ -1,13 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './index.module.css'
-import UserContext from '../../Context'
 import RatingStars from '../ratingStar'
 import FavoritesIcon from '../favoritesIcon'
 
 const ProductCard = (props) => {
-    const { editShoppingCart } = useContext(UserContext)
-
     const currency = props.currency ? props.currency : '$'
 
     let discount = null
@@ -56,9 +53,6 @@ const ProductCard = (props) => {
                         ratingStars={props.ratingStars}
                         ratingCounter={props.ratingCount}
                     />
-                    <button onClick={() => editShoppingCart(props.id, 'M', 1)}>
-                        Add to Cart
-                    </button>
                     {/* <Link to={''} className={styles.link}>VIEW</Link> */}
                 </div>
             </div>

@@ -2,14 +2,6 @@
     display: flex;
 }
 
-.aside-container {
-    flex-grow: 1;
-    min-width: 14%;
-    background-color: #3D53444F;
-    padding: 0 10px;
-    max-width: 14%;
-}
-
 .main-container {
     flex-grow: 4;
     display: flex;

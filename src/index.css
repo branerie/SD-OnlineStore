@@ -21,3 +21,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+title::after {
+  border-bottom: none !important;  
+  text-decoration: none !important;
+  box-shadow: none !important;
+}

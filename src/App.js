@@ -51,10 +51,10 @@ function App() {
 			if (newQuantity > 0) {
 				itemInCart.quantity = newQuantity
 			} else {
-				cart = cart.filter(i => i.productId !== productId && i.sizeName !== sizeName)
+				cart = cart.filter(i => i.productId !== productId || i.sizeName !== sizeName)
 			}
 		} else if (quantityChange > 0) {
-			cart.push({ productId, sizeName, newQuantity })
+			cart.push({ productId, sizeName, quantity: newQuantity })
 		} else {
 			return
 		}

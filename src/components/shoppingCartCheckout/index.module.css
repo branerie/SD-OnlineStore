@@ -1,0 +1,37 @@
+.checkout {
+    margin: -1px 2.5% 0 -1px;
+    border: 1px solid lightgray;
+    padding: 2rem;
+    width: 30%;
+    min-width: 380px;
+    text-align: center;
+}
+
+@media(max-width: 1024px) {
+    .checkout {
+        box-sizing: border-box;
+        width: 60%;
+    }
+}
+
+.receipt {
+    /* font-size: 1.25rem; */
+    display: flex;
+    flex-direction: column;
+    border-bottom: 2px solid black;
+}
+
+.price-discounted {
+    font-size: 2rem;
+    color: #EF696E;
+    display: flex;
+    justify-content: space-between;
+}
+
+.price-original {
+    font-size: 2rem;
+    opacity: 0.6;
+    display: flex;
+    justify-content: space-between;
+}
+

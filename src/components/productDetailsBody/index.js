@@ -3,18 +3,17 @@ import styles from './index.module.css'
 import NavButtons from '../navButtons'
 import BackIconLink from '../iconLinks/backIconLink'
 import ImageGrid from '../imageGrid'
+import ProductDetailsAside from '../productDetailsAside'
 
 const ProductDetailsBody = ({ product }) => {
     const images = product.images
     const [selectedImg, setSelectedImg] = useState(images && images[0])
 
-    const setCurrentImg = useCallback((selectedUrl) => setSelectedImg(selectedUrl))
+    const setCurrentImg = useCallback((selectedUrl) => setSelectedImg(selectedUrl), [])
 
     return (
         <div className={styles.container}>
-            <aside className={styles['aside-container']} >
-                <h2>ASIDE</h2>
-            </aside>
+            <ProductDetailsAside {...product} />
             <main className={styles['main-container']}>
                 <div className={styles['button-wrapper']}>
                     <NavButtons />

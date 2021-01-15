@@ -107,11 +107,11 @@ router.patch('/:userId/cart', async (req, res) => {
         }
 
         const itemInCart = user.cart.find(i =>
-            i.productId === productId && i.sizeName === sizeName)
+            i.productId.toString() === productId && i.sizeName === sizeName)
 
         if (itemInCart) {
             if (parsedQuantity === 0) {
-                user.cart.pull({ productId, sizeName })
+                user.cart.pull(itemInCart)
             } else {
                 itemInCart.quantity = parsedQuantity
             }

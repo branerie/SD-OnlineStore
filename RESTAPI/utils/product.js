@@ -72,7 +72,6 @@ const parseFullMongoProducts = (mongoProducts) => {
     return mongoProducts.map(p => {
         const parsedProduct = {
             id: p._id,
-            sizes: p.sizes,
             price: p.price,
             brand: p.brand,
             description: p.description,
@@ -81,6 +80,9 @@ const parseFullMongoProducts = (mongoProducts) => {
             ratingStars: p.ratingStars,
             ratingCount: p.rating ? (p.rating.counter || 0) : 0
         }
+
+        parsedProduct.sizes = Array.from(p.sizes).sort((sizeA, sizeB) => 
+                                        sortSizes(sizeA.sizeName, sizeB.sizeName))
 
         if (p.discount && p.discount.percent) {
             parsedProduct.discount = {
@@ -101,13 +103,19 @@ const parseFullMongoProducts = (mongoProducts) => {
 
 const parseCartMongoProducts = (mongoProducts) => {
     return mongoProducts.map(p => {
-        return {
+        const productInfo = {
             productId: p._id,
             brand: p.brand,
             description: p.description,
-            price: p.discountPrice,
+            price: p.price,
             image: p.images.length > 0 ? getImageUrl(p.images[0]) : null
         }
+        
+        if (p.discountPrice !== p.price) {
+            productInfo.discountPrice = p.discountPrice
+        }
+
+        return productInfo
     })
 }
 

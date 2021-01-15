@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.container {
+    min-width: 14%;
+    max-width: 18%;
+    background-color:rgba(61, 83, 68, 0.31);
+    padding: 0 0.6rem;
+    color: #735C74;
+    font-family: 'Lateef', cursive;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: normal;
+}
+
+.title-minor {
+    font-weight: normal;
+    margin: 0;
+}
+
+.sizes-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.price {
+    font-family: 'Architects Daughter', cursive;
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.price-final {
+    color:  #EF696E;
+    font-size: 2rem;
+}
+
+.favorites {
+    width: 100%;
+    margin: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+}

@@ -5,6 +5,7 @@ import { getProductDetailsMain } from '../../services/product'
 import ShoppingCartItem from '../../components/shoppingCartItem'
 import HeaderHome from '../../components/headerHome'
 import Footer from '../../components/footer'
+import ShoppingCartCheckout from '../../components/shoppingCartCheckout'
 
 const ShoppingCartPage = () => {
     const [productsInCart, setProductsInCart] = useState([])
@@ -38,20 +39,22 @@ const ShoppingCartPage = () => {
 
     useEffect(() => {
         getItemsInCart()
-    }, [getItemsInCart])
+    }, [getItemsInCart, cart])
 
+    if (productsInCart.length === 0) {
+        return <span>Your shopping cart is empty</span>
+    }
 
     return (
         <>
             <HeaderHome />
+            <h2 className={styles['page-title']}>your shopping cart</h2>
             <div className={styles.container}>
-                {productsInCart.length > 0
-                    ?
-                    productsInCart.map(item =>
-                        <ShoppingCartItem key={item.productId} {...item} />)
-                    :
-                    <span>Your shopping cart is empty</span>
-                }
+                <div className={styles.items}>
+                    {productsInCart.map(item =>
+                        <ShoppingCartItem key={item.productId} {...item} />)}
+                </div>
+                <ShoppingCartCheckout productsInCart={productsInCart} />
             </div>
             <Footer />
         </>
