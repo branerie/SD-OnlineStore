@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './App.css'
 import UserContext from './Context'
+import ErrorBoundary from './ErrorBoundary'
 import Navigation from './navigation'
 
 import { changeShoppingCart, verifyUser } from './services/user'
@@ -82,9 +83,11 @@ function App() {
 	}
 
 	return (
-		<UserContext.Provider value={{ user, setNewUser, editShoppingCart }}>
-			<Navigation />
-		</UserContext.Provider>
+		<ErrorBoundary>
+			<UserContext.Provider value={{ user, setNewUser, editShoppingCart }}>
+				<Navigation />
+			</UserContext.Provider>
+		</ErrorBoundary>
 	)
 }
 

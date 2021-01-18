@@ -110,6 +110,10 @@ const parseCartMongoProducts = (mongoProducts) => {
             price: p.price,
             image: p.images.length > 0 ? getImageUrl(p.images[0]) : null
         }
+
+        productInfo.sizes = Array.from(p.sizes)
+                                 .map(s => s.sizeName)
+                                 .sort((sizeA, sizeB) => sortSizes(sizeA, sizeB))
         
         if (p.discountPrice !== p.price) {
             productInfo.discountPrice = p.discountPrice

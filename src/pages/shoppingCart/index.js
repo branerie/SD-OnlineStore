@@ -53,7 +53,11 @@ const ShoppingCartPage = () => {
                     <div className={styles.container}>
                         <div className={styles.items}>
                             {productsInCart.map(item =>
-                                <ShoppingCartItem key={item.productId} {...item} />)}
+                                <ShoppingCartItem 
+                                    key={item.productId}
+                                    {...item}
+                                />)
+                            }
                         </div>
                         <ShoppingCartCheckout productsInCart={productsInCart} />
                     </div>
