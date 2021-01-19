@@ -1,14 +1,16 @@
 import React, { useState, useMemo, useContext, useCallback, useEffect } from 'react'
 import styles from '../index.module.css'
 import { logOut } from '../../../services/user'
-import UserContext from '../../../Context'
+import UserContext from '../../../UserContext'
 import LoginWindow from '../../loginWindow'
 import RegisterWindow from '../../registerWindow'
 import PasswordResetFormWindow from '../../passwordResetFormWindow'
+import { useAsyncError } from '../../../hooks'
 
 const ProfileIconLink = () => {
     const [isFilled, setIsFilled] = useState(false)
     const [shownWindow, setShownWindow] = useState('')
+    const throwInternalError = useAsyncError()
     
     const { user, setNewUser } = useContext(UserContext)
 
@@ -27,26 +29,16 @@ const ProfileIconLink = () => {
         const result = await logOut()
 
         if (result.error ) {
-            //TODO: handle error
-            return
+            throwInternalError()
         }
 
         setNewUser()
     }
 
-    const handleWindowChange = (windowName) => {
-        if (user.userId) {
-            //TODO: Maybe display a message to user if already logged in?
-            return
-        }
-
-        setShownWindow(windowName)
-    }
-
     const hideWindow = useCallback(() => setShownWindow(''), [])
-    const registerWindowPopup = useCallback(() => handleWindowChange('register'), [])
-    const passwordResetPopup = useCallback(() => handleWindowChange('passwordResetForm'), [])
-    const loginWindowPopup = useCallback(() => handleWindowChange('login'),[])
+    const registerWindowPopup = useCallback(() => setShownWindow('register'), [])
+    const passwordResetPopup = useCallback(() => setShownWindow('passwordResetForm'), [])
+    const loginWindowPopup = useCallback(() => setShownWindow('login'), [])
 
     return (
         <>

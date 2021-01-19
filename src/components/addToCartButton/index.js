@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import styles from './index.module.css'
-import UserContext from '../../Context'
+import UserContext from '../../UserContext'
 
 const BUTTON_TEXT = 'ADD TO BAG'
 

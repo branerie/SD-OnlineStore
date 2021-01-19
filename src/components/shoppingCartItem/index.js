@@ -4,7 +4,7 @@ import QuantityInput from '../inputFields/quantityInput'
 import FavoritesIcon from '../favoritesIcon'
 
 import removeIcon from '../../images/delete.png'
-import UserContext from '../../Context'
+import UserContext from '../../UserContext'
 import { Link } from 'react-router-dom'
 import SizeButton from '../sizeButton'
 import AddToCartButton from '../addToCartButton'

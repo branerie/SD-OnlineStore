@@ -2,18 +2,20 @@ import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
 import { getProductRanges, getProductsPage } from './services/product'
 import { parseQueryString, getProductsQueryString, filtersReducer } from './utils/product'
+import { useAsyncError } from './hooks'
 
 const ProductsContextInitializer = ({ children, pageLength }) => {
     const [productProps, setProductProps] = useState(null)
     const [productPage, setProductPage] = useState(null)
     const [totalCount, setTotalCount] = useState(0)
+    const throwInternalError = useAsyncError()
 
     const [filters, filtersDispatch] = useReducer(filtersReducer, getFiltersFromQuery())
 
     const getProductPropsRange = useCallback(async () => {
         const productPropRanges = await getProductRanges()
         if (productPropRanges.error) {
-            //TODO: Handle errors
+            throwInternalError()
         }
 
 		setProductProps(productPropRanges)
@@ -24,9 +26,10 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
 
         window.history.replaceState({}, null, `${window.location.pathname}?${queryString}`)
 
+        
         const result = await getProductsPage(queryString, pageLength) 
         if (result.error) {
-            //TODO: Handle errors
+            throwInternalError()
         }
 
         const { total, productInfo } = result
@@ -52,7 +55,7 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
             cat: cat || {},
             range: range || {},
             search: searchTerm || '',
-            page: parseInt(page) || 0,
+            page: Math.max(0, parseInt(page)) || 0,
             sort: (sort && sort.split(',')) || ['addDate', 'desc']
         }
     }

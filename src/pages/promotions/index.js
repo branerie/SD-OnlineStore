@@ -4,6 +4,7 @@ import ProductsContextInitializer from '../../ProductsContextInitializer'
 import Header from '../../components/header'
 import Footer from '../../components/footer'
 import ProductPageBody from '../../components/productPageBody'
+import PageWrapper from '../../components/pageWrapper'
 
 const PromotionsPage = ({ pageLength }) => {
     window.history.replaceState({}, null, '/products?bool_discount=true')
@@ -12,10 +13,11 @@ const PromotionsPage = ({ pageLength }) => {
         <>
             <ProductsContextInitializer
                 pageLength={pageLength}>
+                <PageWrapper maxWidth='1250px'>
                     <Header clickedName='Promotions' />
                     <ProductPageBody pageLength={pageLength} />
+                </PageWrapper>
             </ProductsContextInitializer>
-            <Footer />
         </>
     )
 }

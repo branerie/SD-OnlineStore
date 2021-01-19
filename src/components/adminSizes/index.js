@@ -4,11 +4,13 @@ import ProductsContext from '../../ProductsContext'
 import { updateProductSizes } from '../../services/adminProduct'
 import AdminSizesRow from '../adminSizesRow'
 import AdminSizesEdit from '../adminSizesEdit'
+import { useAsyncError } from '../../hooks'
 
 const AdminSizes = ({ sizes, productId }) => {
     const [currentProductSizes, setCurrentProductSizes] = useState(sizes)
     const [modifiedSizes, setModifiedSizes] = useState([])
     const [editedSizeName, setEditedSizeName] = useState('')
+    const throwInternalError = useAsyncError()
 
     const { updateFilters, updateProductsPage } = useContext(ProductsContext)
 
@@ -35,8 +37,7 @@ const AdminSizes = ({ sizes, productId }) => {
 
         const updatedSizes = await updateProductSizes(productId, modifiedSizes)
         if (updatedSizes.error) {
-            //TODO: Display error to client
-            return
+            throwInternalError()
         }
 
         setModifiedSizes([])

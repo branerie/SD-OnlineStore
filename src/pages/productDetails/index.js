@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Footer from '../../components/footer'
 import ProductDetailsBody from '../../components/productDetailsBody'
-import HeaderHome from '../../components/headerHome'
+import Header from '../../components/header'
 import { useParams } from 'react-router-dom'
 import { getProductDetails } from '../../services/product'
+import PageWrapper from '../../components/pageWrapper'
 
 const ProductDetails = () => {
     const { id } = useParams()
     const [currentProduct, setCurrentProduct] = useState(null)
 
     const getCurrentProduct = useCallback(async () => {
-        const response =  await getProductDetails(id)
-        if (response.error) { 
+        const response = await getProductDetails(id)
+        if (response.error) {
             //TODO: handle errors
             return
         }
@@ -29,11 +29,10 @@ const ProductDetails = () => {
     }
 
     return (
-        <>
-            <HeaderHome />
+        <PageWrapper>
+            <Header />
             <ProductDetailsBody product={currentProduct} />
-            <Footer />
-        </>
+        </PageWrapper>
     )
 }
 

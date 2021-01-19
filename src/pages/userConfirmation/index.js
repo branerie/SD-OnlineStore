@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
-import UserContext from '../../Context'
+import UserContext from '../../UserContext'
 import { confirmUser } from '../../services/user'
 import ErrorPage from '../error'
 
@@ -13,18 +13,14 @@ const UserConfirmation = () => {
     const handleUserConfirmation = useCallback(async () => {
         if (!confirmationToken) {
             return (
-                <ErrorPage>
-                    {INVALID_TOKEN_MESSAGE}
-                </ErrorPage>
+                <ErrorPage message={INVALID_TOKEN_MESSAGE} status={400} />
             )
         }
 
         const result = await confirmUser(confirmationToken)
         if (result.error) {
             return (
-                <ErrorPage>
-                    {INVALID_TOKEN_MESSAGE}
-                </ErrorPage>
+                <ErrorPage message={INVALID_TOKEN_MESSAGE} status={400} />
             )
         }
 

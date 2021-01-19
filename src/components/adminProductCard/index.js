@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react'
 import styles from './index.module.css'
-import UserContext from '../../Context'
+import UserContext from '../../UserContext'
 
 import ProductCard from '../productCard'
 import ModifyProductCard from '../modifyProductCard'
@@ -8,12 +8,14 @@ import ProductsContext from '../../ProductsContext'
 import AdminImageCards from '../adminImageCards'
 
 import { deleteProduct } from '../../services/adminProduct'
+import { useAsyncError } from '../../hooks'
 
 
 const AdminProductCard = (props) => {
     const [isEditing, setIsEditing] = useState(false)
     const { user: { isAdmin }} = useContext(UserContext)
     const productsContext = useContext(ProductsContext)
+    const throwInternalError = useAsyncError()
 
     const id = props.id
 
@@ -26,7 +28,7 @@ const AdminProductCard = (props) => {
 
         const deleteResult = await deleteProduct(id)
         if (deleteResult.error) {
-            //TODO: handle errors
+            throwInternalError()
         }
 
         productsContext.handleProductDelete(id)

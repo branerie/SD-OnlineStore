@@ -1,19 +1,17 @@
 import React from 'react'
 import ProductsContextInitializer from '../../ProductsContextInitializer'
-
-import Header from '../../components/header'
-import Footer from '../../components/footer'
 import ProductPageBody from '../../components/productPageBody'
+import PageWrapper from '../../components/pageWrapper'
+import Header from '../../components/header'
 
 const ProductPage = ({ pageLength }) => {
     return (
-        <>
-            <ProductsContextInitializer pageLength={pageLength}>
+        <ProductsContextInitializer pageLength={pageLength}>
+            <PageWrapper maxWidth='1250px'>
                 <Header />
                 <ProductPageBody pageLength={pageLength} />
-            </ProductsContextInitializer>
-            <Footer />
-        </>
+            </PageWrapper>
+        </ProductsContextInitializer>
     )
 }
 

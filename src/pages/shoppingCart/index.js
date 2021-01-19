@@ -1,12 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import styles from './index.module.css'
-import UserContext from '../../Context'
+import UserContext from '../../UserContext'
 import { getProductDetailsMain } from '../../services/product'
 import ShoppingCartItem from '../../components/shoppingCartItem'
-import HeaderHome from '../../components/headerHome'
-import Footer from '../../components/footer'
+import Header from '../../components/header'
 import ShoppingCartCheckout from '../../components/shoppingCartCheckout'
 import BackIconLink from '../../components/iconLinks/backIconLink'
+import PageWrapper from '../../components/pageWrapper'
 
 const ShoppingCartPage = () => {
     const [productsInCart, setProductsInCart] = useState([])
@@ -44,8 +44,8 @@ const ShoppingCartPage = () => {
     }, [getItemsInCart, cart])
 
     return (
-        <>
-            <HeaderHome />
+        <PageWrapper>
+            <Header />
             { productsInCart.length > 0
                 ?
                 <>
@@ -70,8 +70,7 @@ const ShoppingCartPage = () => {
                     <BackIconLink />
                 </>
             }
-            <Footer />
-        </>
+        </PageWrapper>
     )
 }
 

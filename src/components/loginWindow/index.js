@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useRef, useState } from 'react'
 import styles from './index.module.css'
 
 import { logInUser } from '../../services/user'
-import UserContext from '../../Context'
+import UserContext from '../../UserContext'
 import TextInput from '../inputFields/textInput'
 import WindowContainer from '../windowContainer'
 import FacebookLoginButton from './loginFacebookButton'

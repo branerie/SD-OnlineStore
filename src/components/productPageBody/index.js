@@ -14,9 +14,7 @@ const ProductPageBody = ({ pageLength }) => {
                 <ProductsFilter />
             </aside>
             <main className={styles['main-container']}>
-                <div className={styles['button-wrapper']}>
                     <NavButtons />
-                </div>
                 <Pagination pageLength={pageLength}>
                     <div className={styles['sort-position']} >
                         <SortCriteria />

@@ -111,6 +111,25 @@ router.get('/categories', (req, res) => {
     }
 })
 
+router.get('/details/main', async (req, res) => {
+    try {
+        const { pid: productStringIds } = req.query
+
+        if (!productStringIds) {
+            return res.status(400).send({ error: 'Missing product ids' })
+        }
+
+        const productIds = productStringIds.split(',').map(id => new ObjectId(id))
+
+        const fullProductsInCart = await Product.find({ _id: { $in: productIds } })
+        const productDetailsMain = parseCartMongoProducts(fullProductsInCart)
+
+        return res.send(productDetailsMain)
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+})
+
 router.get('/:id', async (req, res) => {
     const id = req.params.id
 
@@ -167,25 +186,6 @@ router.patch('/rating', restrictToUser, async (req, res) => {
             return res.status(403).send({ error: `Product with id ${id} does not exist.` })
         }
 
-        return res.status(500).send({ error: error.message })
-    }
-})
-
-router.get('/details/main', async (req, res) => {
-    try {
-        const { pid: productStringIds } = req.query
-
-        if (!productStringIds) {
-            return res.status(400).send({ error: 'Missing product ids' })
-        }
-
-        const productIds = productStringIds.split(',').map(id => new ObjectId(id))
-
-        const fullProductsInCart = await Product.find({ _id: { $in: productIds } })
-        const productDetailsMain = parseCartMongoProducts(fullProductsInCart)
-
-        return res.send(productDetailsMain)
-    } catch (error) {
         return res.status(500).send({ error: error.message })
     }
 })

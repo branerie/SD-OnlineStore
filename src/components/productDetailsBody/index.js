@@ -1,8 +1,9 @@
-import React, { useState, useCallback} from 'react'
+import React, { useState, useCallback } from 'react'
 import styles from './index.module.css'
 import BackIconLink from '../iconLinks/backIconLink'
 import ImageGrid from '../imageGrid'
 import ProductDetailsAside from '../productDetailsAside'
+import NavButtons from '../navButtons'
 
 const ProductDetailsBody = ({ product }) => {
     const images = product.images
@@ -14,17 +15,20 @@ const ProductDetailsBody = ({ product }) => {
         <div className={styles.container}>
             <ProductDetailsAside {...product} />
             <main className={styles['main-container']}>
+                <div className={styles['nav-secondary']}>
+                    <BackIconLink />
+                    <NavButtons />
+                </div>
                 <div className={styles['img-container']}>
                     <div className={styles['img-selected']}>
-                        <img 
+                        <img
                             src={selectedImg}
                             alt={'No Image'}
                             className={styles['product-image']}
                         />
                     </div>
-                    <ImageGrid imgCollection={images} setCurrentImage={setCurrentImg}/>
+                    <ImageGrid imgCollection={images} setCurrentImage={setCurrentImg} />
                 </div>
-                <BackIconLink />
             </main>
         </div>
     )

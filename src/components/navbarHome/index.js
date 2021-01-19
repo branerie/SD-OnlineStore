@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import styles from './index.module.css'
-import UserContext from '../../Context'
+import UserContext from '../../UserContext'
 import NavbarLink from '../navbarLink'
 import NavButtons from '../navButtons'
 

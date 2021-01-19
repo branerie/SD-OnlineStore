@@ -48,6 +48,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-end;
+    min-width: 14rem;
 }
 
 .btn-container {

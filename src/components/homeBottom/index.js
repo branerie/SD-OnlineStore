@@ -21,21 +21,21 @@ const HomeBottom = () => {
                         <img
                             src={fastDelivery}
                             alt='Fast delivery'
-                            style={{ width: '3.5rem' }} />
+                            style={{ width: '3rem' }} />
                         <span>fast delivery</span>
                     </div>
                     <div className={styles['img-container']}>
                         <img
                             src={fallingPrices}
                             alt='Falling prices'
-                            style={{ width: '2rem' }} />
+                            style={{ width: '1.5rem' }} />
                         <span>falling prices</span>
                     </div>
                     <div className={styles['img-container']}>
                         <img
                             src={freeReturn}
                             alt='Free return'
-                            style={{ width: '4rem' }} />
+                            style={{ width: '3rem' }} />
                         <span>free return</span>
                     </div>
                     <div className={styles['img-container']}>

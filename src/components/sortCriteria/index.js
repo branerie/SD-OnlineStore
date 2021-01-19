@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import ProductsContext from '../../ProductsContext'
-import useVisible from '../../hooks/setVisible'
+import { useVisible } from '../../hooks'
 import styles from './index.module.css'
 import sortByArrow from '../../images/sortByArrow.svg'
 

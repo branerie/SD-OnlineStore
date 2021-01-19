@@ -9,7 +9,7 @@ import TextInput from '../../components/inputFields/textInput'
 import SectionTitle from '../../components/sectionTitle'
 import SubmitButton from '../../components/submitButton'
 import { resetUserPassword } from '../../services/user'
-import UserContext from '../../Context'
+import UserContext from '../../UserContext'
 
 const PASSWORD_MIN_LENGTH = 6
 const PASSWORD_MAX_LENGTH = 30

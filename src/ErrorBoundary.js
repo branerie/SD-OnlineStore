@@ -1,14 +1,15 @@
 import React from 'react'
+import ErrorPage from './pages/error'
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { error: null }
+        this.state = { status: null, message: '' }
     }
   
     static getDerivedStateFromError(error) { 
         // Update state so the next render will show the fallback UI.
-        return { error: error.message }  
+        return { status: error.status, message: error.message }  
     }
     
     // componentDidCatch(error, errorInfo) {    
@@ -17,9 +18,8 @@ class ErrorBoundary extends React.Component {
     // }
     
     render() {
-        if (this.state.error) {      
-            // You can render any custom fallback UI
-            return <h1>{this.state.error}</h1>   
+        if (this.state.status || this.state.message) {      
+            return <ErrorPage status={this.state.status} message={this.state.message} />   
         }
 
         return this.props.children

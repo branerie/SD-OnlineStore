@@ -8,7 +8,7 @@ const {
 const { decode } = require('jsonwebtoken')
 const User = require('../models/user')
 const TokenBlackList = require('../models/tokenBlackList')
-const { isMongoError } = require('../utils/general')
+const { isMongoError, isValidObjectId } = require('../utils/general')
 const { sendConfirmationEmail, sendPasswordResetEmail } = require('../utils/user')
 
 const AUTHORIZATION_HEADER_NAME = 'Authorization'
@@ -93,13 +93,24 @@ router.patch('/favorites', async (req, res) => {
 
 router.patch('/:userId/cart', async (req, res) => {
     try {
-        const { userId } = req.params
-        const { productId, sizeName, quantity } = req.body
+        const { userId } = req.params        
+        const userNotExistError = 'Invalid user ID'
+        if (!isValidObjectId(userId)) {
+            return res.status(400).send({
+                status: 400,
+                error: userNotExistError 
+            })
+        }
 
         const user = await User.findById(userId)
         if (!user) {
-            return res.status(400).send({ error: `User with id ${userId} does not exist` })
+            return res.status(400).send({
+                status: 400,
+                error: userNotExistError 
+            })
         }
+
+        const { productId, sizeName, quantity } = req.body
 
         const parsedQuantity = parseInt(quantity)
         if (isNaN(parsedQuantity)) {

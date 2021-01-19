@@ -4,12 +4,14 @@ import Input from '../input'
 import ProductsContext from '../../ProductsContext'
 
 import { updateProductCategories } from '../../services/adminProduct'
+import { useAsyncError } from '../../hooks'
 
 const AdminCategories = (props) => {
     const [categories, setCategories] = useState(props.categories)
     const [category, setCategory] = useState('')
     const [categoryChanges, setCategoryChanges] = useState([])
     const productsContext = useContext(ProductsContext)
+    const throwInternalError = useAsyncError()
 
     const editCategories = async (event, action) => {
         event.preventDefault()
@@ -36,8 +38,7 @@ const AdminCategories = (props) => {
         const productId = props.id
         const updatedCategories = await updateProductCategories(productId, categoryChanges)
         if (updatedCategories.error) {
-            //TODO: Display error to client
-            return
+            throwInternalError()
         }
 
         setCategoryChanges([])

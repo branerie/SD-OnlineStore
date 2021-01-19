@@ -1,15 +1,15 @@
 import React from 'react'
 import styles from './index.module.css'
+import indexImage from '../../images/index.jpg'
 
 import CategoryCards from '../../components/categoryCards'
-import indexImage from '../../images/index.jpg'
-import HeaderHome from '../../components/headerHome'
 import HomeBottom from '../../components/homeBottom'
-import Footer from '../../components/footer'
+import PageWrapper from '../../components/pageWrapper'
+import HeaderHome from '../../components/headerHome'
 
 const HomePage = () => {
     return (
-        <>
+        <PageWrapper>
             <HeaderHome />
             <div className={styles['img-container']}>
                 <img
@@ -22,8 +22,7 @@ const HomePage = () => {
                 <CategoryCards />
             </section>
             <HomeBottom />
-            <Footer />
-        </>
+        </PageWrapper>
     )
 }
 

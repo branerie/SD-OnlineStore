@@ -36,6 +36,12 @@ const parseValidationConstants = (constants) => {
     return parsedConstants
 }
 
+function InternalError(status, message) {
+    this.status = status
+    this.message = message
+}
+
 export {
-    parseValidationConstants
+    parseValidationConstants,
+    InternalError
 }
