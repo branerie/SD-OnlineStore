@@ -1,8 +1,9 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import HeaderHome from '../../components/headerHome'
-import Footer from '../../components/footer'
+import Header from '../../components/header'
 import ErrorBody from '../../components/errorBody'
+import PageWrapper from '../../components/pageWrapper'
+import NavButtons from '../../components/navButtons'
 
 const ErrorPage = ({ status, message }) => {
     const history = useHistory()
@@ -18,11 +19,11 @@ const ErrorPage = ({ status, message }) => {
     }
 
     return (
-        <>
-            <HeaderHome />
+        <PageWrapper>
+            <Header />
+            <NavButtons />
             <ErrorBody status={status} message={message} />
-            <Footer />
-        </>
+        </PageWrapper>
     )
 }
 
