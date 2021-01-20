@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
+import ErrorContext from '../../ErrorContext'
 import RatingIcon from '../ratingIcon'
 import { setRating } from '../../services/product'
 
@@ -9,6 +10,7 @@ const RatingStars = (props) => {
     const [ratingStars, setRatingStars] = useState(props.ratingStars)
     const [onHover, setOnHover] = useState(0)
     const [ratingCounter, setRatingCounter] = useState(props.ratingCounter)
+    const { addMessage } = useContext(ErrorContext)
     const productId = props.productId
 
     const onMouseEnter = (indexOfStar) => {
@@ -23,7 +25,11 @@ const RatingStars = (props) => {
         const response = await setRating(indexOfStar, productId)
        
         if(response.error) {
-            //TODO handle errors
+            addMessage(
+                'Set Product Rating', 
+                'Something went wrong when trying to rate product. We apologize for the inconvenience!'
+            )
+
             return
         }
 

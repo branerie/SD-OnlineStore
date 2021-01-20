@@ -1,7 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import UserContext from '../../UserContext'
+import ErrorContext from '../../ErrorContext'
 import Header from '../../components/header'
 import BackIconLink from '../../components/iconLinks/backIconLink'
-import UserContext from '../../UserContext'
 import FavoritesListItem from '../../components/favoritesListItem'
 import { getProductDetailsMain } from '../../services/product'
 import styles from './index.module.css'
@@ -11,6 +13,8 @@ import NavButtons from '../../components/navButtons'
 const FavoritesPage = () => {
     const [favorites, setFavorites] = useState(null)
     const { user } = useContext(UserContext)
+    const { addMessage } = useContext(ErrorContext)
+    const history = useHistory()
 
     const getFavorites = useCallback(async () => {
         if (user.favorites.length === 0) {
@@ -28,8 +32,12 @@ const FavoritesPage = () => {
 
         const favoriteProducts = await getProductDetailsMain(user.favorites)
         if (favoriteProducts.error) {
-            //TODO: Handle errors
-            return
+            addMessage(
+                'User Favorites', 
+                'Something went wrong when trying to get user\'s product favorites.'
+            )
+
+            return history.goBack()
         }
 
         setFavorites(favoriteProducts)

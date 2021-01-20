@@ -1,5 +1,6 @@
 .container {
     display: flex;
+    margin-top: 2rem;
 }
 
 .cards {
@@ -8,6 +9,7 @@
 
 .filters {
     flex-grow: 1;
+    min-width: 14%;
 }
 
 

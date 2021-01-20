@@ -7,6 +7,7 @@ import Header from '../../components/header'
 import ShoppingCartCheckout from '../../components/shoppingCartCheckout'
 import BackIconLink from '../../components/iconLinks/backIconLink'
 import PageWrapper from '../../components/pageWrapper'
+import NavButtons from '../../components/navButtons'
 
 const ShoppingCartPage = () => {
     const [productsInCart, setProductsInCart] = useState([])
@@ -46,6 +47,7 @@ const ShoppingCartPage = () => {
     return (
         <PageWrapper>
             <Header />
+            <NavButtons />
             { productsInCart.length > 0
                 ?
                 <>

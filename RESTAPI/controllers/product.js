@@ -162,7 +162,7 @@ router.patch('/rating', restrictToUser, async (req, res) => {
         }
 
         if (rating > 5) {
-            return res.status(403).send({ error: `Product cannot be rated with ${rating} stars.` })
+            return res.status(400).send({ error: `Product cannot be rated with ${rating} stars.` })
         }
 
         const oldRating = product.rating.currentRating || 0

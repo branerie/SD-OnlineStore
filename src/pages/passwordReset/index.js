@@ -1,6 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import UserContext from '../../UserContext'
+import ErrorContext from '../../ErrorContext'
 import styles from './index.module.css'
 
 import Footer from '../../components/footer'
@@ -9,30 +11,45 @@ import TextInput from '../../components/inputFields/textInput'
 import SectionTitle from '../../components/sectionTitle'
 import SubmitButton from '../../components/submitButton'
 import { resetUserPassword } from '../../services/user'
-import UserContext from '../../UserContext'
-
-const PASSWORD_MIN_LENGTH = 6
-const PASSWORD_MAX_LENGTH = 30
-const PASSWORD_PATTERN = new RegExp(`^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{${PASSWORD_MIN_LENGTH},${PASSWORD_MAX_LENGTH}}$`)
+import { getValidationConstants } from '../../services/info'
+import ValidationErrorMessage from '../../components/validationErrorMessage'
 
 const PasswordResetPage = () => {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [validationConstants, setValidationConstants] = useState(null)
     const [isSent, setIsSent] = useState(false)
     const { resetToken } = useParams()
     const { register, errors, handleSubmit, setError } = useForm()
     const { setNewUser } = useContext(UserContext)
+    const { addMessage } = useContext(ErrorContext)
+
+    const getProductValidationConstants = useCallback(async () => {
+        const constants = await getValidationConstants('user')
+        setValidationConstants(constants)
+    }, [setValidationConstants])
+
+    useEffect(() => {
+        getProductValidationConstants()
+    }, [getProductValidationConstants])    
 
     const handleFormSubmit = async ({ password }) => {
         const result = await resetUserPassword(password, resetToken)
 
-        if(result.error) {
-            //TODO: handle errors
+        if (result.error) {
+            addMessage(
+                'Password Reset Confirm',
+                'Something went wrong when trying to reset your password. Please be patient as we try to sort out the issue.'
+            )
             return
         }
 
         setNewUser(result)
         setIsSent(true)
+    }
+
+    if (!validationConstants) {
+        return null
     }
 
     if (isSent) {
@@ -51,37 +68,24 @@ const PasswordResetPage = () => {
                         placeholder='Password'
                         value={password}
                         onChange={e => setPassword(e.target.value)}
-                        reference={register({
-                            pattern: {
-                                value: PASSWORD_PATTERN,
-                                message: `Password must be between ${PASSWORD_MIN_LENGTH} and ${PASSWORD_MAX_LENGTH} characters long and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character`
-                            },
-                            required: {
-                                value: true,
-                                message: 'Password is required'
-                            }
-                        })}
+                        reference={register(validationConstants.password)}
                     />
-                    {errors.password && (<div className={styles.error}>{errors.password.message}</div>)}
+                    {errors.password && (<ValidationErrorMessage message={errors.password.message} />)}
                     <TextInput
                         name='confirmPassword'
                         type='password'
                         placeholder='Confirm Password'
                         value={confirmPassword}
                         onChange={e => setConfirmPassword(e.target.value)}
-                        ref={register({
-                            validate: value => value === password
-                        })}
+                        ref={register({ validate: value => value === password })}
                     />
                     <input
                         type='hidden'
                         name='match'
                         value={password === confirmPassword}
-                        ref={register({
-                            validate: value => value === 'true'
-                        })}
+                        ref={register({ validate: value => value === 'true' })}
                     />
-                    {errors.match && (<div className={styles.error}>Passwords must match</div>)}
+                    {errors.match && (<ValidationErrorMessage message='Passwords must match' />)}
                     <SubmitButton text='Submit'style={{ marginTop: '1rem' }} />
                 </div>
             </form>

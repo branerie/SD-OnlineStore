@@ -12,7 +12,6 @@ const NumberInput = ({
     onChange,
     onBlur,
     reference,
-    
     unitsPlaceholder
 }) => {
     const [isVisible, setIsVisible] = useState(value != undefined)

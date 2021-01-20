@@ -364,9 +364,9 @@ router.post('/password/reset/confirm', async (req, res) => {
         user.set('password', newPassword)
         await user.save()
 
-        const userData = { id: user._id, favorites: user.favorites, isAdmin: user.isAdmin }
         attachLoginCookie(user, res)
-
+        
+        const userData = { id: user._id, favorites: user.favorites, isAdmin: user.isAdmin }
         return res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })

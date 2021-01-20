@@ -1,10 +1,11 @@
 import React, { useContext,  useReducer } from 'react'
 import styles from './index.module.css'
+import ErrorContext from '../../ErrorContext'
+import ProductsContext from '../../ProductsContext'
 
 import Input from '../input'
 import AdminCategories from '../adminCategories'
 import AdminSizes from '../adminSizes'
-import ProductsContext from '../../ProductsContext'
 import GenderInput from '../inputFields/genderInput'
 
 import { updateProduct } from '../../services/adminProduct'
@@ -12,6 +13,7 @@ import NumberInput from '../inputFields/numberInput'
 
 const ModifyProductCard = (props) => {
     const productsContext = useContext(ProductsContext)
+    const { addMessage } = useContext(ErrorContext)
     
     const initialProduct = {
         brand: props.brand,
@@ -55,12 +57,20 @@ const ModifyProductCard = (props) => {
 
         if((state.discount.percent && !state.discount.endDate) ||
            (!state.discount.percent && state.discount.endDate)) {
-            //TODO: handle errors
+            addMessage(
+                'Discount Input Error', 
+                'Product discount must have both a percentage and an end date.'
+            )
+            return
         }
 
         const updateResult = await updateProduct(productId, state)
         if (updateResult.error) {
-            //TODO: handle errors
+            addMessage(
+                'Product Update Error',
+                'An error occurred when trying to update product details.'
+            )
+            return
         }
 
         productsContext.updateFilters()
@@ -83,6 +93,7 @@ const ModifyProductCard = (props) => {
                     placeholder='Price'
                     min='0'
                     onChange={e => stateDispatch({ type: 'price' , value: e.target.value })}
+                    unitsPlaceholder='$'
                 />
                 <Input
                     type='number'

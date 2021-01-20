@@ -1,21 +1,27 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
 import TextInput from '../inputFields/textInput'
 import WindowContainer from '../windowContainer'
 import { sendPasswordResetEmail } from '../../services/user'
 import SectionTitle from '../sectionTitle'
 import SubmitButton from '../submitButton'
+import ErrorContext from '../../ErrorContext'
 
 const PasswordResetFormWindow = ({ hideWindow }) => {
     const [email, setEmail] = useState(null)
     const [isSent, setIsSent] = useState(false)
+    const { addMessage } = useContext(ErrorContext)
 
     const handleSubmit = async (event) => {
         event.preventDefault()
 
         const result = await sendPasswordResetEmail(email)
         if (result.error) {
-            //TODO: handle errors
+            addMessage(
+                'Password Reset Email', 
+                'Something went wrong when trying to send you a password reset email. Please be patient as we try to sort out the issue.'
+            )
+            
             return
         }
         

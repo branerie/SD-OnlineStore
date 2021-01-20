@@ -1,7 +1,8 @@
-import React, { useState, useReducer, useEffect, useCallback } from 'react'
+import React, { useState, useReducer, useEffect, useCallback, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import styles from './index.module.css'
+import ErrorContext from '../../ErrorContext'
 import Input from '../../components/input'
 import DragAndDrop from '../../components/dragAndDrop'
 import GenderInput from '../../components/inputFields/genderInput'
@@ -24,6 +25,8 @@ const AddProductCard = () => {
     const [discountEndDate, setDiscountEndDate] = useState(null)
     const [gender, setGender] = useState('U')
     const [validationConstants, setValidationConstants] = useState(null)
+
+    const { addMessage } = useContext(ErrorContext)
     
     const { register, errors, handleSubmit, setError } = useForm()
     const [images, imagesDispatch] = useReducer(reducer, [])
@@ -83,14 +86,16 @@ const AddProductCard = () => {
 
         const productCreationResult = await createProduct(newProduct)
         if (productCreationResult.error) {
-            //TODO: handle errors
+            addMessage('Create Product', 'Something went wrong when trying to create product.')
+            return
         }
 
         const addedImagePaths = await uploadImages(images)
 
         const imagesAddResult = await addImagesToProduct(productCreationResult.id, addedImagePaths)
         if (imagesAddResult.error) {
-            //TODO: handle error if adding images was unsuccessful 
+            addMessage('Product Add Image', 'Something went wrong when trying to add image to product.')
+            return 
         }
 
         history.push('/admin/products')

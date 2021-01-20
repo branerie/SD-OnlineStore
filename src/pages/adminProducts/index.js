@@ -7,26 +7,29 @@ import Pagination from '../../components/pagination'
 import SortCriteria from '../../components/sortCriteria'
 import ProductsContextInitializer from '../../ProductsContextInitializer'
 import { Link } from 'react-router-dom'
+import PageWrapper from '../../components/pageWrapper'
+import HeaderHome from '../../components/headerHome'
 
 const AdminProductsPage = ({ pageLength }) => {
-	console.log(3)
-
 	return (
-		<div className={styles.container}>
-			<ProductsContextInitializer pageLength={pageLength}>
-				<aside className={styles.filters}>
-					<Link to="/admin/products/add"
-						  className={styles['add-product']} >Add Product</Link>
-					<SortCriteria />
-					<ProductsFilter />
-				</aside>
-				<main className={styles.cards}>
-					<Pagination pageLength={pageLength} >
-						<AdminProductCardsList />
-					</Pagination>
-				</main>
-			</ProductsContextInitializer>
-		</div>
+		<ProductsContextInitializer pageLength={pageLength}>
+			<PageWrapper maxWidth='1600px'>
+				<HeaderHome />
+				<div className={styles.container}>
+					<aside className={styles.filters}>
+						<Link to="/admin/products/add"
+							className={styles['add-product']} >Add Product</Link>
+						<SortCriteria />
+						<ProductsFilter />
+					</aside>
+					<main className={styles.cards}>
+						<Pagination pageLength={pageLength} >
+							<AdminProductCardsList />
+						</Pagination>
+					</main>
+				</div>
+			</PageWrapper>
+		</ProductsContextInitializer>
 	)
 }
 
