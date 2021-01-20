@@ -1,17 +1,19 @@
-import React, { useContext } from 'react'
-import ErrorContext from '../../ErrorContext'
+import React, { useMemo } from 'react'
 import styles from './index.module.css'
 
-const ErrorMessage = () => {
-    const { message } = useContext(ErrorContext)
+const ErrorMessage = ({ text, handleClose }) => {
+    // const timeout = useMemo(() => window.setTimeout(handleClose, 10000), [])
 
-    if (!message) {
-        return null
-    }
+    // const handleWindowClose = () => {
+    //     window.clearTimeout(timeout)
+    //     handleClose()
+    // }
 
     return (
         <div className={styles.container}>
-            {message}
+            {/* <div className={styles['btn-close']} onClick={handleWindowClose}>x</div> */}
+            <div className={styles['btn-close']} onClick={handleClose}>x</div>
+            {text}
         </div>
     )
 }

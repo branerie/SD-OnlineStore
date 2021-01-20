@@ -1,8 +1,9 @@
 import React from 'react'
 
 const ErrorContext = React.createContext({
-    message: null,
-    setMessage: () => {}
+    messages: null,
+    addMessage: () => {},
+    closeMessage: () => {}
 })
 
 export default ErrorContext

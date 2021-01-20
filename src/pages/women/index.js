@@ -2,7 +2,6 @@ import React from 'react'
 import ProductsContextInitializer from '../../ProductsContextInitializer'
 
 import Header from '../../components/header'
-import Footer from '../../components/footer'
 import ProductPageBody from '../../components/productPageBody'
 import PageWrapper from '../../components/pageWrapper'
 

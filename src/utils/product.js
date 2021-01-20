@@ -55,7 +55,7 @@ function parseQueryString(queryString) {
         return {}
     }
 
-    let queryPairs = queryString.replace('?', '').split('&')
+    let queryPairs = decodeURIComponent(queryString.replace('?', '')).split('&')
 
     if (queryPairs.length === 0 ||
         (queryPairs.length === 1 && queryPairs[0] === '')) {

@@ -1,17 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styles from './index.module.css'
 import commonStyles from '../index.module.css'
 import { loadFacebookSDK } from '../../../utils/user'
 import { loginWithFacebook } from '../../../services/user'
+import ErrorContext from '../../../ErrorContext'
 
 const FacebookLogin = ({ setUserState, text = 'facebook' }) => {
     const [fb, setFb] = useState(window.fb)
+    const { addMessage } = useContext(ErrorContext)
 
     useEffect(() => {
         const unloadFacebookSDK = loadFacebookSDK()
 
         if (!window.FB) {
             // TODO: User's browser is blocking the facebook SDK - display a message
+            addMessage(
+                'Facebook SDK', 
+                'Facebook tools have been blocked by your browser\'s settings. Please allow facebook or choose a different login method.'
+            )
+            
             return
         }
 

@@ -2,10 +2,20 @@ import React, { useState } from 'react'
 import ErrorContext from './ErrorContext'
 
 const ErrorContextInitializer = ({ children }) => {
-    const [message, setMessage] = useState(null)
+    const [messages, setMessages] = useState([])
+
+    const closeMessage = (msgName) => setMessages(messages.filter(msg => msg.name !== msgName))
+
+    const addMessage = (name, text) => {
+        if (messages.some(msg => msg.name === name)) {
+            return
+        }
+
+        setMessages([...messages, { name, text }])
+    }
 
     return (
-        <ErrorContext.Provider value={{ message, setMessage }}>
+        <ErrorContext.Provider value={{ messages, addMessage, closeMessage }}>
             {children}
         </ErrorContext.Provider>
     )
