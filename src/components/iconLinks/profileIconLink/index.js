@@ -1,14 +1,17 @@
 import React, { useState, useMemo, useContext, useCallback, useEffect } from 'react'
-import styles from '../index.module.css'
+import styles from './index.module.css'
 import { logOut } from '../../../services/user'
 import UserContext from '../../../UserContext'
 import LoginWindow from '../../loginWindow'
 import RegisterWindow from '../../registerWindow'
 import PasswordResetFormWindow from '../../passwordResetFormWindow'
-import { useAsyncError } from '../../../hooks'
+import { useAsyncError, useVisible } from '../../../hooks'
 
 const ProfileIconLink = () => {
     const [isFilled, setIsFilled] = useState(false)
+    const { ref, isVisible, setIsVisible } = useVisible(false)
+    const [loginFormRender, setLoginFormRender] = useState(false)
+    const [profilFormRender, setProfileFormRender] = useState(false)
     const [shownWindow, setShownWindow] = useState('')
     const throwInternalError = useAsyncError()
     
@@ -22,17 +25,35 @@ const ProfileIconLink = () => {
 
     const checkUserId = async () => {
         if (!user.userId) {
-            setShownWindow('login')
+
+            setIsVisible(!isVisible)
+            setLoginFormRender(true)
+
+            if (profilFormRender) {
+                setProfileFormRender(false)
+            }
+
             return
         }
-        
-        const result = await logOut()
 
+        if (loginFormRender) {
+            setLoginFormRender(false)
+        }
+
+        setIsVisible(!isVisible)
+        setProfileFormRender(true)
+        
+    }
+    const logOutUser = async () => {
+        const result = await logOut()
+    
         if (result.error ) {
             throwInternalError()
         }
 
+        setIsVisible(!isVisible)
         setNewUser()
+
     }
 
     const hideWindow = useCallback(() => setShownWindow(''), [])
@@ -61,6 +82,31 @@ const ProfileIconLink = () => {
                         </g>
                     </g>
                 </svg>
+            {isVisible && loginFormRender ?
+                (
+                    <div className={styles.list} ref={ref}>
+                        <div className={styles.criteria}
+                            onClick={() => setShownWindow('login')}>
+                            Log In
+                        </div>
+                        <div className={styles.criteria}
+                            onClick={() => setShownWindow('register')}>
+                            Sign Up
+                        </div>
+                    </div>
+                )
+                : null}
+            {isVisible && profilFormRender ?
+                (
+                    <div className={styles.list} ref={ref}>
+                        <div className={styles.criteria} >Profile</div>
+                        <div className={styles.criteria}
+                            onClick={logOutUser}>
+                            Logout
+                        </div>
+                    </div>
+                )
+                :null}
             </div>
             { shownWindow === 'login'
                 ?

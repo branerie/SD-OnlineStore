@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
 .dropDownMenu {
   margin: 10px;
 }
@@ -34,10 +36,12 @@ button:focus {
   z-index: 1;
   padding: 2px;
   margin-top: 10px;
+  border-radius: 5px;
 }
 
 .criteria {
   background-color: #f9f9f9;
+  font-family: 'Architects Daughter', cursive;
   border: none;
   color: black;
   text-align: start;
@@ -50,7 +54,7 @@ button:focus {
 }
 
 .criteria:hover {
-  background-color: rgb(212, 206, 206);
+  color: #EF696E;
 }
 
 .sort-by-arrow {
