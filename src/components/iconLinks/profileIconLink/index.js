@@ -1,17 +1,14 @@
-import React, { useState, useMemo, useContext, useCallback, useEffect } from 'react'
+import React, { useState, useMemo, useContext, useCallback } from 'react'
+import UserContext from '../../../UserContext'
 import styles from '../index.module.css'
 import { logOut } from '../../../services/user'
-import UserContext from '../../../UserContext'
 import LoginWindow from '../../loginWindow'
 import RegisterWindow from '../../registerWindow'
 import PasswordResetFormWindow from '../../passwordResetFormWindow'
-import { useAsyncError } from '../../../hooks'
 
 const ProfileIconLink = () => {
     const [isFilled, setIsFilled] = useState(false)
     const [shownWindow, setShownWindow] = useState('')
-    const throwInternalError = useAsyncError()
-    
     const { user, setNewUser } = useContext(UserContext)
 
     const fillColor = useMemo(() => {
@@ -29,7 +26,8 @@ const ProfileIconLink = () => {
         const result = await logOut()
 
         if (result.error ) {
-            throwInternalError()
+            // TODO: Decide whether to show error to user if something went wrong
+            // otherwise, can be used as a place to log errors in the future
         }
 
         setNewUser()

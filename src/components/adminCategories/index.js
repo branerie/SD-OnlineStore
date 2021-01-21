@@ -1,17 +1,17 @@
 import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
-import Input from '../input'
 import ProductsContext from '../../ProductsContext'
+import ErrorContext from '../../ErrorContext'
+import Input from '../input'
 
 import { updateProductCategories } from '../../services/adminProduct'
-import { useAsyncError } from '../../hooks'
 
 const AdminCategories = (props) => {
     const [categories, setCategories] = useState(props.categories)
     const [category, setCategory] = useState('')
     const [categoryChanges, setCategoryChanges] = useState([])
     const productsContext = useContext(ProductsContext)
-    const throwInternalError = useAsyncError()
+    const { addMessage } = useContext(ErrorContext)
 
     const editCategories = async (event, action) => {
         event.preventDefault()
@@ -38,7 +38,12 @@ const AdminCategories = (props) => {
         const productId = props.id
         const updatedCategories = await updateProductCategories(productId, categoryChanges)
         if (updatedCategories.error) {
-            throwInternalError()
+            addMessage(
+                'Product Categories Update',
+                'An error occurred while trying to update product categories.'
+            )
+
+            return
         }
 
         setCategoryChanges([])

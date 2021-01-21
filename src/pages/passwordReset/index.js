@@ -41,6 +41,7 @@ const PasswordResetPage = () => {
                 'Password Reset Confirm',
                 'Something went wrong when trying to reset your password. Please be patient as we try to sort out the issue.'
             )
+
             return
         }
 

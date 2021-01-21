@@ -1,20 +1,25 @@
 import React, { useContext, useMemo } from 'react'
+import UserContext from '../../UserContext'
+import ErrorContext from '../../ErrorContext'
 import styles from './index.module.css'
 import { setFavorites } from '../../services/user'
-import UserContext from '../../UserContext'
 import favoritesImageEmpty from '../../images/favoritesLink.svg'
 import favoritesImageFilled from '../../images/favoritesLinkFilled.svg'
-import { useAsyncError } from '../../hooks'
 
 const FavoritesIcon = ({ productId }) => {
     const { user, setNewUser } = useContext(UserContext)
-    const throwInternalError = useAsyncError()
+    const { addMessage } = useContext(ErrorContext)
 
     const changeFavorites = async () => {
         const response = await setFavorites(productId)
 
         if (response.error) {
-            throwInternalError()
+            addMessage(
+                'Change User Favorites',
+                'An error occurred while trying to update your favorite products. We apologize for the inconvenience!'
+            )   
+
+            return
         }
 
         setNewUser({ ...user, favorites: response.favorites })

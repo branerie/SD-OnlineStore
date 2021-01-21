@@ -27,7 +27,7 @@ const ProductDetailsBody = ({ product }) => {
                             className={styles['product-image']}
                         />
                     </div>
-                    <ImageGrid imgCollection={images} setCurrentImage={setCurrentImg} />
+                    <ImageGrid imgCollection={images || []} setCurrentImage={setCurrentImg} />
                 </div>
             </main>
         </div>

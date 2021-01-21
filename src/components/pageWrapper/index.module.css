@@ -2,12 +2,12 @@
     background-color: black;
     display: flex;
     justify-content: center;
-    z-index: -99;
 }  
 
 .inner-container {
     background-color: white;
-    /* max-width: 1120px; */
+    max-width: 1120px;
+    width: 100%;
 }
 
 .error-container {

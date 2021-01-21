@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
 
 .container {
-    min-width: 20%;
+    min-width: 14rem;
     max-width: 20%;
     background-color:rgba(61, 83, 68, 0.31);
     padding: 0 0.6rem;

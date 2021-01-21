@@ -1,5 +1,6 @@
 .container {
     display: flex;
+    overflow-x: auto;
 }
 
 .main-container {

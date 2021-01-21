@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import UserContext from './UserContext'
+import ErrorContext from './ErrorContext'
 import { useAsyncError } from './hooks'
 import { changeShoppingCart, verifyUser } from './services/user'
 import { CART_COOKIE_NAME } from './utils/constants'
@@ -10,6 +11,7 @@ const GUEST_USER = { userId: null, isAdmin: false, favorites: [], cart: [] }
 const UserContextInitializer = ({ children }) => {
     const [user, setUser] = useState(null)
     const throwInternalError = useAsyncError()
+    const { addMessage } = useContext(ErrorContext)
 
     const verifyCurrentUser = useCallback(async () => {
         try {
@@ -60,24 +62,29 @@ const UserContextInitializer = ({ children }) => {
                 return
             }
     
-            setUser({ ...user, cart })
             newQuantity = Math.max(0, newQuantity)
     
             if (user.userId) {
                 const result = await changeShoppingCart(user.userId, productId, sizeName, newQuantity)
     
                 if (result.error) {
-                    // TODO: log errors?
+                    // TODO: Could possibly log errors in future
                     /* 
                     if (result.status) {
                         throwInternalError(new InternalError(result.status, result.error))
                     }
                     */
-    
-                    throwInternalError()
+                   
+                    addMessage(
+                        'Change Shopping Cart',
+                        'An error occurred while trying to update your shopping cart. Please be patient as we try to solve the issue.'
+                    )
                 }
+
+                setUser({ ...user, cart })
             } else {
                 setCookie(CART_COOKIE_NAME, JSON.stringify(cart), '10d')
+                setUser({ ...user, cart })
             }
         } catch(error) {
             throwInternalError()

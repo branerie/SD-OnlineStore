@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
+import ErrorContext from '../../ErrorContext'
 import styles from './index.module.css'
 
 import ImageCards from '../imageCards'
@@ -6,20 +7,23 @@ import ImageCards from '../imageCards'
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from '../../utils/constants'
 import { getImagePath } from '../../utils/product'
 import { addImagesToProduct, removeImage } from '../../services/adminProduct'
-import { useAsyncError } from '../../hooks'
-import { InternalError } from '../../utils/info'
 
 const AdminImageCards = ({ productId, images }) => {
     const imageUrls = images ? [...images] : []
     const [imageCards, setImageCards] = useState(imageUrls)
-    const throwInternalError = useAsyncError()
+    const { addMessage } = useContext(ErrorContext)
 
     const handleImageAdd = async (imageUrl) => {
         const imagePath = getImagePath(imageUrl)
 
         const addResult = await addImagesToProduct(productId, imagePath)
         if (addResult.error) {
-            throwInternalError(new InternalError(500, 'Failed to add image to product'))
+            addMessage(
+                'Add Product Image',
+                'An error occurred while trying to add an image to a product.'
+            )
+
+            return
         }
 
         setImageCards([...imageCards, imageUrl])
@@ -30,7 +34,12 @@ const AdminImageCards = ({ productId, images }) => {
 
         const imageRemoveResult = await removeImage(productId, imagePath)
         if (imageRemoveResult.error) {
-            throwInternalError(new InternalError(500, 'Failed to remove image from product'))
+            addMessage(
+                'Add Product Image',
+                'An error occurred while trying to remove an image from a product.'
+            )
+
+            return
         }
 
         setImageCards(imageCards.filter(img => img !== imageUrl))
@@ -48,7 +57,12 @@ const AdminImageCards = ({ productId, images }) => {
             }
 
             if (error) {
-                throwInternalError()
+                addMessage(
+                    'Cloudinary Widget',
+                    'Product image widget failed to load.'
+                )
+
+                return
             }
         })
 

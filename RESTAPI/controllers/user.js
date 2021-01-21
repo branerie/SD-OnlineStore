@@ -260,24 +260,26 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/logout', async (req, res) => {
-    const currentToken = req.headers.authorization || ''
-
-    if (currentToken) {
-        try {
-            const { exp } = decode(currentToken)
-            await TokenBlackList.create({ token: currentToken, expirationDate: exp * 1000 })
-
-            delete req.headers.authorization
-            return res.send({ status: 'Successfully logged out' })
-        } catch (error) {
-            if (isMongoError(error)) {
-                return res.status(403).send({ error: error.message })
-            }
-
-            return res.status(500).send({ error: error.message })
+    try {
+        const currentToken = req.headers.authorization || ''
+        
+        if (!currentToken) {
+            return res.status(401).send({ error: 'Not logged in' })
         }
-    } else {
-        return res.status(401).send({ error: 'No one is logged in' })
+
+        const { exp } = decode(currentToken)
+        await TokenBlackList.create({ token: currentToken, expirationDate: exp * 1000 })
+
+        delete req.headers.authorization
+        return res.send({ status: 'Successfully logged out' })
+    } catch (error) {
+        delete req.headers.authorization
+
+        if (isMongoError(error)) {
+            return res.status(403).send({ error: error.message })
+        }
+
+        return res.status(500).send({ error: error.message })
     }
 })
 
