@@ -18,7 +18,7 @@ const SortCriteria = () => {
         <div className={styles.dropDownMenu}>
             <button
                 className={styles.title}
-                onClick={e => setIsVisible(!isVisible)}
+                onClick={() => setIsVisible(!isVisible)}
             >
                 Sort by
                     <img src={sortByArrow} alt='Sort By' className={styles['sort-by-arrow']} />
