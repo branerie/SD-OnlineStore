@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import styles from '../index.module.css'
 
-const SearchIconLink = () => {
+const SearchIconLink = ({ onClick }) => {
     const [isFilled, setIsFilled] = useState(false)
 
     const fillColor = useMemo(() => {
@@ -15,7 +15,8 @@ const SearchIconLink = () => {
             className={styles.container}
             style={{ paddingLeft: '5px' }}
             onMouseEnter={() => setIsFilled(true)}
-            onMouseLeave={() => setIsFilled(false)}>
+            onMouseLeave={() => setIsFilled(false)}
+            onClick={onClick}>
             <svg xmlns="http://www.w3.org/2000/svg" width="110%" height="110%" viewBox="0 0 44.786 67.971">
                 <g id="Group_1" data-name="Group 1" transform="translate(-1534.241 -103.111)">
                     <path id="Path_299" data-name="Path 299" d="M12343.864-986.766s2.248,22.468,8.171,26.145,4.7-2.247,4.7-2.247-11.029-17.362-8.374-23.9" transform="translate(-10787 1130)" fill={fillColor} stroke="#707070" strokeWidth="1" />

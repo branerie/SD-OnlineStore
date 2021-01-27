@@ -8,6 +8,7 @@ import SearchIconLink from '../iconLinks/searchIconLink'
 
 const NavbarSearch = () => {
     const [searchTerm, setSearchTerm] = useState('')
+    const [isInputShown, setIsInputShown] = useState(false)
     const { filtersDispatch } = useContext(ProductsContext)
     const ref = useRef(null)
     const history = useHistory()
@@ -32,6 +33,18 @@ const NavbarSearch = () => {
         filtersDispatch({ type: 'search', searchTerm: searchTerm })
     }
 
+    const handleClick = () => {
+        if (window.innerWidth < 768) {
+            setIsInputShown(true)
+        } else {
+            ref.current.click()
+        }
+    }
+
+    const closeMediaSearch = () => {
+        setIsInputShown(false)
+    }
+
     return (
         <form noValidate onSubmit={handleSubmit} className={styles.container} data-testid='search-form'>
             <input
@@ -42,7 +55,23 @@ const NavbarSearch = () => {
                 placeholder='Search' required
                 onChange={e => setSearchTerm(e.target.value)}
             />
-            <SearchIconLink onClick={() => ref.current.click()} />
+            {isInputShown 
+                ?   <div className={styles['media-search']}>
+                        <input
+                            type='text'
+                            name='responsiveSearch'
+                            value={searchTerm}
+                            className={styles['media-input']}
+                            placeholder='Search' required
+                            onChange={e => setSearchTerm(e.target.value)}/>
+                        <div className={styles['close-mediaSearch']} onClick={closeMediaSearch}>
+                            <span className={styles['media-bar']} />
+                            <span className={styles['media-bar']} />
+                        </div>
+                    </div>
+                : null
+            }
+            <SearchIconLink onClick={handleClick} />
             <input type='submit' ref={ref} className={styles['submit-btn']} />
         </form>
     )

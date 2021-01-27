@@ -8,15 +8,78 @@
 .navbar-links {
     margin-top: 0;
     margin-bottom: 0;
-    min-width: 50%;
+    /* min-width: 50%; */
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     list-style-type: none;
     padding-left: 5.5rem;
     padding-top: 0.6rem;
     width: 100%;
 }
 
-.logo-space {
-    min-width: 100px;
+.menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    transition: all 0.3s ease-in-out;
+    background: #3D5344;
+
+}
+
+.nav-menu {
+    display: flex;
+    width: 100%;
+    justify-content: space-around
+}
+
+@media screen and (max-width:768px) {
+    .site-nav {
+        position: relative;
+    }
+    
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 3.4rem;
+        width: 100%;
+        left: -100%;
+        opacity: 0;
+        transition: all 0.5s ease;
+    }
+
+    .nav-menu.active{
+        background-color: rgb(206, 206, 206);
+        left: 0;
+        opacity: 1;
+        transition: all 0.5s ease;
+    }
+
+    .menu-toggle {
+        position: absolute;
+        top: 20%;
+        left: 17px;
+    }
+
+    .menu-toggle .bar {
+        display: block;
+        cursor: pointer;
+    }
+
+    .menu-toggle:hover {
+        cursor: pointer;
+    }
+
+    .menu-toggle.is-active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.is-active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-toggle.is-active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
 }

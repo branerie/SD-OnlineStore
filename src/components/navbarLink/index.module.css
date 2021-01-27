@@ -15,4 +15,5 @@
 
 .link:hover {
     color: #EF696E;
+    transition: all 0.4s ease-out;
 }
