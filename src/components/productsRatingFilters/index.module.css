@@ -34,6 +34,8 @@
 .check-box {
     margin-left: 10%;
     margin-top: 5%;
+    min-width: 50%;
+    max-width: 100%;
 }
 
 .container:hover input~.checkmark {

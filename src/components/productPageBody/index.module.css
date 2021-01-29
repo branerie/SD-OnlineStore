@@ -6,10 +6,10 @@
 
 .aside-container {
     flex-grow: 1;
-    min-width: 14%;
+    /* min-width: 14%;
     background-color: #3D53444F;
     padding: 0 10px;
-    max-width: 14%;
+    max-width: 14%; */
 }
 
 .main-container {
@@ -28,4 +28,10 @@
     display: flex;
     justify-content: flex-end;
     margin-right: 3rem;
+}
+
+@media screen and (max-width:768px) {
+    .aside-container {
+        display: inline-block;
+    }
 }
