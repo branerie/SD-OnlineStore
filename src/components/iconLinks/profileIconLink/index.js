@@ -40,9 +40,9 @@ const ProfileIconLink = () => {
         <>
             <div
                 className={styles.container}
-                // onMouseEnter={() => setIsFilled(true)}
-                // onMouseLeave={() => setIsFilled(false)}
-                onClick={() => setIsVisible(!ref.current)}
+                onMouseEnter={() => setIsFilled(true)}
+                onMouseLeave={() => setIsFilled(false)}
+                onClick={() => setIsVisible(!isVisible)}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 52.844 49.636">
                     <g id="Group_3" data-name="Group 3" transform="translate(-1814.241 -103.364)">
