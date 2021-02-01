@@ -1,22 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import styles from './index.module.css'
 import UserContext from '../../UserContext'
 import NavbarLink from '../navbarLink'
 import NavButtons from '../navButtons'
+import { useVisible } from '../../hooks'
 
 const NavbarHome = () => {
     const { user: { isAdmin }} = useContext(UserContext)
-    const [isActive, setIsActive] = useState(false)
+    const { ref, isVisible, setIsVisible } = useVisible(false)
 
     return (
         <nav className={styles['site-nav']}>
             <ul className={styles['navbar-links']}>
-                <div className={ isActive ? `${styles['menu-toggle']} ${styles['is-active']}` : styles['menu-toggle'] } onClick={() => setIsActive(!isActive)}>
+                <div className={ isVisible ? `${styles['menu-toggle']} ${styles['is-active']}` : styles['menu-toggle'] } onClick={() => setIsVisible(!isVisible)}>
                     <span className={styles.bar}></span>
                     <span className={styles.bar}></span>
                     <span className={styles.bar}></span>
                 </div>
-                <div className={ isActive ? `${styles['nav-menu']} ${styles.active}` : styles['nav-menu']}>
+                <div className={ isVisible ? `${styles['nav-menu']} ${styles.active}` : styles['nav-menu']} ref={ref}>
                     <NavbarLink name='Men' path='/products/men'/>
                     <NavbarLink name='Women' path='/products/women'/>
                     <NavbarLink name='Promotions' path='/products/promotions'/>

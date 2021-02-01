@@ -3,3 +3,9 @@
     flex-flow: wrap;
     justify-content: space-between;
 }
+
+@media screen and (max-width:665px) {
+    .container {
+        justify-content: center;
+    }
+}
