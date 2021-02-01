@@ -6,7 +6,8 @@ import sortByArrow from '../../images/sortByArrow.svg'
 
 const SortCriteria = () => {
     const productsContext = useContext(ProductsContext)
-    const { ref, isVisible, setIsVisible } = useVisible(false)
+    // const { ref, isVisible, setIsVisible } = useVisible(false)
+    const { ref, isVisible, setIsVisible } = { ref: null, isVisible: false, setIsVisible: (isVisible) => {}}//useVisible(false)
 
     const setSortCriteria = (criteria, direction) => {
 

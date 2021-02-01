@@ -5,11 +5,11 @@ import ProductsCheckboxFilter from '../productsCheckboxFilter'
 import ProductsRangeFilter from '../productsRangeFilter'
 import ProductContext from '../../ProductsContext'
 import ProductsRatingFilters from '../productsRatingFilters'
-import { useVisible } from '../../hooks'
+// import { useVisible } from '../../hooks'
 
 const ProductsFilter = () => {
     const { productProps, productPage, totalCount } = useContext(ProductContext)
-    const { ref, isVisible, setIsVisible } = useVisible(false)
+    const { ref, isVisible, setIsVisible } = { ref: null, isVisible: false, setIsVisible: () => {} }//useVisible(false)
 
     
     if (!productProps || !productPage) {

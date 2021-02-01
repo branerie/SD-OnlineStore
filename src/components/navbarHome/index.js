@@ -7,7 +7,7 @@ import { useVisible } from '../../hooks'
 
 const NavbarHome = () => {
     const { user: { isAdmin }} = useContext(UserContext)
-    const { ref, isVisible, setIsVisible } = useVisible(false)
+    const { ref, isVisible, setIsVisible } = {}//useVisible(false)
 
     return (
         <nav className={styles['site-nav']}>

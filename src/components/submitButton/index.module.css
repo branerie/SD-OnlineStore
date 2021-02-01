@@ -2,6 +2,7 @@
 
 .button {
     align-items: center;
+    flex-grow: 1;
     font-family: 'Architects Daughter', cursive;
     border: 1px solid lightgray;
     background-color: #3D5344;
