@@ -4,6 +4,8 @@
     font-size: 1.3rem;
     margin-left: 10%;
     margin-top: 5%;
+    min-width: 50%;
+    max-height: 100%;
 }
 
 .range-input {
