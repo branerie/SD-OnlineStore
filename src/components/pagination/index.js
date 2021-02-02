@@ -74,7 +74,7 @@ const Pagination = ({ pageLength, children }) => {
                     onClick={() => filtersDispatch({ type: 'page', newPage: page - 1 })}
                     data-testid='pagination-previous'
                 >
-                    previous
+                    <span className={styles['pagination-text']}>previous</span>
                     <img src={previousArrow} className={styles.arrow} alt='Previous Page' />
                 </span>
                 {pagesToDisplay && pagesToDisplay.map(pageNumber => {
@@ -86,7 +86,7 @@ const Pagination = ({ pageLength, children }) => {
                     data-testid='pagination-next'
                 >
                     <img src={nextArrow} className={styles.arrow} alt='Next Page' />
-                    next
+                    <span className={styles['pagination-text']}>next</span> 
                 </span>
             </div>
         </div>
