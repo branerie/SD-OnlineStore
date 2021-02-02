@@ -39,3 +39,14 @@
     text-transform: uppercase;
     color: #707070;
 }
+
+@media screen and (max-width:768px) {
+
+    .pagination-text {
+        display: none;
+    }
+
+    .pagination-container {
+        margin-bottom: 25px;
+    }
+}

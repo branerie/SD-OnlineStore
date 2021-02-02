@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-
 import styles from './index.module.css'
 import ProductsCheckboxFilter from '../productsCheckboxFilter'
 import ProductsRangeFilter from '../productsRangeFilter'
@@ -22,12 +21,21 @@ const ProductsFilter = () => {
     return (
         <>
             <div className={styles.container}>
-                <div className={ isVisible ? `${styles['menu-toggle']} ${styles['is-active']}` : styles['menu-toggle'] } onClick={() => setIsVisible(!isVisible)}>
+                <div 
+                    className={ 
+                        isVisible 
+                            ? `${styles['menu-toggle']} ${styles['is-active']}` 
+                            : styles['menu-toggle'] } 
+                    onClick={() => setIsVisible(!isVisible)}
+                >
                         <span className={styles.bar}></span>
                         <span className={styles.bar}></span>
                         <span className={styles.bar}></span>
                 </div>
-                <div className={ isVisible ? ` ${styles['media-aside']} ${styles.active}` : styles['media-aside']} ref={ref}>
+                <div 
+                    className={ isVisible ? ` ${styles['media-aside']} ${styles.active}` : styles['media-aside']}
+                    ref={ref}
+                >
                     <div className={styles.title}>
                         <p className={styles['center-text']}>
                             Showing {pageLength} of {totalCount} results

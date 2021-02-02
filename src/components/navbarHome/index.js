@@ -12,12 +12,22 @@ const NavbarHome = () => {
     return (
         <nav className={styles['site-nav']}>
             <ul className={styles['navbar-links']}>
-                <div className={ isVisible ? `${styles['menu-toggle']} ${styles['is-active']}` : styles['menu-toggle'] } onClick={() => setIsVisible(!isVisible)}>
+                <div 
+                    className={ isVisible 
+                        ? `${styles['menu-toggle']} ${styles['is-active']}` 
+                        : styles['menu-toggle'] } 
+                    onClick={() => setIsVisible(!isVisible)}
+                >
                     <span className={styles.bar}></span>
                     <span className={styles.bar}></span>
                     <span className={styles.bar}></span>
                 </div>
-                <div className={ isVisible ? `${styles['nav-menu']} ${styles.active}` : styles['nav-menu']} ref={ref}>
+                <div 
+                    className={ isVisible 
+                        ? `${styles['nav-menu']} ${styles.active}` 
+                        : styles['nav-menu']} 
+                    ref={ref}
+                >
                     <NavbarLink name='Men' path='/products/men'/>
                     <NavbarLink name='Women' path='/products/women'/>
                     <NavbarLink name='Promotions' path='/products/promotions'/>
