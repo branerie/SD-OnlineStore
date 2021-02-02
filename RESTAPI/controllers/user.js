@@ -13,6 +13,7 @@ const { sendConfirmationEmail, sendPasswordResetEmail } = require('../utils/user
 
 const AUTHORIZATION_HEADER_NAME = 'Authorization'
 const INVALID_TOKEN_ERROR = 'Invalid JWT token'
+const INVALID_ID_ERROR = 'Invalid user Id'
 
 const attachLoginCookie = (user, response) => {
     const token = createToken({ userId: user._id, isAdmin: user.isAdmin || false })
@@ -94,11 +95,10 @@ router.patch('/favorites', async (req, res) => {
 router.patch('/:userId/cart', async (req, res) => {
     try {
         const { userId } = req.params        
-        const userNotExistError = 'Invalid user ID'
         if (!isValidObjectId(userId)) {
             return res.status(400).send({
                 status: 400,
-                error: userNotExistError 
+                error: INVALID_ID_ERROR 
             })
         }
 
@@ -106,7 +106,7 @@ router.patch('/:userId/cart', async (req, res) => {
         if (!user) {
             return res.status(400).send({
                 status: 400,
-                error: userNotExistError 
+                error: INVALID_ID_ERROR 
             })
         }
 

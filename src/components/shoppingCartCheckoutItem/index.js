@@ -29,7 +29,7 @@ const ShoppingCartCheckoutItem = ({
     return (
         <div className={styles['receipt-item']}>
             <div className={styles['receipt-item-qty']}>
-                {`${quantity}x `}
+                {`${quantity} x `}
             </div>
             <div className={styles['receipt-item-desc']}>
                 <span className={styles['receipt-brand']}>

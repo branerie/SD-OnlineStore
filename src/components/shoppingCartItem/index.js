@@ -7,8 +7,6 @@ import removeIcon from '../../images/delete.png'
 import UserContext from '../../UserContext'
 import { Link } from 'react-router-dom'
 
-let changeTimeout = null
-
 const ShoppingCartItem = ({
     productId,
     brand,
@@ -20,6 +18,7 @@ const ShoppingCartItem = ({
     quantity
 }) => {
     const [itemQuantity, setItemQuantity] = useState(quantity)
+    const [editTimeout, setEditTimeout] = useState(null)
     const { editShoppingCart } = useContext(UserContext)
 
     const handleItemRemove = () => {
@@ -31,11 +30,13 @@ const ShoppingCartItem = ({
             return
         }
 
-        window.clearTimeout(changeTimeout)
+        window.clearTimeout(editTimeout)
 
-        changeTimeout = window.setTimeout(() => {
+        const newEditTimeout = window.setTimeout(() => {
             editShoppingCart(productId, sizeName, itemQuantity - quantity)
         }, 1000)
+
+        setEditTimeout(newEditTimeout)
     }, [itemQuantity])
 
     return (

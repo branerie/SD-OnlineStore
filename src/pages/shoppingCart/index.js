@@ -51,7 +51,9 @@ const ShoppingCartPage = () => {
                 return { ...acc, [p.productId]: p }
             }, {})
 
-            newProductsInCart = cart.map(p => {
+            // filter cart by returned product ids in case a product which is in the cart
+            // has been deleted and is not available anymore 
+            newProductsInCart = cart.filter(ci => resultsByProductId[ci.productId]).map(p => {
                 return {
                     sizeName: p.sizeName,
                     quantity: p.quantity,
@@ -69,10 +71,6 @@ const ShoppingCartPage = () => {
         getItemsInCart()
     }, [getItemsInCart])
 
-    useEffect(() => {
-
-    }, [cart])
-
     return (
         <PageWrapper>
             <Header />
@@ -85,7 +83,7 @@ const ShoppingCartPage = () => {
                         <div className={styles.items}>
                             {productsInCart.map(item =>
                                 <ShoppingCartItem
-                                    key={item.productId}
+                                    key={`${item.productId}-${item.sizeName}`}
                                     {...item}
                                 />)
                             }
