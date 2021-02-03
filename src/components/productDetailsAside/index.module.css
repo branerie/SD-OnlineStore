@@ -47,3 +47,27 @@
     display: flex;
     justify-content: space-around;
 }
+
+@media screen and (max-width:768px) {
+    .container {
+        order: 2;
+        max-width: 100%;
+    }
+
+    .title {
+        margin: 0.5rem 0;
+    }
+
+    .price {
+        width: 100%;
+    }
+
+    .price-final {
+        display: inline;
+        padding: 0.5rem;
+    }
+
+    .favorites {
+        justify-content: center;
+    }
+}
