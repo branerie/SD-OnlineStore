@@ -1,5 +1,5 @@
 import React from 'react'
-import ErrorPage from './pages/error'
+import ErrorBody from './components/errorBody'
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -19,7 +19,7 @@ class ErrorBoundary extends React.Component {
     
     render() {
         if (this.state.status || this.state.message) {      
-            return <ErrorPage status={this.state.status} message={this.state.message} />   
+            return <ErrorBody status={this.state.status} message={this.state.message} />   
         }
 
         return this.props.children

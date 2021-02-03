@@ -17,13 +17,15 @@ const getErrorTitle = (statusCode) => {
 const INTERNAL_ERROR_MESSAGE = 'An issue has occurred on our server. Please be patient as we try to fix the problem.'
 
 const ErrorBody = ({ status, message }) => {
+    const environment = process.env.NODE_ENV
+
     return (
         <main className={styles.container}>
             <h2 className={styles['error-title']}>
                 {getErrorTitle(status)}
             </h2>
             <p>
-                {message ? message : INTERNAL_ERROR_MESSAGE}
+                {(message && environment === 'development') ? message : INTERNAL_ERROR_MESSAGE}
             </p>
         </main>
     )

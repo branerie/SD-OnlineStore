@@ -96,7 +96,7 @@ const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
                     Continue with login
                 </div>
                 <div className={styles.container}>
-                    <p className={styles.paragraph}>I wish to receive sale and other information relating to Find you</p>
+                    <p className={styles.paragraph}>I wish to receive sale and other information related to Find you</p>
                     <label className={styles['label-checkbox']}>
                         <input
                             className={styles['checkbox-input']}
