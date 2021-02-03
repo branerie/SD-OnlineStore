@@ -9,7 +9,7 @@ import HeaderHome from '../../components/headerHome'
 
 const HomePage = () => {
     return (
-        <PageWrapper>
+        <PageWrapper maxWidth='1120px'>
             <HeaderHome />
             <div className={styles['img-container']}>
                 <img

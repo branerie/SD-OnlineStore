@@ -12,7 +12,7 @@ const PromotionsPage = ({ pageLength }) => {
         <>
             <ProductsContextInitializer
                 pageLength={pageLength}>
-                <PageWrapper maxWidth='1250px'>
+                <PageWrapper>
                     <Header clickedName='Promotions' />
                     <ProductPageBody pageLength={pageLength} />
                 </PageWrapper>

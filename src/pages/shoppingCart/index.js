@@ -72,7 +72,7 @@ const ShoppingCartPage = () => {
     }, [getItemsInCart])
 
     return (
-        <PageWrapper>
+        <PageWrapper maxWidth='1680px'>
             <Header />
             <NavButtons />
             { productsInCart.length > 0

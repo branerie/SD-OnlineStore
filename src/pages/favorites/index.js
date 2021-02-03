@@ -49,7 +49,7 @@ const FavoritesPage = () => {
 
     return (
         <>
-            <PageWrapper>
+            <PageWrapper maxWidth='1280px'>
                 <Header />
                 <NavButtons />
                 { (favorites && favorites.length > 0)

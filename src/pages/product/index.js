@@ -7,7 +7,7 @@ import Header from '../../components/header'
 const ProductPage = ({ pageLength }) => {
     return (
         <ProductsContextInitializer pageLength={pageLength}>
-            <PageWrapper maxWidth='1250px'>
+            <PageWrapper>
                 <Header />
                 <ProductPageBody pageLength={pageLength} />
             </PageWrapper>

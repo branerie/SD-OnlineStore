@@ -13,7 +13,7 @@ const MensPage = ({ pageLength }) => {
         <>
             <ProductsContextInitializer
                 pageLength={pageLength}>
-                <PageWrapper maxWidth='1250px'>
+                <PageWrapper>
                     <Header clickedName='Men' />
                     <ProductPageBody pageLength={pageLength} />
                 </PageWrapper>

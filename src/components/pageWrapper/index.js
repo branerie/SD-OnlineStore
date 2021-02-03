@@ -4,12 +4,12 @@ import ErrorMessage from '../errorMessage'
 import Footer from '../footer'
 import ErrorContext from '../../ErrorContext'
 
-const PageWrapper = ({ children, maxWidth = '1120px' }) => {
+const PageWrapper = ({ children, maxWidth }) => {
     const { messages, closeMessage } = useContext(ErrorContext) 
 
     return (
         <div className={styles.container}>
-            <div className={styles['inner-container']} style={{ maxWidth }}>
+            <div className={styles['inner-container']} style={maxWidth && { maxWidth }}>
                 {children}
                 { messages.length > 0 
                     ? 
