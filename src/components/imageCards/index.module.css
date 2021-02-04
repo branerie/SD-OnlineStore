@@ -1,7 +1,5 @@
-.container {
-    /* display: flex; */
-}
-
 .card-container {
     display: flex;
+    width: 18rem;
+    overflow-y: auto;
 }

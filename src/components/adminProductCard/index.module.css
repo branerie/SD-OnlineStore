@@ -1,5 +1,5 @@
 .container {
-	min-width: 20rem;
+	min-width: 26rem;
 	margin: 10px 0 10px 0;
 	height: auto;
 	border: 1px solid #234465;
@@ -8,6 +8,7 @@
 	display: flex;
 	flex-direction: column;
 	margin-right: 1rem;
+	align-items: center;
 }
 
 .confirmButton {
@@ -27,6 +28,7 @@
 .btn {
 	min-height: 2.5rem;
 	cursor: pointer;
+	margin: 0 5px;
 }
 
 .btn-delete:hover {

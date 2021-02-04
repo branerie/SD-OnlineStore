@@ -4,12 +4,11 @@
 }
 
 .cards {
-    flex-grow: 11;
+    flex-grow: 4;
 }
 
 .filters {
     flex-grow: 1;
-    min-width: 14%;
 }
 
 

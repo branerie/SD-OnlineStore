@@ -63,7 +63,7 @@ const Pagination = ({ pageLength, children }) => {
     }
 
     return (
-        <div>
+        <>
             <div className={styles.pagination} data-testid='pagination-pageNumber'>
                 page <span className={styles.current}>{page + 1}</span>
             </div>
@@ -89,7 +89,7 @@ const Pagination = ({ pageLength, children }) => {
                     <span className={styles['pagination-text']}>next</span> 
                 </span>
             </div>
-        </div>
+        </>
     )
 }
 
