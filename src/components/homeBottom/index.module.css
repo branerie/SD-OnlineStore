@@ -32,11 +32,12 @@
 .bottom-img-container {
     display: flex;
     justify-content: center;
+    max-height: 131px;
 }
 
 .bottom-reasons {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: flex-end;
     flex-wrap: wrap;
 }
