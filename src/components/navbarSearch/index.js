@@ -31,6 +31,7 @@ const NavbarSearch = () => {
         }
 
         filtersDispatch({ type: 'search', searchTerm: searchTerm })
+        setIsInputShown(false)
     }
 
     const handleClick = () => {
@@ -39,10 +40,6 @@ const NavbarSearch = () => {
         } else {
             ref.current.click()
         }
-    }
-
-    const closeMediaSearch = () => {
-        setIsInputShown(false)
     }
 
     return (
@@ -64,7 +61,7 @@ const NavbarSearch = () => {
                             className={styles['media-input']}
                             placeholder='Search' required
                             onChange={e => setSearchTerm(e.target.value)}/>
-                        <div className={styles['close-mediaSearch']} onClick={closeMediaSearch}>
+                        <div className={styles['close-mediaSearch']} onClick={() => setIsInputShown(false)}>
                             <span className={styles['media-bar']} />
                             <span className={styles['media-bar']} />
                         </div>
