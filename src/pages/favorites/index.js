@@ -55,7 +55,7 @@ const FavoritesPage = () => {
                 { (favorites && favorites.length > 0)
                     ?
                     <>
-                        <h2 className={styles['page-title']}>your favorite products</h2>
+                        <div className={styles['page-title']}>your favorite products</div>
                         <div className={styles.container}>
                             <div className={styles.items}>
                                 {favorites.map(item =>

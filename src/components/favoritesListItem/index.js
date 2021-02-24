@@ -29,7 +29,7 @@ const FavoritesListItem = ({
                     <div>
                         <h3 className={styles.brand}>{brand}</h3>
                         <p className={styles.info}>{description}</p>
-                        <div style={{ display: 'flex' }}>
+                        <div className={styles['size-container']}>
                             {sizes.map(sizeName => {
                                 return (
                                     <SizeButton
@@ -43,9 +43,9 @@ const FavoritesListItem = ({
                     </div>
                 </div>
                 <div className={styles.column}>
-                    <div className={styles['btn-container']}>
+                    {/* <div className={styles['btn-container']}> */}
                         <FavoritesIcon productId={productId} />
-                    </div>
+                    {/* </div> */}
                     { discountPrice
                         ?
                         <div className={styles.price}>

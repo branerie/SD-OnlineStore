@@ -51,11 +51,11 @@
     min-width: 14rem;
 }
 
-.btn-container {
+/* .btn-container {
     display: flex;
     justify-content: space-between;
     width: 5rem;
-}
+} */
 
 .btn-remove {
     position: relative;
@@ -77,6 +77,10 @@
     color: #735C74;
 }
 
+.size-container {
+    display: flex;
+}
+
 @media(max-width: 640px) {
     .info-container {
         flex-direction: column;
@@ -85,10 +89,17 @@
     .column {
         margin-top: 1rem;
         align-items: flex-start;
+        min-width: 0;
     }
 
     .price {
         text-align: left;
+    }
+
+    .size-container {
+        max-width: 100%;
+        flex-wrap: wrap;
+        /* justify-content: space-around; */
     }
 }
 
