@@ -39,6 +39,15 @@
     .checkout {
         margin: 0;
         width: 95%;
+        min-width: 0;
+    }
+
+    .price-discounted {
+        font-size: 1.5rem;
+    }
+
+    .price-original {
+        font-size: 1.2rem;
     }
 }
 

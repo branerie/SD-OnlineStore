@@ -28,3 +28,11 @@
     color: #735C74;
     font-size: 1.5rem;
 }
+
+
+@media screen and (max-width:768px) {
+    .receipt-item-qty {
+        font-size: 1.2rem;
+        width: 50px;
+    }
+}
