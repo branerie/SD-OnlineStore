@@ -89,12 +89,7 @@ const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
                     />
                     {errors.password && <ValidationErrorMessage message={errors.password.message} />}
                 </div>
-                <div
-                    className={styles['login-btn']}
-                    onClick={loginWindowPopup}
-                >
-                    Continue with login
-                </div>
+                <SubmitButton text='Register' />
                 <div className={styles.container}>
                     <p className={styles.paragraph}>I wish to receive sale and other information related to Find you</p>
                     <label className={styles['label-checkbox']}>
@@ -110,7 +105,12 @@ const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
                 <p className={styles['paragraph-two']}>Find you would like to keep you up to date with news of products and services including store events, offers, promotions, and Sale information. Find you may use your contact details to get in touch by email, telephone, SMS or post. You can opt out at any time by amending your preferences in My Account. Your personal information will not be shared with other companies for their marketing purposes. To find out more, see our Privacy and Cookie Policy.</p>
                 <div className={styles['third-container']}>
                     <p className={styles['paragraph-three']}>By clicking Register you agree to the Find You <Link>Terms and Conditions</Link> and <Link>Privacy&Cookie Policy</Link></p>
-                    <SubmitButton text='Register' />
+                    <div
+                        className={styles['login-btn']}
+                        onClick={loginWindowPopup}
+                    >
+                        Continue with login
+                    </div>
                 </div>
             </form>
         </WindowContainer>
