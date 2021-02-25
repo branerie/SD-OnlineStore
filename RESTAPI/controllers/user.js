@@ -8,8 +8,9 @@ const {
 const { decode } = require('jsonwebtoken')
 const User = require('../models/user')
 const TokenBlackList = require('../models/tokenBlackList')
-const { isMongoError, isValidObjectId } = require('../utils/general')
+const { isMongoError } = require('../utils/general')
 const { sendConfirmationEmail, sendPasswordResetEmail } = require('../utils/user')
+const { restrictToUser } = require('../utils/authenticate')
 
 const AUTHORIZATION_HEADER_NAME = 'Authorization'
 const INVALID_TOKEN_ERROR = 'Invalid JWT token'
@@ -25,12 +26,18 @@ const getUserData = (user) => {
         ? {
             userId: user._id,
             isAdmin: user.isAdmin || false,
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
+            email: user.email,
             favorites: user.favorites || [],
             cart: user.cart || []
         }
         : {
             userId: null,
             isAdmin: false,
+            email: '',
+            firstName: '',
+            lastName: '',
             favorites: [],
             cart: []
         }
@@ -39,101 +46,21 @@ const getUserData = (user) => {
 router.get('/verify', async (req, res) => {
     const currentToken = req.headers.authorization
 
-    if (currentToken) {
-        try {
-            const userInfo = await verifyToken(currentToken)
-            if (!userInfo) {
-                return res.status(401).send({ error: INVALID_TOKEN_ERROR })
-            }
-
-            const user = await User.findById(userInfo.userId)
-
-            return res.send(getUserData(user))
-        } catch (error) {
-            return res.status(403).send(getUserData())
-        }
+    if (!currentToken) {
+        return res.send(getUserData())
     }
 
-    return res.send(getUserData())
-})
-
-router.patch('/favorites', async (req, res) => {
-    const currentToken = req.headers.authorization
-    const productId = req.body.productId
-
-    if (currentToken) {
-        try {
-            const userInfo = await verifyToken(currentToken)
-            if (!userInfo) {
-                return res.status(401).send({ error: INVALID_TOKEN_ERROR })
-            }
-
-            let user = await User.findById(userInfo.userId)
-
-            if (user.favorites.includes(productId)) {
-                await user.updateOne({ $pull: { favorites: productId } })
-
-            } else {
-                await user.updateOne({ $push: { favorites: productId } })
-            }
-
-            user = await User.findById(userInfo.userId)
-            return res.send({ favorites: user.favorites, userId: user._id })
-
-        } catch (error) {
-            if (isMongoError(error)) {
-                return res.status(403).send({ error: error.message })
-            }
-
-            return res.status(500).send({ error: error.message })
-        }
-    } else {
-        //TODO implement without login
-    }
-})
-
-router.patch('/:userId/cart', async (req, res) => {
     try {
-        const { userId } = req.params        
-        if (!isValidObjectId(userId)) {
-            return res.status(400).send({
-                status: 400,
-                error: INVALID_ID_ERROR 
-            })
+        const userInfo = await verifyToken(currentToken)
+        if (!userInfo) {
+            return res.status(401).send({ error: INVALID_TOKEN_ERROR })
         }
 
-        const user = await User.findById(userId)
-        if (!user) {
-            return res.status(400).send({
-                status: 400,
-                error: INVALID_ID_ERROR 
-            })
-        }
+        const user = await User.findById(userInfo.userId)
 
-        const { productId, sizeName, quantity } = req.body
-
-        const parsedQuantity = parseInt(quantity)
-        if (isNaN(parsedQuantity)) {
-            return res.status(400).send({ error: 'Invalid quantity parameter' })
-        }
-
-        const itemInCart = user.cart.find(i =>
-            i.productId.toString() === productId && i.sizeName === sizeName)
-
-        if (itemInCart) {
-            if (parsedQuantity === 0) {
-                user.cart.pull(itemInCart)
-            } else {
-                itemInCart.quantity = parsedQuantity
-            }
-        } else if (quantity > 0) {
-            user.cart.push({ productId, sizeName, quantity })
-        }
-
-        await user.save()
-        return res.send({ status: 'Success' })
+        return res.send(getUserData(user))
     } catch (error) {
-        return res.status(500).send({ error: error.message })
+        return res.status(403).send(getUserData())
     }
 })
 
@@ -262,7 +189,7 @@ router.post('/register', async (req, res) => {
 router.post('/logout', async (req, res) => {
     try {
         const currentToken = req.headers.authorization || ''
-        
+
         if (!currentToken) {
             return res.status(401).send({ error: 'Not logged in' })
         }
@@ -367,9 +294,170 @@ router.post('/password/reset/confirm', async (req, res) => {
         await user.save()
 
         attachLoginCookie(user, res)
-        
+
         const userData = { id: user._id, favorites: user.favorites, isAdmin: user.isAdmin }
         return res.send(userData)
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.post('/cart', restrictToUser, async (req, res) => {
+    try {
+        const { userId } = req.user
+
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(401).send({ error: INVALID_ID_ERROR })
+        }
+
+        const { cart } = req.body
+        user.cart = cart
+        await user.save()
+
+        return res.send({ status: 'Success' })
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.post('/purchase', restrictToUser, async (req, res) => {
+    try {
+        const { userId } = req.user
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(401).send({ error: INVALID_ID_ERROR })
+        }
+
+        const cart = user.cart
+        if (!cart || cart.length === 0) {
+            return res.status(400).send({ error: 'User doesn\'t have any products in cart' })
+        }
+
+        user.purchaseHistory.push({ products: cart, dateAdded: new Date() })
+        user.cart = []
+        await user.save()
+
+        return res.send({ status: 'Success' })
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.patch('/details', restrictToUser, async (req, res) => {
+    try {
+        const { userId } = req.user
+
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(400).send({
+                status: 400,
+                error: INVALID_ID_ERROR
+            })
+        }
+
+        const { firstName, lastName } = req.body
+        await user.updateOne({ firstName, lastName })
+
+        return res.send({ status: 'Success' })
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.patch('/favorites', async (req, res) => {
+    const currentToken = req.headers.authorization
+    const productId = req.body.productId
+
+    if (currentToken) {
+        try {
+            const userInfo = await verifyToken(currentToken)
+            if (!userInfo) {
+                return res.status(401).send({ error: INVALID_TOKEN_ERROR })
+            }
+
+            let user = await User.findById(userInfo.userId)
+
+            if (user.favorites.includes(productId)) {
+                await user.updateOne({ $pull: { favorites: productId } })
+
+            } else {
+                await user.updateOne({ $push: { favorites: productId } })
+            }
+
+            user = await User.findById(userInfo.userId)
+            return res.send({ favorites: user.favorites, userId: user._id })
+
+        } catch (error) {
+            if (isMongoError(error)) {
+                return res.status(403).send({ error: error.message })
+            }
+
+            return res.status(500).send({ error: error.message })
+        }
+    } else {
+        //TODO implement without login
+    }
+})
+
+router.patch('/cart', restrictToUser, async (req, res) => {
+    try {
+        const { userId } = req.user
+
+        const user = await User.findById(userId)
+        if (!user) {
+            return res.status(400).send({
+                status: 400,
+                error: INVALID_ID_ERROR
+            })
+        }
+
+        const { productId, sizeName, quantity } = req.body
+
+        const parsedQuantity = parseInt(quantity)
+        if (isNaN(parsedQuantity)) {
+            return res.status(400).send({ error: 'Invalid quantity parameter' })
+        }
+
+        const itemInCart = user.cart.find(i =>
+            i.productId.toString() === productId && i.sizeName === sizeName)
+
+        if (itemInCart) {
+            if (parsedQuantity === 0) {
+                user.cart.pull(itemInCart)
+            } else {
+                itemInCart.quantity = parsedQuantity
+            }
+        } else if (quantity > 0) {
+            user.cart.push({ productId, sizeName, quantity })
+        }
+
+        await user.save()
+        return res.send({ status: 'Success' })
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+})
+
+router.put('/password', async (req, res) => {
+    try {
+        if (!req.user || !req.user.userId) {
+            return res.status(401).send({ error: 'User must be logged in to make a request to this url' })
+        }
+
+        const { password, newPassword } = req.body
+
+        const user = await User.findById(req.user.userId)
+        const isPasswordValid = await user.matchPassword(password)
+
+        if (!isPasswordValid) {
+            return res.status(401).send({ error: 'Something went wrong when trying to change user password' })
+        }
+
+        user.set('password', newPassword)
+        await user.save()
+
+        return res.send({ status: 'Success' })
     } catch (error) {
         return res.status(500).send({ error: error.message })
     }

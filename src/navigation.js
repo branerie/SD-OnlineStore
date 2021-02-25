@@ -20,6 +20,7 @@ import ProductDetailsPage from './pages/productDetails'
 import FavoritesPage from './pages/favorites'
 import ErrorBoundary from './ErrorBoundary'
 import ErrorPage from './pages/error'
+import ProfilePage from './pages/profile'
 
 const PAGE_LENGTH = 6
 
@@ -59,6 +60,7 @@ const Navigation = () => {
                     <Route path='/user/password/reset/:resetToken' component={PasswordResetPage} />
                     <Route path='/user/cart' component={ShoppingCartPage} />
                     <Route path='/user/favorites' component={FavoritesPage} />
+                    <Route path='/user/profile' component={ProfilePage} />
                     <Route>
                         <ErrorPage status={404} message='The requested page does not exist' />
                     </Route>

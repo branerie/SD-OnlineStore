@@ -1,9 +1,9 @@
 import {
     REST_API_URL,
-    CART_COOKIE_NAME,
     HTTP_HEADERS,
     JSON_CONTENT_TYPE,
-    AUTH_COOKIE_NAME
+    AUTH_COOKIE_NAME,
+    CART_COOKIE_NAME
 } from '../utils/constants'
 import { getCookie, setCookie } from '../utils/cookie'
 
@@ -62,7 +62,17 @@ const logInUser = async (email, password) => {
         setLoginCookieFromResponse(response)
     }
 
-    return await response.json()
+
+    const result = await response.json()
+
+    if (!result.error) {
+        const cartCookieString = getCookie(CART_COOKIE_NAME)
+        if ((!result.cart || result.cart.length === 0) && cartCookieString) {
+            result.cart = JSON.parse(cartCookieString)
+        }
+    }
+
+    return result
 }
 
 const logOut = async () => {
@@ -75,7 +85,8 @@ const logOut = async () => {
     })
 
     if(response.status === 200) {
-        document.cookie = `${AUTH_COOKIE_NAME}= ; expires = Thu, 01 Jan 1970 00:00:01 GMT;`
+        document.cookie = `${AUTH_COOKIE_NAME}= ; expires = Thu, 01 Jan 1970 00:00:01 GMT;path=/`
+        document.cookie = `${CART_COOKIE_NAME}= ; expires = Thu, 01 Jan 1970 00:00:01 GMT;path=/`
     }
 
     return await response.json()
@@ -173,27 +184,68 @@ const resetUserPassword = async (newPassword, resetToken) => {
     return await response.json()
 }
 
-const getShoppingCart = async (userId) => {
-    if (userId) {
-        const response = await fetch(`${USER_URL}/${userId}/cart`)
-
-        if (response.status === 204) {
-            return []
+const changePassword = async (password, newPassword) => {
+    const response = await fetch(`${USER_URL}/password`, {
+        method: 'PUT',
+        body: JSON.stringify({ password, newPassword }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
         }
-        
-        return await response.json()
-    }
+    })
 
-    const cart = getCookie(CART_COOKIE_NAME)
-    return cart
+    return await response.json()
 }
 
-const changeShoppingCart = async (userId, productId, sizeName, quantity) => {
-    const response = await fetch(`${USER_URL}/${userId}/cart`, {
+const changeDetails = async (firstName, lastName) => {
+    const response = await fetch(`${USER_URL}/details`, {
+        method: 'PATCH',
+        body: JSON.stringify({ firstName, lastName }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    return await response.json()
+}
+
+const setShoppingCart = async (cart) => {
+    const response = await fetch(`${USER_URL}/cart`, {
+        method: 'POST',
+        body: JSON.stringify({ cart }),
+        headers: {
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    return await response.json()
+}
+
+const changeShoppingCart = async (productId, sizeName, quantity) => {
+    const response = await fetch(`${USER_URL}/cart`, {
         method: 'PATCH',
         body: JSON.stringify({ productId, sizeName, quantity }),
         headers: {
-            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
+            [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE,
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    return await response.json()
+}
+
+const makePurchase = async () => {
+    const cookie = getCookie(AUTH_COOKIE_NAME)
+    if (!cookie) {
+        return { error: 'User is not logged in', displayError: 'You must be logged in to make a purchase' }
+    }
+
+    const response = await fetch(`${USER_URL}/purchase`, {
+        method: 'POST',
+        headers: {
+            [HTTP_HEADERS.AUTHORIZATION]: cookie
         }
     })
 
@@ -211,6 +263,9 @@ export {
     setFavorites,
     sendPasswordResetEmail,
     resetUserPassword,
-    getShoppingCart,
-    changeShoppingCart
+    changePassword,
+    changeDetails,
+    changeShoppingCart,
+    setShoppingCart,
+    makePurchase
 }

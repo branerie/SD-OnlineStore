@@ -1,10 +1,10 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import styles from './index.module.css'
-import WindowContainer from '../windowContainer'
+import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import WindowContainer from '../windowContainer'
 import { registerUser } from '../../services/user'
 import UserContext from '../../UserContext'
-import { Link } from 'react-router-dom'
 import SectionTitle from '../sectionTitle'
 import SubmitButton from '../submitButton'
 import TextInput from '../inputFields/textInput'
@@ -13,7 +13,7 @@ import ValidationErrorMessage from '../validationErrorMessage'
 
 const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
     const [validationConstants, setValidationConstants] = useState(null)
-    const { register, errors, handleSubmit, setError } = useForm()
+    const { register, errors, clearErrors, handleSubmit, setError } = useForm()
     const { setNewUser } = useContext(UserContext)
 
     const getUserValidationConstants = useCallback(async () => {
@@ -38,8 +38,10 @@ const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
                 message: registerResult.error
             })
 
-            return
-        } else if (!registerResult.error) {
+            return setTimeout(() => clearErrors(registerResult.uniqueRestriction), 5000)
+        }
+        
+        if (!registerResult.error) {
             setNewUser(registerResult)
             hideWindow()
         }

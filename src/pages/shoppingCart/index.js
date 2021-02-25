@@ -10,6 +10,7 @@ import ShoppingCartCheckout from '../../components/shoppingCartCheckout'
 import BackIconLink from '../../components/iconLinks/backIconLink'
 import PageWrapper from '../../components/pageWrapper'
 import NavButtons from '../../components/navButtons'
+import PageSecondaryTitle from '../../components/pageSecondaryTitle'
 
 const ShoppingCartPage = () => {
     const [productsInCart, setProductsInCart] = useState([])
@@ -78,7 +79,7 @@ const ShoppingCartPage = () => {
             { productsInCart.length > 0
                 ?
                 <>
-                    <h2 className={styles['page-title']}>your shopping cart</h2>
+                    <PageSecondaryTitle title='your shopping cart' />
                     <div className={styles.container}>
                         <div className={styles.items}>
                             {productsInCart.map(item =>

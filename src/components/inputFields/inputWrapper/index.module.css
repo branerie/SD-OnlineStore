@@ -1,6 +1,7 @@
 .container {
     margin-bottom: 10px;
     box-sizing: border-box;
+    width: 100%;
 }
 
 .inner-container {

@@ -7,12 +7,13 @@ const TextInput = ({
     value,
     onChange,
     onBlur,
-    type,
     maxLength,
     placeholder,
-    reference
+    reference,
+    type = 'text',
+    disabled = false
 }) => {
-    const [isVisible, setIsVisible] = useState(value ? true : false)
+    const [isVisible, setIsVisible] = useState(!!value)
 
     const handleChange = (event) => {
         if (event.target.value.length > 0) {
@@ -38,6 +39,7 @@ const TextInput = ({
                 onBlur={onBlur}
                 maxLength={maxLength}
                 placeholder={placeholder}
+                disabled={disabled}
             />
         </InputWrapper>
     )

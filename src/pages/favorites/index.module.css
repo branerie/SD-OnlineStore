@@ -15,11 +15,8 @@
 
 .page-title {
     font-family: 'Architects Daughter', cursive;
-    font-size: 2rem;
-    text-transform: uppercase;
     color: #735C74;
-    margin: 3rem 0 0 2.5%;
-    text-align: center;
+    text-transform: uppercase;
 }
 
 @media(max-width: 1024px) {

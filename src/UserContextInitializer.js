@@ -6,7 +6,7 @@ import { changeShoppingCart, verifyUser } from './services/user'
 import { CART_COOKIE_NAME } from './utils/constants'
 import { getCookie, setCookie } from './utils/cookie'
 
-const GUEST_USER = { userId: null, isAdmin: false, favorites: [], cart: [] }
+const GUEST_USER = { userId: null, email: '', firstName: '', lastName: '', isAdmin: false, favorites: [], cart: [] }
 
 const UserContextInitializer = ({ children }) => {
     const [user, setUser] = useState(null)
@@ -19,14 +19,10 @@ const UserContextInitializer = ({ children }) => {
 
             if (!userInfo.userId) {
                 const savedCartString = getCookie(CART_COOKIE_NAME)
-                if (savedCartString) {
-                    userInfo.cart = JSON.parse(savedCartString)
-                } else {
-                    userInfo.cart = []
-                }
+                userInfo.cart = savedCartString ? JSON.parse(savedCartString) : []
             }
 
-            setUser(userInfo)
+            setUser({ ...GUEST_USER, ...userInfo })
         } catch(error) {
             setUser(GUEST_USER)
         }
@@ -65,7 +61,7 @@ const UserContextInitializer = ({ children }) => {
             newQuantity = Math.max(0, newQuantity)
     
             if (user.userId) {
-                const result = await changeShoppingCart(user.userId, productId, sizeName, newQuantity)
+                const result = await changeShoppingCart(productId, sizeName, newQuantity)
     
                 if (result.error) {
                     // TODO: Could possibly log errors in future
@@ -82,18 +78,17 @@ const UserContextInitializer = ({ children }) => {
                 }
 
                 setUser({ ...user, cart })
-            } else {
-                setCookie(CART_COOKIE_NAME, JSON.stringify(cart), '10d')
-                setUser({ ...user, cart })
-            }
+                return 
+            } 
+
+            setCookie(CART_COOKIE_NAME, JSON.stringify(cart), '10d')
+            setUser({ ...user, cart })
         } catch(error) {
             throwInternalError()
         }
     }, [user])
 
-    const setNewUser = (userProps = {}) => {
-        setUser({ ...GUEST_USER, ...userProps })
-    }
+    const setNewUser = (userProps = {}) => setUser({ ...GUEST_USER, ...userProps })
 
     if (!user) {
         return null

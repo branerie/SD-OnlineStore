@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useContext, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import { logOut } from '../../../services/user'
 import LoginWindow from '../../loginWindow'
@@ -12,6 +13,7 @@ const ProfileIconLink = () => {
     const { ref, isVisible, setIsVisible } = useVisible(false)
     const [shownWindow, setShownWindow] = useState('')
     const { user, setNewUser } = useContext(UserContext)
+    const history = useHistory()
 
     const fillColor = useMemo(() => {
         return isFilled
@@ -79,7 +81,7 @@ const ProfileIconLink = () => {
             { isVisible && user.userId      // user is logged in
                 ? (
                     <div className={styles.list} ref={ref}>
-                        <div className={styles.criteria}>Profile</div>
+                        <div className={styles.criteria} onClick={() => history.push('/user/profile')}>Profile</div>
                         <div className={styles.criteria}
                             onClick={logOutUser}>
                             Logout

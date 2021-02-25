@@ -1,9 +1,15 @@
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import styles from './index.module.css'
 import SubmitButton from '../../components/submitButton'
 import ShoppingCartCheckoutItem from '../shoppingCartCheckoutItem'
+import { makePurchase } from '../../services/user'
+import ErrorContext from '../../ErrorContext'
+import UserContext from '../../UserContext'
 
 const ShoppingCartCheckout = ({ productsInCart }) => {
+    const { addMessage } = useContext(ErrorContext)
+    const { user, setNewUser } = useContext(UserContext)
+
     const [totalDiscountedPrice, totalOriginalPrice] = useMemo(() => {
         let totalDiscountedPrice = 0
         let totalOriginalPrice = 0
@@ -16,6 +22,19 @@ const ShoppingCartCheckout = ({ productsInCart }) => {
 
         return [totalDiscountedPrice, totalOriginalPrice]
     }, [productsInCart])
+
+    const handlePurchase = async () => {
+        const result = await makePurchase()
+        if (result.error) {
+            return addMessage(
+                'Cart Purchase',
+                result.displayError || 
+                'An error occurred while trying to process your request. Please be patient as we try to solve this issue.'
+            )
+        }
+
+        setNewUser({ ...user, cart: [] })
+    }
 
     return (
         <div className={styles.checkout}>
@@ -36,7 +55,12 @@ const ShoppingCartCheckout = ({ productsInCart }) => {
                 <div>Total Today:</div>
                 <div>{totalDiscountedPrice.toFixed(2)}$</div>
             </div>
-            <SubmitButton text='Checkout' style={{ marginTop: '1.5rem', width: '100%' }} />
+            <SubmitButton
+                type='button'
+                onClick={handlePurchase}
+                text='Checkout'
+                style={{ marginTop: '1.5rem', width: '100%' }} 
+            />
         </div>
     )
 }

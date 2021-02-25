@@ -9,6 +9,7 @@ import { getProductDetailsMain } from '../../services/product'
 import styles from './index.module.css'
 import PageWrapper from '../../components/pageWrapper'
 import NavButtons from '../../components/navButtons'
+import PageSecondaryTitle from '../../components/pageSecondaryTitle'
 
 const FavoritesPage = () => {
     const [favorites, setFavorites] = useState(null)
@@ -55,7 +56,7 @@ const FavoritesPage = () => {
                 { (favorites && favorites.length > 0)
                     ?
                     <>
-                        <div className={styles['page-title']}>your favorite products</div>
+                        <PageSecondaryTitle title='your favorite products' />
                         <div className={styles.container}>
                             <div className={styles.items}>
                                 {favorites.map(item =>

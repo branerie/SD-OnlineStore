@@ -1,0 +1,55 @@
+.container {
+    display: flex;
+    padding: 2rem;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    min-width: 20%;
+    max-width: 30%;
+}
+
+.btn-sidebar {
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 0.25rem;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 1.25rem;
+    color: rgb(115, 92, 116);
+    border: 1px solid gray;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.btn-sidebar:disabled {
+    cursor: default;
+}
+
+.btn-sidebar:hover,
+.selected {
+    background-color: rgb(230, 227, 227);
+    color: #EF696E;
+}
+
+@media (max-width: 550px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container > aside {
+        margin-bottom: 2rem;
+        max-width: 90%;
+        width: 90%;
+        flex-direction: row;
+    }
+
+    .container > aside > button {
+        margin-right: 0.5rem;
+    }
+
+    .container > div {
+        width: 90%;
+        margin-left: 0;
+    }
+}

@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useRef, useState } from 'react'
 import styles from './index.module.css'
 
-import { logInUser } from '../../services/user'
+import { logInUser, setShoppingCart } from '../../services/user'
 import UserContext from '../../UserContext'
 import TextInput from '../inputFields/textInput'
 import WindowContainer from '../windowContainer'
@@ -30,8 +30,17 @@ const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) =>
 
         const loginResult = await logInUser(email, password)
         if (loginResult.error) {
-            ref.current.innerText = loginResult.error
+            ref.current.innerText = 'Invalid email or password'
             return
+        }
+
+        if (loginResult.cart) {
+            const cartResult = await setShoppingCart(loginResult.cart)
+
+            if (cartResult.error) {
+                ref.current.innerText = 'Could not update user cart'
+                return
+            }
         }
 
         setNewUserState(loginResult)
@@ -62,7 +71,7 @@ const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) =>
                 >
                     Forgot your password?
                 </div>
-                <SubmitButton text='enter' />
+                <SubmitButton text='enter' disabled={!email || !password} />
                 <SectionTitle title='log in with:' />
                 <FacebookLoginButton setUserState={setNewUserState} text='facebook' />
                 <GoogleLoginButton setUserState={setNewUserState} text='google' />

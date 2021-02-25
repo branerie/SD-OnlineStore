@@ -65,6 +65,25 @@ const userSchema = new mongoose.Schema({
             min: 1,
             required: true
         }
+    }],
+    purchaseHistory: [{
+        products: [{
+            productId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true
+            },
+            sizeName: {
+                type: String,
+                required: true
+            },
+            quantity: {
+                type: Number,
+                min: 1,
+                required: true
+            }
+        }],
+        dateAdded: { type: Date, required: true }
     }]
 })
 

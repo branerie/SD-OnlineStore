@@ -14,6 +14,10 @@
     background-color: rgb(230, 227, 227);
 }
 
-.input:hover {
+.input:enabled:hover {
     border: 1px solid black;
+}
+
+.input:disabled {
+    background-color: rgb(230, 227, 227);
 }

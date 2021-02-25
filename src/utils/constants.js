@@ -1,7 +1,7 @@
 const AUTH_COOKIE_NAME = 'x-auth-cookie'
 const CART_COOKIE_NAME = 'cart'
 const REST_API_URL = process.env.NODE_ENV === 'development'
-                            ? 'http://localhost:3001/api'
+                            ? 'http://192.168.1.2:3001/api'//'http://localhost:3001/api'
                             : '/api'
                             
 const JSON_CONTENT_TYPE = 'application/json'
