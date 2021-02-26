@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const User = require('../models/user')
 const Product = require('../models/product')
 const { 
     getDbProductsFilter, 
@@ -173,8 +174,16 @@ router.patch('/rating', restrictToUser, async (req, res) => {
         const oldcount = product.rating.counter || 0
         const count = oldcount + 1
         const newRating = { currentRating : oldRating + numRating, counter : count }
+        
+        const user = await User.findById(req.user.userId)
+        if (!user) {
+            throw new Error()
+        }
+
+        user.ratedProducts.push(product)
 
         await product.updateOne({ $set: { rating : newRating }})
+        await user.save()
         
         return res.send({
             productId,

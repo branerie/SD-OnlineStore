@@ -1,11 +1,9 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import UserContext from '../../UserContext'
-import ErrorContext from '../../ErrorContext'
 import ShoppingCartItem from '../../components/shoppingCartItem'
 import Header from '../../components/header'
-import ShoppingCartCheckout from '../../components/shoppingCartCheckout'
+import ShoppingCartReceipt from '../../components/shoppingCartReceipt'
 import BackIconLink from '../../components/iconLinks/backIconLink'
 import PageWrapper from '../../components/pageWrapper'
 import NavButtons from '../../components/navButtons'
@@ -52,7 +50,7 @@ const ShoppingCartPage = () => {
                                 )
                             }
                         </div>
-                        <ShoppingCartCheckout productsInCart={productsInCart} />
+                        <ShoppingCartReceipt productsInCart={productsInCart} isCheckout={true} />
                     </div>
                 </>
                 :

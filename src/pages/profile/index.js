@@ -6,6 +6,8 @@ import NavButtons from '../../components/navButtons'
 import PageWrapper from '../../components/pageWrapper'
 import ProfileSettings from '../../components/profileSettings'
 import UserContext from '../../UserContext'
+import ProfileHistory from '../../components/profileHistory'
+import ProfileSidebarButton from '../../components/profileSidebarButton'
 
 const ProfilePage = () => {
     const [activeMenu, setActiveMenu] = useState('settings')
@@ -22,24 +24,20 @@ const ProfilePage = () => {
             <NavButtons />
             <main className={styles.container}>
                 <aside className={styles.sidebar}>
-                    <button 
-                        className={`${styles['btn-sidebar']} ${(activeMenu === 'settings') && styles.selected}`}
+                    <ProfileSidebarButton 
+                        isSelected={activeMenu === 'settings'}
                         onClick={() => setActiveMenu('settings')}
-                        disabled={activeMenu === 'settings'}
-                    >
-                        Settings
-                    </button>
-                    <button 
-                        className={`${styles['btn-sidebar']} ${(activeMenu === 'purchases') && styles.selected}`}
+                        text='Settings'
+                    />
+                    <ProfileSidebarButton 
+                        isSelected={activeMenu === 'purchases'}
                         onClick={() => setActiveMenu('purchases')}
-                        disabled={activeMenu === 'purchases'}
-                    >
-                        Purchase History
-                    </button>
+                        text='Purchase History'
+                    />
                 </aside>
                 {activeMenu === 'settings'
                     ? <ProfileSettings />
-                    : null
+                    : <ProfileHistory />
                 }
             </main>
         </PageWrapper>

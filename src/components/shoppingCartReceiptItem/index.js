@@ -14,7 +14,7 @@ const shortenText = (text, maxChars) => {
     return `${text.slice(0, maxIndex)}...`
 }
 
-const ShoppingCartCheckoutItem = ({ 
+const ShoppingCartReceiptItem = ({ 
     brand,
     description,
     discountPrice,
@@ -44,4 +44,4 @@ const ShoppingCartCheckoutItem = ({
     )
 }
 
-export default ShoppingCartCheckoutItem
+export default ShoppingCartReceiptItem

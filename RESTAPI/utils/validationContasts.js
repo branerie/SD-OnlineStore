@@ -87,10 +87,6 @@ const validationConstants = {
                     pattern: {
                         value: NAME_PATTERN, 
                         message: NAME_PATTERN_ERROR
-                    },
-                    required: {
-                        value: true,
-                        message: 'First name is a required field'
                     }
                 }
             }
@@ -115,10 +111,6 @@ const validationConstants = {
                     pattern: {
                         value: NAME_PATTERN, 
                         message: NAME_PATTERN_ERROR
-                    },
-                    required: {
-                        value: true,
-                        message: 'Last name is a required field'
                     }
                 }
             }

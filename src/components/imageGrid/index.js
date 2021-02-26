@@ -28,7 +28,7 @@ const ImageGrid = ({ imgCollection, setCurrentImage }) => {
                 <img
                     className={styles['img-img']}
                     src={imgCollection[initialImgIndex]}
-                    alt='Product top'
+                    alt=''
                     onClick={() => setCurrentImage(imgCollection[initialImgIndex])}
                 />
             </div>
@@ -36,7 +36,7 @@ const ImageGrid = ({ imgCollection, setCurrentImage }) => {
                 <img
                     className={styles['img-img']}
                     src={imgCollection[initialImgIndex + 1]}
-                    alt='Product bottom'
+                    alt=''
                     onClick={() => setCurrentImage(imgCollection[initialImgIndex + 1])}
                 />
             </div>

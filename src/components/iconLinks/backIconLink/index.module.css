@@ -7,6 +7,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    cursor: pointer;
 }
 
 .btn-name {
@@ -14,5 +15,4 @@
     font-size: 1.5rem;
     color: #3D5344;
     padding-right: 1rem;
-    cursor: pointer;
 }

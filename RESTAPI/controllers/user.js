@@ -7,6 +7,7 @@ const {
 } = require('../utils/jwt')
 const { decode } = require('jsonwebtoken')
 const User = require('../models/user')
+const Product = require('../models/product')
 const TokenBlackList = require('../models/tokenBlackList')
 const { isMongoError } = require('../utils/general')
 const { sendConfirmationEmail, sendPasswordResetEmail } = require('../utils/user')
@@ -30,7 +31,9 @@ const getUserData = (user) => {
             lastName: user.lastName || '',
             email: user.email,
             favorites: user.favorites || [],
-            cart: user.cart || []
+            ratedProducts: user.ratedProducts || [],
+            cart: user.cart || [],
+            purchaseHistory: user.purchaseHistory || [],
         }
         : {
             userId: null,
@@ -39,7 +42,9 @@ const getUserData = (user) => {
             firstName: '',
             lastName: '',
             favorites: [],
-            cart: []
+            ratedProducts: [],
+            cart: [],
+            purchaseHistory: [],
         }
 }
 
@@ -329,12 +334,43 @@ router.post('/purchase', restrictToUser, async (req, res) => {
             return res.status(401).send({ error: INVALID_ID_ERROR })
         }
 
-        const cart = user.cart
-        if (!cart || cart.length === 0) {
+        if (!user.cart || user.cart.length === 0) {
             return res.status(400).send({ error: 'User doesn\'t have any products in cart' })
         }
 
-        user.purchaseHistory.push({ products: cart, dateAdded: new Date() })
+        const cartItems = []
+        const cartProductIds = new Set()
+        for (const cartItem of user.cart) {
+            cartItems.push({ 
+                productId: cartItem.productId, 
+                quantity: cartItem.quantity, 
+                sizeName: cartItem.sizeName 
+            })
+
+            cartProductIds.add(cartItem.productId)
+        }    
+
+        const products = await Product.find({
+            '_id': {
+                '$in': Array.from(cartProductIds)
+            }
+        })
+
+        const cartItemsInfo = Array.from(products).reduce((acc, item) => {
+            const discountPrice = item.discount && item.discount.percent 
+                                    ? item.price * (1 - item.discount.percent)
+                                    : item.price
+
+            return { 
+                ...acc, 
+                [item._id]: { price: item.price, discountPrice } 
+            }
+        }, {})
+
+        user.purchaseHistory.push({ 
+            products:  cartItems.map(ci => ({ ...ci, ...cartItemsInfo[ci.productId] })), 
+            dateAdded: new Date() 
+        })
         user.cart = []
         await user.save()
 
