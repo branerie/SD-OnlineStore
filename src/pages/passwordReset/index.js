@@ -20,7 +20,7 @@ const PasswordResetPage = () => {
     const [validationConstants, setValidationConstants] = useState(null)
     const [isSent, setIsSent] = useState(false)
     const { resetToken } = useParams()
-    const { register, errors, handleSubmit, setError } = useForm()
+    const { register, errors, handleSubmit } = useForm()
     const { setNewUser } = useContext(UserContext)
     const { addMessage } = useContext(ErrorContext)
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styles from './index.module.css'
 import CarouselButton from '../carouselButton'
 
@@ -6,10 +6,6 @@ const ImageGrid = ({ imgCollection, setCurrentImage }) => {
     const [initialImgIndex, setInitialImgIndex] = useState(0)
     
     const changeCarousel = useCallback((indexOfChange) => {
-        changeInitialIndex(indexOfChange)
-    }, [initialImgIndex])
-    
-    const changeInitialIndex = (indexOfChange) => {
         if (isNaN(indexOfChange)){
             return
         }
@@ -20,10 +16,10 @@ const ImageGrid = ({ imgCollection, setCurrentImage }) => {
         }
 
         setInitialImgIndex(changedIndex)
-    }
+    }, [initialImgIndex])
 
-    let hasMoreUp = initialImgIndex < imgCollection.length - 2
-    let hasMoreDown = initialImgIndex > 0
+    const hasMoreUp = useMemo(() => initialImgIndex < imgCollection.length - 2, [initialImgIndex])
+    const hasMoreDown = useMemo(() => initialImgIndex > 0, [initialImgIndex])
 
     return (
         <div className={styles['img-grid']}>
@@ -32,6 +28,7 @@ const ImageGrid = ({ imgCollection, setCurrentImage }) => {
                 <img
                     className={styles['img-img']}
                     src={imgCollection[initialImgIndex]}
+                    alt='Product top'
                     onClick={() => setCurrentImage(imgCollection[initialImgIndex])}
                 />
             </div>
@@ -39,6 +36,7 @@ const ImageGrid = ({ imgCollection, setCurrentImage }) => {
                 <img
                     className={styles['img-img']}
                     src={imgCollection[initialImgIndex + 1]}
+                    alt='Product bottom'
                     onClick={() => setCurrentImage(imgCollection[initialImgIndex + 1])}
                 />
             </div>

@@ -36,7 +36,7 @@ const FavoritesIcon = ({ productId }) => {
             <img
                 onClick={changeFavorites}
                 src={imgSrc}
-                alt='No image'
+                alt='Button to add/remove from favorites'
                 title='Add/remove from favorites collection'
                 className={styles['like-button']}
             />

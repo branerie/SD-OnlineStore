@@ -40,7 +40,7 @@ const ShoppingCartCheckout = ({ productsInCart }) => {
         <div className={styles.checkout}>
             <div className={styles.receipt}>
                 {productsInCart.map(product => 
-                    <ShoppingCartCheckoutItem {...product} />)
+                    <ShoppingCartCheckoutItem key={product.productId} {...product} />)
                 }
             </div>
             { totalDiscountedPrice < totalOriginalPrice

@@ -21,7 +21,7 @@ const FavoritesListItem = ({
         <div className={styles.container}>
             <div className={styles['img-container']}>
                 <Link to={`/product/details/${productId}`}>
-                    <img className={styles.image} src={image} alt='No image' />
+                    <img className={styles.image} src={image} alt='Product' />
                 </Link>
             </div>
             <div className={styles['info-container']}>

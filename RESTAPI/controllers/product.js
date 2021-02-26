@@ -124,7 +124,11 @@ router.get('/details/main', async (req, res) => {
         const fullProductsInCart = await Product.find({ _id: { $in: productIds } })
         const productDetailsMain = parseCartMongoProducts(fullProductsInCart)
 
-        return res.send(productDetailsMain)
+        const detailsById = productDetailsMain.reduce((acc, productInfo) => {
+            return { ...acc, [productInfo.productId]: productInfo }
+        }, {})
+
+        return res.send(detailsById)
     } catch (error) {
         return res.status(500).send({ error: error.message })
     }

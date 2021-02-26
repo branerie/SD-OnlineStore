@@ -5,13 +5,18 @@ import { useAsyncError } from './hooks'
 import { changeShoppingCart, verifyUser } from './services/user'
 import { CART_COOKIE_NAME } from './utils/constants'
 import { getCookie, setCookie } from './utils/cookie'
+import { getProductDetailsMain } from './services/product'
+import { getPurchaseHistory } from './services/user'
 
 const GUEST_USER = { userId: null, email: '', firstName: '', lastName: '', isAdmin: false, favorites: [], cart: [] }
 
 const UserContextInitializer = ({ children }) => {
+    const [productInfo, setProductInfo] = useState({})
     const [user, setUser] = useState(null)
     const throwInternalError = useAsyncError()
     const { addMessage } = useContext(ErrorContext)
+
+    const setNewUser = useCallback((userProps = {}) => setUser({ ...GUEST_USER, ...userProps }), [])
 
     const verifyCurrentUser = useCallback(async () => {
         try {
@@ -22,15 +27,15 @@ const UserContextInitializer = ({ children }) => {
                 userInfo.cart = savedCartString ? JSON.parse(savedCartString) : []
             }
 
-            setUser({ ...GUEST_USER, ...userInfo })
+            setNewUser(userInfo)
         } catch(error) {
-            setUser(GUEST_USER)
+            setNewUser()
         }
-	}, [])
+	}, [setNewUser])
 
     useEffect(() => {
         verifyCurrentUser()
-    }, [])
+    }, [verifyCurrentUser])
 
     const editShoppingCart = useCallback(async (productId, sizeName, quantityChange) => {
         try {
@@ -71,7 +76,7 @@ const UserContextInitializer = ({ children }) => {
                     }
                     */
                    
-                    addMessage(
+                    return addMessage(
                         'Change Shopping Cart',
                         'An error occurred while trying to update your shopping cart. Please be patient as we try to solve the issue.'
                     )
@@ -86,16 +91,74 @@ const UserContextInitializer = ({ children }) => {
         } catch(error) {
             throwInternalError()
         }
-    }, [user])
+    }, [user, throwInternalError, addMessage])
 
-    const setNewUser = (userProps = {}) => setUser({ ...GUEST_USER, ...userProps })
+    const getFullCollectionProducts = useCallback(async (productIds) => {
+        const productsWithoutInfo = productIds.filter(p => { 
+            return !productInfo[p.productId]
+        })
+
+        let newProductInfo = productInfo
+        if (productsWithoutInfo.length > 0) {
+            const requestResult = await getProductDetailsMain(productsWithoutInfo)
+            if (requestResult.error) {
+                throw new Error('Could not retrieve products info')
+            }
+
+            newProductInfo = { ...productInfo, ...requestResult }
+            setProductInfo(newProductInfo)
+        }
+
+        const requiredProductsInfo = {}
+        productIds.forEach(productId => {
+            requiredProductsInfo[productId] = newProductInfo[productId]
+        })
+
+        return requiredProductsInfo
+    }, [])
+
+    const getFullCartProducts = useCallback(() => {
+        const cartProductIds = Array.from(new Set(user.cart.map(p => p.productId)))
+        return getFullCollectionProducts(cartProductIds)
+    }, [user, getFullCollectionProducts])
+
+    const getFullFavoriteProducts = useCallback(() => {
+        return getFullCollectionProducts(user.favorites)
+    }, [user, getFullCollectionProducts])
+
+    const getFullHistoryProducts = useCallback(async () => {
+        if (!user.purchaseHistory) {
+            const purchaseHistory = await getPurchaseHistory()
+            if (purchaseHistory.error) {
+                throw new Error('Could not retrieve user purchase history')
+            }
+
+            return setNewUser({ ...user, purchaseHistory })
+        }
+
+        const productIds = new Set()
+        user.purchaseHistory.forEach(purchase => {
+            purchase.products.forEach(product => {
+                productIds.add(product.productId)
+            })
+        })
+
+        return getFullCollectionProducts(Array.from(productIds))
+    }, [user, getFullCollectionProducts])
 
     if (!user) {
         return null
     }
 
     return (
-        <UserContext.Provider value={{ user, setNewUser, editShoppingCart }}>
+        <UserContext.Provider value={{ 
+            user, 
+            setNewUser, 
+            editShoppingCart, 
+            getFullCartProducts, 
+            getFullHistoryProducts, 
+            getFullFavoriteProducts 
+        }}>
             {children}
         </UserContext.Provider>
     )

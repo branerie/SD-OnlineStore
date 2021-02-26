@@ -8,7 +8,10 @@ const UserContext = React.createContext({
         cart: []
     },
     setNewUser: () => {},
-    editShoppingCart: () => {}
+    editShoppingCart: () => {},
+    getFullCartProducts: () => {}, 
+    getFullHistoryProducts: () => {}, 
+    getFullFavoriteProducts: () => {} 
 })
 
 export default UserContext

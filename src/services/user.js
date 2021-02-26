@@ -252,6 +252,17 @@ const makePurchase = async () => {
     return await response.json()
 }
 
+const getPurchaseHistory = async () => {
+    const response = await fetch(`${USER_URL}/history`, {
+        method: 'GET',
+        headers: {
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    return await response.json()
+}
+
 export {
     verifyUser,
     confirmUser,
@@ -267,5 +278,6 @@ export {
     changeDetails,
     changeShoppingCart,
     setShoppingCart,
-    makePurchase
+    makePurchase,
+    getPurchaseHistory,
 }
