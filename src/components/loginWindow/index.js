@@ -34,6 +34,9 @@ const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) =>
             return
         }
 
+        // if result contains cart, it was set from the guest user's cart
+        // (as user cart was empty - if it was not, should not take guest cart)
+        // and needs to be updated on back end for user 
         if (loginResult.cart) {
             const cartResult = await setShoppingCart(loginResult.cart)
 

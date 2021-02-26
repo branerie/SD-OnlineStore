@@ -65,6 +65,8 @@ const logInUser = async (email, password) => {
 
     const result = await response.json()
 
+    // if logged in user has an empty cart and (pre-log in) guest had items in cart,
+    // update user's cart to contain guest cart items
     if (!result.error) {
         const cartCookieString = getCookie(CART_COOKIE_NAME)
         if ((!result.cart || result.cart.length === 0) && cartCookieString) {
@@ -252,17 +254,6 @@ const makePurchase = async () => {
     return await response.json()
 }
 
-const getPurchaseHistory = async () => {
-    const response = await fetch(`${USER_URL}/history`, {
-        method: 'GET',
-        headers: {
-            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
-        }
-    })
-
-    return await response.json()
-}
-
 export {
     verifyUser,
     confirmUser,
@@ -279,5 +270,4 @@ export {
     changeShoppingCart,
     setShoppingCart,
     makePurchase,
-    getPurchaseHistory,
 }

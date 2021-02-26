@@ -2,13 +2,22 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import UserContext from './UserContext'
 import ErrorContext from './ErrorContext'
 import { useAsyncError } from './hooks'
-import { changeShoppingCart, verifyUser } from './services/user'
+import { changeShoppingCart, makePurchase, verifyUser } from './services/user'
 import { CART_COOKIE_NAME } from './utils/constants'
 import { getCookie, setCookie } from './utils/cookie'
 import { getProductDetailsMain } from './services/product'
-import { getPurchaseHistory } from './services/user'
 
-const GUEST_USER = { userId: null, email: '', firstName: '', lastName: '', isAdmin: false, favorites: [], cart: [] }
+const GUEST_USER = { 
+    userId: null, 
+    email: '', 
+    firstName: '', 
+    lastName: '', 
+    isAdmin: false, 
+    favorites: [],
+    ratedProducts: [], 
+    cart: [],
+    purchaseHistory: [], 
+}
 
 const UserContextInitializer = ({ children }) => {
     const [productInfo, setProductInfo] = useState({})
@@ -93,6 +102,24 @@ const UserContextInitializer = ({ children }) => {
         }
     }, [user, throwInternalError, addMessage])
 
+    const handlePurchase = useCallback(async () => {
+        const result = await makePurchase()
+        if (result.error) {
+            return addMessage(
+                'Cart Purchase',
+                result.displayError || 
+                'An error occurred while trying to process your request. Please be patient as we try to solve this issue.'
+            )
+        }
+
+        const purchase = user.cart
+        setNewUser({ 
+            ...user, 
+            cart: [], 
+            purchaseHistory: [...user.purchaseHistory, { products: purchase, dateAdded: new Date() }] 
+        })
+    }, [setNewUser, addMessage, user])
+
     const getFullCollectionProducts = useCallback(async (productIds) => {
         const productsWithoutInfo = productIds.filter(p => { 
             return !productInfo[p.productId]
@@ -127,15 +154,6 @@ const UserContextInitializer = ({ children }) => {
     }, [user, getFullCollectionProducts])
 
     const getFullHistoryProducts = useCallback(async () => {
-        if (!user.purchaseHistory) {
-            const purchaseHistory = await getPurchaseHistory()
-            if (purchaseHistory.error) {
-                throw new Error('Could not retrieve user purchase history')
-            }
-
-            return setNewUser({ ...user, purchaseHistory })
-        }
-
         const productIds = new Set()
         user.purchaseHistory.forEach(purchase => {
             purchase.products.forEach(product => {
@@ -154,7 +172,8 @@ const UserContextInitializer = ({ children }) => {
         <UserContext.Provider value={{ 
             user, 
             setNewUser, 
-            editShoppingCart, 
+            editShoppingCart,
+            handlePurchase,
             getFullCartProducts, 
             getFullHistoryProducts, 
             getFullFavoriteProducts 

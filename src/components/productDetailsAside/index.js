@@ -4,14 +4,21 @@ import SizeButton from '../sizeButton'
 import AddToCartButton from '../addToCartButton'
 import FavoritesIcon from '../favoritesIcon'
 
-const ProductDetailsAside = ({ id, brand, sizes, price, discount, discountPrice }) => {
+const ProductDetailsAside = ({ id, brand, sizes, price, discount, discountPrice, description }) => {
     const [selectedSize, setSelectedSize] = useState(null)
 
     const finalPrice = discountPrice ? discountPrice : price
 
     return (
         <aside className={styles.container} >
-            <h2 className={styles.title}>{brand}</h2>
+            <div className={styles.title}>
+                <h2 className={styles.brand}>{brand}</h2>
+                { description && 
+                    <div className={styles.description}>
+                        {description}
+                    </div>
+                }
+            </div>
             <h3 className={styles['title-minor']}>Size:</h3>
             <div className={styles['sizes-container']}>
                 {

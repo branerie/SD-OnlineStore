@@ -50,6 +50,10 @@ const userSchema = new mongoose.Schema({
     confirmationToken: {
         type: String
     },
+    ratedProducts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }],
     cart: [{
         productId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -80,6 +84,16 @@ const userSchema = new mongoose.Schema({
             quantity: {
                 type: Number,
                 min: 1,
+                required: true
+            },
+            price: {
+                type: Number,
+                min: 0,
+                required: true
+            },
+            discountPrice: {
+                type: Number,
+                min: 0,
                 required: true
             }
         }],
