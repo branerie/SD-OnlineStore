@@ -14,6 +14,7 @@ import ClosePopUp from '../closePopUp'
 
 const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
     const [validationConstants, setValidationConstants] = useState(null)
+    const [showPassCondition, setShowPassCondition] = useState(false)
     const { register, errors, clearErrors, handleSubmit, setError } = useForm()
     const { setNewUser } = useContext(UserContext)
 
@@ -84,7 +85,15 @@ const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
                         <ValidationErrorMessage message={errors.lastName.message} />
                     }
                 </div>
-                <div className={styles['input-group']}>
+                <div 
+                    className={styles['input-group']}
+                    onFocus={() => setShowPassCondition(true)}
+                >
+                    { showPassCondition && 
+                            <div className={styles['pass-condition']}>
+                                Password must contain min 6 symbols: at least 1 capital case , 1 lowercase, 1 numeric and 1 special symbol
+                            </div>  
+                    }
                     <TextInput
                         name='password'
                         type='password'
