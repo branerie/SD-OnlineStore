@@ -9,6 +9,7 @@ import FacebookLoginButton from './loginFacebookButton'
 import GoogleLoginButton from './loginGoogleButton'
 import SectionTitle from '../sectionTitle'
 import SubmitButton from '../submitButton'
+import ClosePopUp from '../closePopUp'
 
 const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) => {
     const [email, setEmail] = useState(null)
@@ -48,6 +49,7 @@ const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) =>
 
     return (
         <WindowContainer hideWindow={hideWindow}>
+            <ClosePopUp hideWindow={hideWindow} />
             <form className={styles['login-form']} onSubmit={event => loginNewUser(event)}>
                 <SectionTitle title='log in' />
                 <div className={styles['input-group']}>
