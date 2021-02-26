@@ -73,14 +73,13 @@
 }
 
 .checkbox-input {
-    position: absolute;
+    position: relative;
     opacity: 0;
-    cursor: pointer;
     height: 1.5rem;
     width: 1.5rem;
     top: 1.2rem;
     right: 0rem;
-  }
+}
 
 .checkmark {
     position: absolute;
@@ -90,6 +89,7 @@
     top: 1.2rem;
     background-color: white;
     border-radius: 7px;
+    cursor: pointer;
 }
 
 .label-checkbox:hover input ~ .checkmark {
