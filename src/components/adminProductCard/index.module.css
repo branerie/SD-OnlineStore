@@ -1,10 +1,10 @@
 .container {
-	min-width: 26rem;
-	margin: 10px 0 10px 0;
+	min-width: 18rem;
+	margin: 10px 0;
+	padding: 0.5rem;
 	height: auto;
-	border: 1px solid #234465;
-	border-radius: 4px;
-	background-color: bisque;
+	border: 3px solid #234465;
+	border-radius: 1rem;
 	display: flex;
 	flex-direction: column;
 	margin-right: 1rem;
@@ -25,12 +25,24 @@
 	cursor: pointer;
 }
 
-.btn {
-	min-height: 2.5rem;
-	cursor: pointer;
-	margin: 0 5px;
-}
-
 .btn-delete:hover {
 	background-color: crimson;
+}
+
+.inner-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.btn-admin {
+	display: flex;
+	justify-content: flex-start;
+	margin: 1rem 0;
+	flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+	.container {
+		margin-right: 0;
+	}
 }

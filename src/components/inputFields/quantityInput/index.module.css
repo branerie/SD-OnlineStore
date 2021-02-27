@@ -2,6 +2,7 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
+    color: inherit;
 }
 
 .input-field {
@@ -53,4 +54,5 @@
 
 .label {
     margin-right: 1rem;
+    color: inherit;
 }

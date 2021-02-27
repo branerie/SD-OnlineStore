@@ -16,7 +16,7 @@ const CategoriesInputWrapper = ({ handleAdd, handleRemove, addedCategories }) =>
         getAllCategories()
     }, [getAllCategories])
 
-    if(!allCategories){
+    if(!allCategories) {
         return <></>
     }
 

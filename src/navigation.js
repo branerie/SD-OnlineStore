@@ -8,7 +8,6 @@ import {
 import UserContext from './UserContext'
 import HomePage from './pages/home'
 import AdminProductsPage from './pages/adminProducts'
-import AddProductPage from './pages/addProduct'
 import ProductPage from './pages/product'
 import MensPage from './pages/men'
 import WomensPage from './pages/women'
@@ -46,9 +45,6 @@ const Navigation = () => {
                     </Route>
                     <Route path='/product/details/:id' >
                         <ProductDetailsPage />
-                    </Route>
-                    <Route path='/admin/products/add'>
-                        {user && user.isAdmin ? (<AddProductPage />) : (<Redirect to='/' />)}
                     </Route>
                     <Route path='/admin/products'>
                         {user && user.isAdmin

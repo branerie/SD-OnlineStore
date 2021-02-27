@@ -12,7 +12,8 @@ const NumberInput = ({
     onChange,
     onBlur,
     reference,
-    unitsPlaceholder
+    unitsPlaceholder,
+    step = 0.01
 }) => {
     const [isVisible, setIsVisible] = useState(value != undefined)
 
@@ -39,7 +40,7 @@ const NumberInput = ({
                     value={value}
                     placeholder={placeholder}
                     min={min}
-                    step='0.01'
+                    step={step}
                     max={max}
                     onChange={handleChange}
                     onBlur={onBlur}

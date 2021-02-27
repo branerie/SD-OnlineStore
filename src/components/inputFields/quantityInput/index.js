@@ -2,7 +2,7 @@ import React from 'react'
 
 import styles from './index.module.css'
 
-const QuantityInput = ({ value, name, label, setNewValue, max, reference, min=0 }) => {
+const QuantityInput = ({ value, name, label, setNewValue, max, reference, style, min=0 }) => {
     const changeValue = (newValue) => {
         let numberValue = Number(newValue)
         if (!numberValue && numberValue !== 0) {
@@ -17,7 +17,7 @@ const QuantityInput = ({ value, name, label, setNewValue, max, reference, min=0 
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={style}>
             {label && <label className={styles.label}>{label}</label>}
             <button
                 type="button"

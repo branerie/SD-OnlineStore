@@ -12,6 +12,7 @@
     border: 1px solid black;
     border-radius: 0.3rem;
     position: relative;
+    z-index: 10000;
 }
 
 .btn-close {

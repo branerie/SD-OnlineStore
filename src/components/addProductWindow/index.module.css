@@ -1,17 +1,14 @@
 .container {
     display: flex;
     flex-direction: column;
-    border: 2px solid blue;
     box-sizing: border-box;
     padding: 10px;
     border-radius: 20px;
-    background-color: bisque;
     margin: 25px auto;
-    width: auto;
-    max-width: 33%;
-    min-width: 300px;
     height: auto;
     max-height: 90%;
+    font-family: 'Architects Daughter', cursive;
+    color: #735C74;
 }
 
 .button {
@@ -49,4 +46,8 @@
 
 .title {
     margin-bottom: 10px;
+}
+
+.discount-container {
+    margin-bottom: 0.5rem;
 }

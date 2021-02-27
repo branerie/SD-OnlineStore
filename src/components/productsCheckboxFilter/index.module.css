@@ -29,6 +29,7 @@
     right: 0rem;
     background-color: white;
     border-radius: 7px;
+    cursor: pointer;
 }
 
 .container:hover input ~ .checkmark {

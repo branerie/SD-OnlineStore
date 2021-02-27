@@ -1,5 +1,14 @@
+.container {
+    width: 100%;
+}
+
 .card-container {
     display: flex;
-    width: 18rem;
+    max-width: 20rem;
     overflow-y: auto;
+    min-height: 8.5rem;
+}
+
+.empty-container {
+    min-height: 8.5rem;
 }

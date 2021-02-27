@@ -41,7 +41,7 @@ const ProductDetailsAside = ({ id, brand, sizes, price, discount, discountPrice,
             </div>
             <AddToCartButton productId={id} selectedSize={selectedSize} />
             <div className={styles.favorites}>
-                <label>Add to wish list:</label>
+                <label>Add to favorites:</label>
                 <FavoritesIcon productId={id} />
             </div>
         </aside>

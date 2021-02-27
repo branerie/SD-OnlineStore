@@ -6,6 +6,7 @@
     background-color: #3D53444F;
     padding: 0 10px;
     max-width: 14vw;
+    height: 100%;
 }
 
 .title {
@@ -42,6 +43,7 @@
         left: 17px;
         padding-top: 10px;
         z-index: 501;
+        cursor: pointer;
     }
 
     .menu-toggle .bar {

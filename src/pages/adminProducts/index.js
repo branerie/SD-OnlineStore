@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import styles from './index.module.css'
 
 import AdminProductCardsList from '../../components/adminProductCardsList'
@@ -6,29 +6,40 @@ import ProductsFilter from '../../components/productsFilter'
 import Pagination from '../../components/pagination'
 import SortCriteria from '../../components/sortCriteria'
 import ProductsContextInitializer from '../../ProductsContextInitializer'
-import { Link } from 'react-router-dom'
 import PageWrapper from '../../components/pageWrapper'
-import HeaderHome from '../../components/headerHome'
+import Header from '../../components/header'
+import SubmitButton from '../../components/submitButton'
+import AddProductWindow from '../../components/addProductWindow'
+import NavButtons from '../../components/navButtons'
 
 const AdminProductsPage = ({ pageLength }) => {
+	const [shownWindow, setShownWindow] = useState(null)
+
+	const hideWindow = useCallback(() => setShownWindow(null), [])
+
 	return (
 		<ProductsContextInitializer pageLength={pageLength}>
 			<PageWrapper maxWidth='1600px'>
-				<HeaderHome />
+				<Header />
 				<div className={styles.container}>
 					<aside className={styles.filters}>
-						<Link to="/admin/products/add"
-							className={styles['add-product']} >Add Product</Link>
-						<SortCriteria />
 						<ProductsFilter />
 					</aside>
 					<main className={styles.cards}>
+						<div className={styles.nav}>
+							<SubmitButton text='Add Product' onClick={() => setShownWindow('add')} />
+							<NavButtons />
+						</div>
 						<Pagination pageLength={pageLength} >
+							<div className={styles['sort-position']}>
+								<SortCriteria />
+							</div>
 							<AdminProductCardsList />
 						</Pagination>
 					</main>
 				</div>
 			</PageWrapper>
+			{ shownWindow === 'add' && <AddProductWindow hideWindow={hideWindow} /> }
 		</ProductsContextInitializer>
 	)
 }

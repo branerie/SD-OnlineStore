@@ -1,17 +1,19 @@
-import React, { useCallback, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styles from './index.module.css'
 
 const INITIAL_TEXT = '--- Add categories ---'
 
 const CategoriesInput = ({ handleAdd, handleRemove, addedCategories, allCategories }) => {
-    const [categories, setCategories] = useState(allCategories)
+    const [categories, setCategories] = useState(allCategories.filter(c => !addedCategories.includes(c)))
 
-    const getSortedCategories = useCallback(() => {
+    const sortedCategories = useMemo(() => {
         if (categories) {
             return categories.sort((c1, c2) => {
                 if (c1 === INITIAL_TEXT) {
                     return -1
-                } else if (c2 === INITIAL_TEXT) {
+                } 
+                
+                if (c2 === INITIAL_TEXT) {
                     return 1
                 }
 
@@ -20,26 +22,26 @@ const CategoriesInput = ({ handleAdd, handleRemove, addedCategories, allCategori
         }
     }, [categories])
 
-    const handleCategoryAdd = useCallback(category => {
+    const handleCategoryAdd = category => {
         if (category === INITIAL_TEXT) {
             return
         }
 
         setCategories(categories.filter(cat => cat !== category))
         handleAdd(category)
-    }, [handleAdd, categories])
+    }
 
-    const handleCategoryRemove = useCallback(category => {
+    const handleCategoryRemove = category => {
         setCategories([...categories, category])
         handleRemove(category)
-    }, [handleRemove, categories])
+    }
 
     return (
         <div className={styles.container}>
             <select
                 className={styles.select}
                 onClick={e => handleCategoryAdd(e.target.value)}>
-                {categories && getSortedCategories().map(cat => {
+                {categories && sortedCategories.map(cat => {
                     return (
                         <option key={cat} value={cat}>
                             {cat}
@@ -53,7 +55,10 @@ const CategoriesInput = ({ handleAdd, handleRemove, addedCategories, allCategori
                         <span
                             key={cat}
                             className={styles.category} 
-                            onClick={() => handleCategoryRemove(cat)}>{cat}</span>
+                            onClick={() => handleCategoryRemove(cat)}
+                        >
+                            {cat}
+                        </span>
                     )
                 })}
             </div>}

@@ -1,12 +1,12 @@
 import React from 'react'
 import styles from './index.module.css'
 
-const SubmitButton = ({ text, style, disabled, onClick }) => {
+const SubmitButton = ({ text, type, style, disabled, onClick, btnType }) => {
     return (
         <button 
             onClick={onClick}
-            type='submit'
-            className={`${styles.button} ${disabled && styles.disabled}`} 
+            type={type || 'submit'}
+            className={`${styles.button} ${styles[btnType]} ${disabled && styles.disabled}`} 
             style={style} 
             disabled={disabled}
         >

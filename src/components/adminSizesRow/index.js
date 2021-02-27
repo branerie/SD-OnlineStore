@@ -1,24 +1,22 @@
 import React from 'react'
+import QuantityInput from '../inputFields/quantityInput'
+import SubmitButton from '../submitButton'
 import styles from './index.module.css'
 
-const AdminSizesRow = ({ action, sizeName, count, handleDelete, selectForEdit }) => {
+const AdminSizesRow = ({ sizeName, count, handleDelete, handleChange }) => {
     return (
         <div className={styles.container}>
-            <div className={action && styles['size-edit']}>
-                {sizeName} - {count}
+            <div className={styles['inner-container']}>
+                {sizeName}
+                <QuantityInput value={count} setNewValue={handleChange} min={1} />
             </div>
-            <div>
-                <button
-                    type='button'
-                    onClick={selectForEdit}>
-                    Edit
-                </button>
-                <button
-                    type='button'
-                    onClick={() => handleDelete(sizeName)}>
-                    Remove
-                </button>
-            </div>
+            <SubmitButton 
+                type='button'
+                text='Remove' 
+                onClick={handleDelete} 
+                style={{ maxWidth: '8rem' }} 
+                btnType='delete' 
+            />
         </div>
     )
 }

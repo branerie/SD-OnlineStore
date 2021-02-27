@@ -10,15 +10,16 @@ const ImageCards = ({ imageCards, handleImageRemove }) => {
         <div className={styles.container}>
             {
                 containsImages
-                    ? (<div className={styles['card-container']}>
+                    ? 
+                    <div className={styles['card-container']}>
                         {imageCards.map(imageUrl => {
                             return <ImageCard
                                         key={imageUrl}
                                         src={imageUrl}
                                         handleImageRemove={() => handleImageRemove(imageUrl)} />
                         })}
-                    </div>)
-                    : <div>No images available</div>
+                    </div>
+                    : <div className={styles['empty-container']}>No images available</div>
             }
         </div>
     )

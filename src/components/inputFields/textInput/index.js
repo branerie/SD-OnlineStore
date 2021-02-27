@@ -7,9 +7,11 @@ const TextInput = ({
     value,
     onChange,
     onBlur,
+    onKeyDown,
     maxLength,
     placeholder,
     reference,
+    autoFocus = false,
     type = 'text',
     disabled = false
 }) => {
@@ -37,9 +39,11 @@ const TextInput = ({
                 value={value}
                 onChange={handleChange}
                 onBlur={onBlur}
+                onKeyDown={onKeyDown}
                 maxLength={maxLength}
                 placeholder={placeholder}
                 disabled={disabled}
+                autoFocus={autoFocus}
             />
         </InputWrapper>
     )
