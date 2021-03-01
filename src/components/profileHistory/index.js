@@ -47,6 +47,7 @@ const ProfileHistory = () => {
                         {purchaseHistory.reverse().map((h, index) => {
                             return (
                                 <ProfileSidebarButton
+                                    key={`${h._id}-${h.dateAdded}`}
                                     historyId={h._id}
                                     onClick={() => setShownIndex(index)}
                                     isSelected={shownIndex === index}
