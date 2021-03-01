@@ -29,7 +29,7 @@ const Navbar = ({ clickedName }) => {
             promotions: {
                 name: 'Promotions',
                 path: '/products/promotions',
-                imageName: 'menLink.png',
+                imageName: 'promotionsLink.png',
                 clicked: clickedName === 'Promotions',
                 normalOrder: 5,
                 clickedOrder: 2
@@ -82,7 +82,10 @@ const Navbar = ({ clickedName }) => {
                 })}
 
                 {isAdmin &&
-                    <div style={{ order: 10 }}>
+                    <div 
+                        style={{ order: 10 }} 
+                        className={window.location.pathname.startsWith('/admin') && styles.selected}
+                    >
                         <NavbarLink name='Admin' path='/admin/products' />
                     </div>
                 }

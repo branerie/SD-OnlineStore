@@ -46,8 +46,8 @@ const ProfileHistory = () => {
                     <div className={styles['receipt-buttons']}>
                         {purchaseHistory.reverse().map((h, index) => {
                             return (
-                                <ProfileSidebarButton 
-                                    key={h.dateAdded}
+                                <ProfileSidebarButton
+                                    historyId={h._id}
                                     onClick={() => setShownIndex(index)}
                                     isSelected={shownIndex === index}
                                     text={formatDate(new Date(h.dateAdded), '%d.%m.%Y')}

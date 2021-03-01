@@ -1,9 +1,10 @@
 import React from 'react'
 import styles from './index.module.css'
 
-const ProfileSidebarButton = ({ text, isSelected, onClick, style }) => {
+const ProfileSidebarButton = ({ text, isSelected, onClick, style, historyId }) => {
     return (
         <button
+            key={historyId}
             className={`${styles['btn-sidebar']} ${isSelected && styles.selected}`}
             onClick={onClick}
             disabled={isSelected}

@@ -16,7 +16,8 @@ const ImageCards = ({ imageCards, handleImageRemove }) => {
                             return <ImageCard
                                         key={imageUrl}
                                         src={imageUrl}
-                                        handleImageRemove={() => handleImageRemove(imageUrl)} />
+                                        handleImageRemove={() => handleImageRemove(imageUrl)} 
+                    />
                         })}
                     </div>
                     : <div className={styles['empty-container']}>No images available</div>

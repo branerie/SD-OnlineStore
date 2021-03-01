@@ -1,5 +1,10 @@
 const router = require('express').Router()
-const cloudinary = require('cloudinary').v2
+// const cloudinary = require('cloudinary').v2
+// cloudinary.config({ 
+//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+//     api_key: process.env.CLOUDINARY_API_KEY, 
+//     api_secret: process.env.CLOUDINARY_API_SECRET,
+// })
 
 const Product = require('../models/product')
 
@@ -154,19 +159,20 @@ router.delete('/:productId/images/:imageDir/:imagePublicName', async (req, res) 
 
         await product.save()
 
-        cloudinary.uploader.destroy(imagePublicId, function (error, result) {
-            if (error) {
-                return res.status(500).send({ error })
-            }
+        // cloudinary.uploader.destroy(imagePublicId, function (error, result) {
+        //     if (error) {
+        //         return res.status(500).send({ error })
+        //     }
 
-            if (result.result === 'not found') {
-                return res.status(400).send({ error: `Image with public id ${imagePublicId} not found.` })
-            }
+        //     if (result.result === 'not found') {
+        //         return res.status(400).send({ error: `Image with public id ${imagePublicId} not found.` })
+        //     }
 
             return res.send({ status: 'Success!', deletedImageId: imagePublicId })
-        })
+        // })
     } catch(error) {
         console.log(error)
+        return res.status(500).send({ error: error.message })
     }
 })
 

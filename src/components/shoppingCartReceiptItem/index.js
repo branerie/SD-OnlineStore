@@ -1,18 +1,6 @@
 import React from 'react'
 import styles from './index.module.css'
-
-const shortenText = (text, maxChars) => {
-    if (text.length <= maxChars) {
-        return text
-    }
-
-    let maxIndex = maxChars - 1
-    while (text[maxIndex] !== ' ') {
-        maxIndex--
-    }
-
-    return `${text.slice(0, maxIndex)}...`
-}
+import { shortenText } from '../../utils/text'
 
 const ShoppingCartReceiptItem = ({ 
     brand,
@@ -20,14 +8,15 @@ const ShoppingCartReceiptItem = ({
     discountPrice,
     price,
     quantity,
-    sizeName
+    sizeName,
+    productId
 }) => {
     const shortenedDescription = shortenText(description, 30)
 
     const finalPrice = discountPrice ? discountPrice : price
 
     return (
-        <div className={styles['receipt-item']}>
+        <div className={styles['receipt-item']} key={productId}>
             <div className={styles['receipt-item-qty']}>
                 {`${quantity} x `}
             </div>

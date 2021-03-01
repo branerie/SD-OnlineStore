@@ -27,6 +27,11 @@
     z-index: -1;
 }
 
+.selected,
+.selected > li {
+    color: #EF696E;
+}
+
 @media screen and (max-width:768px) {
     .navbar-links {
         display: flex;

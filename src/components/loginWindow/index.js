@@ -78,7 +78,7 @@ const LoginWindow = ({ hideWindow, registerWindowPopup, passwordResetPopup }) =>
                 </div>
                 <SubmitButton text='enter' disabled={!email || !password} />
                 <SectionTitle title='log in with:' />
-                <FacebookLoginButton setUserState={setNewUserState} text='facebook' />
+                {/* <FacebookLoginButton setUserState={setNewUserState} text='facebook' /> */}
                 <GoogleLoginButton setUserState={setNewUserState} text='google' />
             </form>
                 <SectionTitle title='new customer' />
