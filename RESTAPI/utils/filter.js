@@ -34,7 +34,15 @@ function getDbProductsFilter(query) {
         const [propType, propValue] = property.split('_')
 
         if (property === 'searchTerm' && query[property] !== '') {
-            filter['$text'] = { $search: query[property] }
+            // filter['$text'] = { $search: query[property] }
+
+            const searchRegex = new RegExp(query[property], "i")
+            filter['$or'] = [
+                { categories: { $regex: searchRegex } },
+                { brand: { $regex: searchRegex } },
+                { description: { $regex: searchRegex } },
+            ]
+
             continue
         }
 
@@ -91,15 +99,15 @@ function getSortCriteria(sortQuery) {
 
 function getProductsAggregationObject(productFilters, sortCriteria, page, pageLength) {
     const resultArray = []
-    const shouldFilterByText = '$text' in productFilters 
+    // const shouldFilterByText = '$text' in productFilters 
 
-    if (shouldFilterByText) {
-        const textMatchPhase = { $match: { $text: productFilters.$text } }
-        resultArray.push(textMatchPhase)
+    // if (shouldFilterByText) {
+    //     const textMatchPhase = { $match: { $text: productFilters.$text } }
+    //     resultArray.push(textMatchPhase)
 
-        productFilters = {...productFilters}
-        delete productFilters.$text
-    }
+    //     productFilters = {...productFilters}
+    //     delete productFilters.$text
+    // }
 
     const addFieldsPhase = {
         $addFields: {
@@ -122,9 +130,9 @@ function getProductsAggregationObject(productFilters, sortCriteria, page, pageLe
         }
     }
     
-    if (shouldFilterByText) {
-        addFieldsPhase.$addFields.score =  { $meta: "textScore" }
-    }
+    // if (shouldFilterByText) {
+    //     addFieldsPhase.$addFields.score =  { $meta: "textScore" }
+    // }
 
     resultArray.push(addFieldsPhase)
     resultArray.push({ $match: productFilters })

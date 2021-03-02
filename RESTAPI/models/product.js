@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { compareDates } = require('../utils/date')
 const { getAllCategories } = require('../utils/product')
 
 const getValidationConstants = require('../utils/validationContasts')
@@ -91,10 +92,10 @@ const productSchema = new mongoose.Schema({
     }
 })
 
-// productSchema.pre('validate', preprocessDiscountOnCreate)
+productSchema.pre('validate', preprocessOnSave)
 // productSchema.pre('findOneAndUpdate', preprocessDiscountOnUpdate)
 // productSchema.pre('update', preprocessDiscountOnUpdate)
-productSchema.pre('save', processAddDateOnCreate)
+// productSchema.pre('save', preprocessOnSave)
 
 productSchema.virtual('discountPrice').get(function () {
     return this.discount.percent
@@ -116,47 +117,18 @@ productSchema.virtual('viewRatingCount').get(function() {
 
 // productSchema.index({ categories: 'text' })
 
-function processAddDateOnCreate(next) {
+function preprocessOnSave(next) {
     if (this.isNew) {
         this.addDate = new Date()
     }
 
+    const discount = this.discount
+    if (discount && discount.endDate && compareDates(new Date(discount.endDate), new Date()) < 0) {
+        // in case product has an expired discount, remove the discount
+        this.discount = {}
+    }
+
     return next()
 }
-
-// function preprocessDiscountOnCreate(next) {
-//     if (this.discount.$isEmpty() || !this.discount.isModified()){
-//         return next()
-//     }
-
-//     if (this.discount.hasOwnProperty('endDate') &&
-//         this.discount.hasOwnProperty('percent')) {
-//         if (this.discount.percent && this.discount.endDate) {
-//             this.discount.percent /= 100
-
-//             return next()  
-//         }            
-//     }
-
-//     throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
-// }
-
-// function preprocessDiscountOnUpdate(next) {
-//     const update = this.getUpdate()
-
-//     if (update.hasOwnProperty('$set') &&
-//         update.$set.hasOwnProperty('discount') &&
-//         update.$set.discount.hasOwnProperty('percent')) {
-
-//         const discount = update.$set.discount
-//         if (!discount.hasOwnProperty('endDate') || !discount.endDate) {
-//             throw new SyntaxError('Product discount must have an end date.')
-//         }
-
-//         update.$set.discount.percent /= 100
-//     }
-
-//     next()
-// }
 
 module.exports = mongoose.model('Product', productSchema)

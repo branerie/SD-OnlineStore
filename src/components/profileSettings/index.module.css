@@ -28,6 +28,34 @@
     max-width: 48%;
 }
 
+ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+ul li {
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+
+.address {
+    max-width: 80%;
+    cursor: pointer;
+}
+
+.address > span {
+    padding-left: 1rem;
+}
+
+.address-buttons > button {
+    max-height: 2rem;
+    margin-left: 0.5rem;
+    margin-top: 0;
+}
+
 @media (max-width: 750px) {
     .password-new {
         flex-direction: column;

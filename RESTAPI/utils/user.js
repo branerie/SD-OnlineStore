@@ -48,7 +48,7 @@ const sendPasswordResetEmail = async (firstName, lastName, email, resetToken) =>
         to: email,
         subject: `Password reset request`,
         text: `
-        Dear ${firstName} ${lastName},
+        Dear ${firstName ? firstName : ''} ${lastName ? lastName : ''} ${(!firstName && !lastName) ? 'User' : ''},
         
         Someone has requested to reset the password of your account on ${server_url.split('//')[1]}.
         If this was you, please follow the link below. It will take you to a secure page where you can reset your password. The page will expire in one hour.

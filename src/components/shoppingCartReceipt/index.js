@@ -1,10 +1,12 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import styles from './index.module.css'
 import SubmitButton from '../submitButton'
 import ShoppingCartReceiptItem from '../shoppingCartReceiptItem'
 import UserContext from '../../UserContext'
+import ConfirmPurchaseWindow from '../confirmPurchaseWindow'
 
 const ShoppingCartReceipt = ({ productsInCart, isCheckout }) => {
+    const [isConfirmActive, setIsConfirmActive] = useState(false)
     const { handlePurchase } = useContext(UserContext)
 
     const [totalDiscountedPrice, totalOriginalPrice] = useMemo(() => {
@@ -19,11 +21,21 @@ const ShoppingCartReceipt = ({ productsInCart, isCheckout }) => {
 
         return [totalDiscountedPrice, totalOriginalPrice]
     }, [productsInCart])
+
+    if (!productsInCart) {
+        return null
+    }
+
     return (
         <div className={styles.checkout}>
             <div className={styles.receipt}>
                 { productsInCart.map(product => 
-                    <ShoppingCartReceiptItem key={`product.productId_`} productId={product.productId} {...product} />)
+                    <ShoppingCartReceiptItem 
+                        key={`${product.productId}_${product.sizeName}`} 
+                        productId={product.productId} 
+                        {...product} 
+                    />
+                )
                 }
             </div>
             { totalDiscountedPrice < totalOriginalPrice
@@ -41,10 +53,17 @@ const ShoppingCartReceipt = ({ productsInCart, isCheckout }) => {
             { isCheckout &&
                 <SubmitButton
                     type='button'
-                    onClick={handlePurchase}
+                    onClick={() => setIsConfirmActive(true)}
                     text='Checkout'
                     style={{ marginTop: '1.5rem', width: '100%' }} 
                 />
+            }
+            { isConfirmActive &&
+                <ConfirmPurchaseWindow 
+                    hideWindow={() => setIsConfirmActive(false)} 
+                    handlePurchase={handlePurchase} 
+                />
+
             }
         </div>
     )

@@ -31,7 +31,7 @@ const AddProductWindow = ({ hideWindow }) => {
     const [validationConstants, setValidationConstants] = useState(null)
 
     const { addMessage } = useContext(ErrorContext)
-    const { updateProductsPage } = useContext(ProductsContext)
+    const { updateProductsPage, filtersDispatch } = useContext(ProductsContext)
 
     const { register, errors, handleSubmit, setError } = useForm()
     const [images, imagesDispatch] = useReducer(reducer, [])
@@ -104,6 +104,7 @@ const AddProductWindow = ({ hideWindow }) => {
         }
 
         updateProductsPage()
+        filtersDispatch({ type: 'page', newPage: 0 })
         hideWindow()
     }
 

@@ -1,4 +1,4 @@
-const FORMAT_REGEX = /%[aAbBdmwyY]/g
+const FORMAT_REGEX = /%[aAbBdHmMwyY]/g
 
 const MONTHS = [ 
     'January', 'February', 'March', 'April', 'May', 'June', 'July', 
@@ -22,6 +22,8 @@ const FORMAT_OPTIONS = {
     'a': (date) => WEEKDAYS[date.getDay()].slice(0, 3),             // weekday, short (Mon, Wed)
     'A': (date) => WEEKDAYS[date.getDay()],                         // weekday, long (Monday)
     'w': (date) => getWeekNumber(date),                             // week number of the year (1-53)
+    'H': (date) => `0${date.getHours()}`.slice(-2),                 // hour of day acc. to local time (00-23)
+    'M': (date) => `0${date.getMinutes()}`.slice(-2),               // minutes of hour acc. to local time (00-59)
 }
 
 const getDateWithOffset = (initialDate, daysOffset) => {

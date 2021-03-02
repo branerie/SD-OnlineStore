@@ -7,9 +7,9 @@ import ShoppingCartReceipt from '../shoppingCartReceipt'
 import ProfileSidebarButton from '../profileSidebarButton'
 
 const ProfileHistory = () => {
-    const [productInfo, setProductInfo] = useState(null)
-    const [shownIndex, setShownIndex] = useState(0)
     const { user: { purchaseHistory }, getFullHistoryProducts } = useContext(UserContext)
+    const [productInfo, setProductInfo] = useState(null)
+    const [shownIndex, setShownIndex] = useState(purchaseHistory.length - 1)
 
     const fetchProductInfo = useCallback(async () => {
         const fullProducts = await getFullHistoryProducts()
@@ -44,15 +44,15 @@ const ProfileHistory = () => {
                         />
                     </div>
                     <div className={styles['receipt-buttons']}>
-                        {purchaseHistory.reverse().map((h, index) => {
+                        {purchaseHistory.map((h, index) => {
                             return (
                                 <ProfileSidebarButton
                                     key={`${h._id}-${h.dateAdded}`}
                                     historyId={h._id}
                                     onClick={() => setShownIndex(index)}
                                     isSelected={shownIndex === index}
-                                    text={formatDate(new Date(h.dateAdded), '%d.%m.%Y')}
-                                    style={{ marginRight: '0.5rem' }}
+                                    text={formatDate(new Date(h.dateAdded), '%d.%m.%Y, %H:%M')}
+                                    style={{ marginRight: '0.5rem', order: `${-index}`, textAlign: 'start' }}
                                 />
                             )
                         })}

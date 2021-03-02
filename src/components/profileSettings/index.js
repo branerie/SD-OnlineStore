@@ -14,19 +14,19 @@ const ProfileSettings = () => {
     const [name, setName] = useState({ firstName: user.firstName, lastName: user.lastName })
     const [password, setPassword] = useState({ current: '', new: '', confirmNew: '' })
     const [validationConstants, setValidationConstants] = useState(null)
-    const { 
+    const {
         register: registerName,
         errors: errorsName,
-        clearErrors: clearErrorsName, 
-        handleSubmit: handleSubmitName, 
+        clearErrors: clearErrorsName,
+        handleSubmit: handleSubmitName,
         setError: setErrorName
     } = useForm()
 
-    const { 
+    const {
         register: registerPass,
         errors: errorsPass,
-        clearErrors: clearErrorsPass, 
-        handleSubmit: handleSubmitPass, 
+        clearErrors: clearErrorsPass,
+        handleSubmit: handleSubmitPass,
         setError: setErrorPass
     } = useForm()
 
@@ -93,8 +93,8 @@ const ProfileSettings = () => {
                     reference={registerName(validationConstants.lastName)}
                 />
 
-                {(errorsName.firstName || errorsName.lastName) && 
-                    <ValidationErrorMessage 
+                {(errorsName.firstName || errorsName.lastName) &&
+                    <ValidationErrorMessage
                         message={(errorsName.firstName ? errorsName.firstName : errorsName.lastName).message}
                     />
                 }
@@ -137,9 +137,9 @@ const ProfileSettings = () => {
                     />
                 </div>
 
-                { (errorsPass.password || errorsPass.newPassword) && 
-                    <ValidationErrorMessage 
-                        message={(errorsPass.password ? errorsPass.password: errorsPass.newPassword).message} 
+                {(errorsPass.password || errorsPass.newPassword) &&
+                    <ValidationErrorMessage
+                        message={(errorsPass.password ? errorsPass.password : errorsPass.newPassword).message}
                     />
                 }
 

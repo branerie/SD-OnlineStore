@@ -16,7 +16,7 @@ const ShoppingCartReceiptItem = ({
     const finalPrice = discountPrice ? discountPrice : price
 
     return (
-        <div className={styles['receipt-item']} key={productId}>
+        <div className={styles['receipt-item']} key={`${productId}-${sizeName}`}>
             <div className={styles['receipt-item-qty']}>
                 {`${quantity} x `}
             </div>

@@ -15,9 +15,3 @@
     opacity: 0.5;
     cursor: default;
 }
-
-@media screen and (max-width:640px) {
-    .bag-link {
-        font-size: 1.5rem;
-    }
-}
