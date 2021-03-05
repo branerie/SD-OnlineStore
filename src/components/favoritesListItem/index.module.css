@@ -118,11 +118,23 @@
     .column {
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: flex-start;
+        justify-content: center;
     }
 
-    .column>div:nth-child(2) {
-        margin-right: 6rem;
+    .column>div:nth-child(1) {
+        margin-right: 1rem;
+    }
+
+    .brand {
+        text-align: center;
+    }
+
+    .info {
+        text-align: center;
+    }
+
+    .size-container {
+        justify-content: center;
     }
 }
 

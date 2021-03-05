@@ -19,3 +19,9 @@
     background-color: rgb(230, 227, 227);
     color: #EF696E;
 }
+
+@media(max-width: 550px) {
+    .btn-sidebar {
+        min-width: 8rem;
+    }
+}
