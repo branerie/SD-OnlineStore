@@ -270,10 +270,11 @@ router.post('/password/reset/send', async (req, res) => {
         }
 
         const resetToken = createToken({ userId: user._id }, '1h')
-        sendPasswordResetEmail(user.firstName, user.lastName, email, resetToken)
+        await sendPasswordResetEmail(user.firstName, user.lastName, email, resetToken)
 
         return res.send({ status: 'Success', email })
     } catch (error) {
+        console.log(error)
         return res.status(500).send({ error: error.message })
     }
 })
@@ -300,7 +301,7 @@ router.post('/password/reset/confirm', async (req, res) => {
 
         attachLoginCookie(user, res)
 
-        const userData = { id: user._id, favorites: user.favorites, isAdmin: user.isAdmin }
+        const userData = getUserData(user)
         return res.send(userData)
     } catch (error) {
         return res.status(500).send({ error: error.message })
