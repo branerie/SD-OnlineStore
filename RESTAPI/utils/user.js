@@ -1,11 +1,27 @@
 const nodemailer = require('nodemailer')
 
 const getTransporter = () => {
+    if (process.env.NODE_ENV === process.env.ENVIRONMENT_DEV) {
+        return nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        })
+    }
+
     return nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
+            type: 'OAuth2',
+            user: 'infofindyou9@gmail.com',
+            clientId: process.env.GMAIL_CLIENT_ID,
+            clientSecret: process.env.GMAIL_CLIENT_SECRET,
+            // accessToken: 'ya29.Xx_XX0xxxxx-xX0X0XxXXxXxXXXxX0x',
+            // expires: 1484314697598
         }
     })
 }
