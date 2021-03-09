@@ -274,6 +274,7 @@ router.post('/password/reset/send', async (req, res) => {
 
         return res.send({ status: 'Success', email })
     } catch (error) {
+        console.log(error)
         return res.status(500).send({ error: error.message })
     }
 })

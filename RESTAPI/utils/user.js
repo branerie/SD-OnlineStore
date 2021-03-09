@@ -1,15 +1,16 @@
 const nodemailer = require('nodemailer')
+const { google } = require('googleapis')
+const OAuth2 = google.auth.OAuth2
 
 const getTransporter = () => {
-    if (process.env.NODE_ENV === process.env.ENVIRONMENT_DEV) {
-        return nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        })
-    }
+    const oauth2Client = new OAuth2(
+        process.env.GMAIL_CLIENT_ID,
+        process.env.GMAIL_CLIENT_SECRET,
+        'https://developers.google.com/oauthplayground' // Redirect URL
+    )
+
+    oauth2Client.setCredentials({ refresh_token: process.env.GMAIL_REFRESH_TOKEN })
+    const accessToken = oauth2Client.getAccessToken()
 
     return nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -20,8 +21,8 @@ const getTransporter = () => {
             user: 'infofindyou9@gmail.com',
             clientId: process.env.GMAIL_CLIENT_ID,
             clientSecret: process.env.GMAIL_CLIENT_SECRET,
-            // accessToken: 'ya29.Xx_XX0xxxxx-xX0X0XxXXxXxXXXxX0x',
-            // expires: 1484314697598
+            refreshToken: process.env.GMAIL_REFRESH_TOKEN,
+            accessToken: accessToken
         }
     })
 }
