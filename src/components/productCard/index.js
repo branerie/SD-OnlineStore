@@ -4,22 +4,22 @@ import styles from './index.module.css'
 import RatingStars from '../ratingStar'
 import FavoritesIcon from '../favoritesIcon'
 
-const ProductCard = (props) => {
-    const currency = props.currency ? props.currency : '$'
-
-    let discount = null
-    if (props.discount) {
-        const discPrice = props.discountPrice.toFixed(2)
-        const discPercent = props.discount.percent
-
-        discount = `-${parseInt(discPercent)}% = ${discPrice}${currency}`
-    }
-
+const ProductCard = ({
+    brand,
+    currency,
+    discount,
+    discountPrice,
+    images,
+    price,
+    productId,
+    ratingCount,
+    ratingStars,
+}) => {
     return (
         <div className={styles.container}>
-            <Link to={`/product/details/${props.id}`}>
+            <Link to={`/product/details/${productId}`}>
                 <img
-                    src={props.images && props.images[0]}
+                    src={images && images[0]}
                     alt='No image'
                     className={styles['product-image']}
                 />
@@ -27,31 +27,30 @@ const ProductCard = (props) => {
             <div className={styles['text-container']}>
                 <div className={styles['brand-likeButton']}>
                     <div className={styles.brand}>
-                        {props.brand}
+                        {brand}
                     </div>
-                    <FavoritesIcon productId={props.id} />
+                    <FavoritesIcon productId={productId} />
                 </div>
                 <div className={styles['price-container']}>
-                    <div className={props.discountPrice ? styles['price-discount'] : styles.price}>
-                        {props.price.toFixed(2)}{currency}
+                    <div className={discountPrice ? styles['price-discount'] : styles.price}>
+                        {price.toFixed(2)}{currency || '$'}
                     </div>
 
-                    {props.discountPrice &&
+                    {discountPrice &&
                         <div
                             className={styles['discount-style']}
-                            data-testid={`discount-${props.id}`}
+                            data-testid={`discount-${productId}`}
                         >
-                            {discount}
+                            {`-${parseInt(discount.percent)}% = ${discountPrice.toFixed(2)}${currency || '$'}`}
                         </div>
                     }
 
                 </div>
                 <div className={styles['rating-view']}>
                     <RatingStars
-                        key={props.id}
-                        productId={props.id}
-                        ratingStars={props.ratingStars}
-                        ratingCounter={props.ratingCount}
+                        productId={productId}
+                        ratingStars={ratingStars}
+                        ratingCounter={ratingCount}
                     />
                     {/* <Link to={''} className={styles.link}>VIEW</Link> */}
                 </div>

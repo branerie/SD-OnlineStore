@@ -3,7 +3,6 @@ import styles from './index.module.css'
 import ErrorContext from '../../ErrorContext'
 import ProductsContext from '../../ProductsContext'
 
-import Input from '../input'
 import AdminCategories from '../adminCategories'
 import AdminSizes from '../adminSizes'
 import GenderInput from '../inputFields/genderInput'
@@ -11,7 +10,6 @@ import GenderInput from '../inputFields/genderInput'
 import { updateProduct } from '../../services/adminProduct'
 import NumberInput from '../inputFields/numberInput'
 import WindowContainer from '../windowContainer'
-import ClosePopUp from '../closePopUp'
 import PageSecondaryTitle from '../pageSecondaryTitle'
 import TextInput from '../inputFields/textInput'
 import QuantityInput from '../inputFields/quantityInput'
@@ -29,7 +27,7 @@ const ModifyProductWindow = ({
     sizes,
     categories,
     hideWindow,
-    id: productId
+    productId
 }) => {
     const { updateProductsPage, updateFilters } = useContext(ProductsContext)
     const { addMessage } = useContext(ErrorContext)
@@ -117,7 +115,6 @@ const ModifyProductWindow = ({
 
     return (
         <WindowContainer hideWindow={hideWindow}>
-            <ClosePopUp hideWindow={hideWindow} />
             <div className={styles.container}>
                 <PageSecondaryTitle title='Main:' />
                 <div className={styles.form}>

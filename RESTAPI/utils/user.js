@@ -81,7 +81,67 @@ const sendPasswordResetEmail = async (firstName, lastName, email, resetToken) =>
     })
 }
 
+const parsePurchaseHistory = (purchaseHistory) => {
+    const activeProductIds = new Set()
+    const archivedProductIds = new Set()
+    const purchaseInfo = []
+    for (const purchase of purchaseHistory) {
+        const productsInfo = []
+        for (const product of purchase.products) {
+            productsInfo.push({ 
+                price: product.price, 
+                discountPrice: product.discountPrice, 
+                quantity: product.quantity,
+                sizeName: product.sizeName,
+                productId: product.productId 
+            })
+
+            if (product.isArchived) {
+                archivedProductIds.add(product.productId)
+                continue
+            }
+
+            activeProductIds.add(product.productId)
+        }
+
+        purchaseInfo.push({
+            products: productsInfo,
+            dateAdded: purchase.dateAdded
+        })
+    }
+
+    return { 
+        activeProductIds: Array.from(activeProductIds), 
+        archivedProductIds: Array.from(archivedProductIds), 
+        purchaseInfo 
+    }
+}
+
+const checkPurchaseAvailability = (cartItemsById, productsById) => {
+    const unavailablePurchases = []
+    for (const [productId, productItems] of Object.entries(cartItemsById)) {
+        const product = productsById[productId]
+
+        for (const [sizeName, customerQuantity] of productItems) {
+            const size = product && product.sizes.find(s => s.sizeName === sizeName)
+            if (!size) {
+                unavailablePurchases.push({ productId, sizeName, availableQuantity: 0 })
+                continue
+            }
+
+            const sizeAvailableQuantity = size.count
+            if (sizeAvailableQuantity < customerQuantity) {
+                unavailablePurchases.push({ productId, sizeName, availableQuantity: sizeAvailableQuantity })
+            }
+        }
+    }
+
+    return unavailablePurchases
+}
+
 module.exports = {
     sendConfirmationEmail,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    parsePurchaseHistory,
+    checkPurchaseAvailability
 }

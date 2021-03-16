@@ -12,15 +12,28 @@ import { getImagePath } from '../../utils/product'
 import { addImagesToProduct, deleteProduct } from '../../services/adminProduct'
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from '../../utils/constants'
 import SubmitButton from '../submitButton'
+import ConfirmWindow from '../confirmWindow'
 
-const AdminProductCard = (props) => {
-    const [imageCards, setImageCards] = useState(props.images ? [...props.images] : [])
+const AdminProductCard = ({
+    brand,
+    categories,
+    description,
+    discount,
+    discountPrice,
+    gender,
+    id: productId,
+    images,
+    price,
+    ratingCount,
+    ratingStars,
+    sizes
+}) => {
+    const [imageCards, setImageCards] = useState(images ? [...images] : [])
     const [showModifyWindow, setShowModifyWindow] = useState(false)
+    const [showDeleteWarning, setShowDeleteWarning] = useState(false)
     const { user: { isAdmin } } = useContext(UserContext)
-    const productsContext = useContext(ProductsContext)
+    const { handleProductDelete, updateFilters, updateProductsPage } = useContext(ProductsContext)
     const { addMessage } = useContext(ErrorContext)
-
-    const productId = props.id
 
     const handleDelete = useCallback(async (event) => {
         event.preventDefault()
@@ -35,9 +48,9 @@ const AdminProductCard = (props) => {
             return
         }
 
-        productsContext.handleProductDelete(productId)
-        productsContext.updateFilters()
-        productsContext.updateProductsPage()
+        handleProductDelete(productId)
+        updateFilters()
+        updateProductsPage()
     })
 
     const handleImageAdd = async (imageUrl) => {
@@ -83,7 +96,7 @@ const AdminProductCard = (props) => {
     return (
         <div className={styles.container}>
             <AdminImageCards 
-                images={props.images} 
+                images={images} 
                 productId={productId} 
                 imageCards={imageCards} 
                 setImageCards={setImageCards} 
@@ -91,7 +104,16 @@ const AdminProductCard = (props) => {
             <div className={styles['inner-container']}>
                 {isAdmin &&
                     <>
-                    <ProductCard key={props.id} {...props} />
+                    <ProductCard  
+                        brand={brand}
+                        discount={discount}
+                        discountPrice={discountPrice}
+                        productId={productId}
+                        images={images}
+                        price={price}
+                        ratingCount={ratingCount}
+                        ratingStars={ratingStars}
+                    />
                     <div className={styles['btn-admin']}>
                         <SubmitButton 
                             text='Edit' 
@@ -101,7 +123,7 @@ const AdminProductCard = (props) => {
                         />
                         <SubmitButton 
                             text='Delete' 
-                            onClick={handleDelete}
+                            onClick={() => setShowDeleteWarning(true)}
                             btnType='delete'
                             style={{ marginRight: '0.5rem', minWidth: '6rem' }}
                         />
@@ -113,11 +135,25 @@ const AdminProductCard = (props) => {
                     </div>
                     </>
                 }
-                {showModifyWindow &&
+                { showModifyWindow &&
                     <ModifyProductWindow
-                        key={props.id}
-                        {...props}
+                        brand={brand}
+                        price={price}
+                        discount={discount}
+                        description={description}
+                        gender={gender}
+                        sizes={sizes}
+                        categories={categories}
+                        productId={productId}
                         hideWindow={() => setShowModifyWindow(false)} 
+                    />
+                }
+                { showDeleteWarning &&
+                    <ConfirmWindow
+                        hideWindow={() => setShowDeleteWarning(false)} 
+                        handleConfirm={handleDelete}
+                        title='Confirm Delete'
+                        text='Are you sure you wish to remove this product?'
                     />
                 }
             </div>

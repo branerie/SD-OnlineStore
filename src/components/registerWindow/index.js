@@ -10,7 +10,6 @@ import SubmitButton from '../submitButton'
 import TextInput from '../inputFields/textInput'
 import { getValidationConstants } from '../../services/info'
 import ValidationErrorMessage from '../validationErrorMessage'
-import ClosePopUp from '../closePopUp'
 
 const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
     const [validationConstants, setValidationConstants] = useState(null)
@@ -51,7 +50,6 @@ const RegisterWindow = ({ hideWindow, loginWindowPopup }) => {
 
     return (
         <WindowContainer hideWindow={hideWindow}>
-            <ClosePopUp hideWindow={hideWindow} />
             <form className={styles['register-form']} onSubmit={handleSubmit(registerNewUser)}>
                 <SectionTitle title='QUICK Secure SIGN UP' />
                 <div className={styles['input-group']}>

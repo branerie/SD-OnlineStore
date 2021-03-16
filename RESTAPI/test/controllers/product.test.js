@@ -81,7 +81,7 @@ const fillDatabase = async () => {
                 { sizeName: 'S', count: 17 }
             ],
             description: 'Best in the biz and very cool',
-            gender: 'U'
+            gender: 'F'
         },
     ])
 }
@@ -146,7 +146,7 @@ describe('controllers/product', () => {
                         expect(data.categories).to.have.members(['Dresses', 'Jeans', 'Shoes'])
                         expect(data.categories).to.have.length(3)
 
-                        expect(data.gender).to.have.members(['U', 'M', 'F'])
+                        expect(data.gender).to.have.members(['M', 'F'])
                         expect(data.gender).to.have.length(3)
 
                         expect(data.minPrice).to.equal(15)

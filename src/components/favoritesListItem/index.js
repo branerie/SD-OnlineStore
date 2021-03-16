@@ -3,8 +3,8 @@ import styles from './index.module.css'
 import FavoritesIcon from '../favoritesIcon'
 
 import { Link } from 'react-router-dom'
-import SizeButton from '../sizeButton'
 import AddToCartButton from '../addToCartButton'
+import ProductSizes from '../productSizes'
 
 const FavoritesListItem = ({
     productId,
@@ -30,15 +30,7 @@ const FavoritesListItem = ({
                         <h3 className={styles.brand}>{brand}</h3>
                         <p className={styles.info}>{description}</p>
                         <div className={styles['size-container']}>
-                            {sizes.map(sizeName => {
-                                return (
-                                    <SizeButton
-                                        sizeName={sizeName}
-                                        handleSelect={setSelectedSize}
-                                        isSelected={sizeName === selectedSize}
-                                    />
-                                )
-                            })}
+                            <ProductSizes sizes={sizes} selectedSize={selectedSize} setSelectedSize={setSelectedSize} />
                         </div>
                     </div>
                 </div>

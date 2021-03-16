@@ -7,22 +7,29 @@ const ProductCardsList = () => {
     const productsContext = useContext(ProductsContext)
     const { productPage } = productsContext
 
-    function renderProductList() {
-        if(!productPage) {
-            return <></>
-        }
-
-        return productPage.map(product => {
-            return (
-                <ProductCard key={product.id} {...product} />
-            )
-        })
+    if (!productPage) {
+        return null
     }
-
 
     return (
         <div className={styles.container}>
-            {renderProductList()}
+            { 
+                productPage.map(product => {
+                    return (
+                        <ProductCard 
+                            key={product.id}
+                            brand={product.brand}
+                            discount={product.discount}
+                            discountPrice={product.discountPrice}
+                            images={product.images}
+                            price={product.price}
+                            productId={product.id}
+                            ratingCount={product.ratingCount}
+                            ratingStars={product.ratingStars}
+                        />
+                    )
+                })
+            }
         </div>
     )
 }

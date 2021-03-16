@@ -23,6 +23,10 @@ code {
     monospace;
 }
 
+#root {
+  min-height: 100vh;
+}
+
 title::after {
   border-bottom: none !important;  
   text-decoration: none !important;

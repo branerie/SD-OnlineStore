@@ -95,7 +95,8 @@ const userSchema = new mongoose.Schema({
                 type: Number,
                 min: 0,
                 required: true
-            }
+            },
+            isArchived: { type: Boolean } 
         }],
         dateAdded: { type: Date, required: true }
     }]

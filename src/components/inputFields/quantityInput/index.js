@@ -2,18 +2,27 @@ import React from 'react'
 
 import styles from './index.module.css'
 
-const QuantityInput = ({ value, name, label, setNewValue, max, reference, style, min=0 }) => {
+const QuantityInput = ({ 
+    value, 
+    name, 
+    label, 
+    setNewValue, 
+    reference, 
+    style, 
+    max = 9999, 
+    min = 0 
+}) => {
     const changeValue = (newValue) => {
-        let numberValue = Number(newValue)
-        if (!numberValue && numberValue !== 0) {
+        // allows changes that are not within min/max if passed value is not itself within min/max
+        // to allow user to adjust the value to the acceptable range if its initial value is not acceptable
+        // (such as when total quantity of an item in shopping cart decreased to below the quantity that the
+        // user wanted to buy)
+        if ((value >= min && value <= max) &&
+            (isNaN(newValue) || newValue < min || newValue > max)) {
             return
         }
 
-        if (newValue < min) {
-            numberValue = min
-        }
-
-        setNewValue(numberValue)
+        setNewValue(newValue)
     }
 
     return (
@@ -22,7 +31,9 @@ const QuantityInput = ({ value, name, label, setNewValue, max, reference, style,
             <button
                 type="button"
                 className={[styles.sign, styles['btn-left']].join(' ')}
-                onClick={() => changeValue(Number(value) - 1)}>-</button>
+                onClick={() => changeValue(Number(value) - 1)}>
+                -
+            </button>
             <input
                 type='number'
                 name={name}
@@ -32,12 +43,15 @@ const QuantityInput = ({ value, name, label, setNewValue, max, reference, style,
                 className={styles['input-field']}
                 pattern='[0-9]+'
                 ref={reference}
-                onChange={e => setNewValue(e.target.value)} />
+                onChange={e => changeValue(Number(e.target.value))} 
+            />
             <button
                 type="button"
                 className={[styles.sign, styles['btn-right']].join(' ')}
                 value="+"
-                onClick={() => changeValue(Number(value) + 1)}>+</button>
+                onClick={() => changeValue(Number(value) + 1)}>
+                +
+            </button>
         </div>
     )
 }

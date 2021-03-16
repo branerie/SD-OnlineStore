@@ -4,8 +4,7 @@ import styles from './index.module.css'
 const GenderInput = ({ currentGender, onChange }) => {
     const genderInfos = [
         { value: 'M', name: 'Male' },
-        { value: 'F', name: 'Female' },
-        { value: 'U', name: 'Unspecified' }
+        { value: 'F', name: 'Female' }
     ]
 
     return (

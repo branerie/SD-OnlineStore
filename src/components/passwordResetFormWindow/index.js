@@ -6,7 +6,6 @@ import { sendPasswordResetEmail } from '../../services/user'
 import SectionTitle from '../sectionTitle'
 import SubmitButton from '../submitButton'
 import ErrorContext from '../../ErrorContext'
-import ClosePopUp from '../closePopUp'
 
 const PasswordResetFormWindow = ({ hideWindow }) => {
     const [email, setEmail] = useState(null)
@@ -31,7 +30,6 @@ const PasswordResetFormWindow = ({ hideWindow }) => {
 
     return (
         <WindowContainer hideWindow={hideWindow}>
-            <ClosePopUp hideWindow={hideWindow} />
             { isSent
                 ?
                 <>

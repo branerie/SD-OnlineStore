@@ -37,7 +37,7 @@
     display: none;
 }
 
-@media screen and (max-width:925px) {
+@media screen and (max-width:768px) {
    .input {
        display: none;
    }

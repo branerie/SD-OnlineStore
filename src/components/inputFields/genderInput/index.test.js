@@ -5,23 +5,22 @@ import GenderInput from './index'
 describe('GenderInput', () => {
     afterEach(cleanup)
 
-    const mokOnChange = jest.fn()
+    const mockOnChange = jest.fn()
     let getByTestId,queryByText,queryByTestId
     beforeEach(() => {
-        const mokCurrentGender = 'M'
+        const mockCurrentGender = 'M'
         const renderResult = render(<GenderInput
-                                        currentGender={mokCurrentGender}
-                                        onChange={mokOnChange}
+                                        currentGender={mockCurrentGender}
+                                        onChange={mockOnChange}
                                     />)
         getByTestId = renderResult.getByTestId
         queryByText = renderResult.queryByText
         queryByTestId = renderResult.queryByTestId
     })
 
-    it('shoulde be render all 3 radio button', () => {
+    it('shoulde render all 2 radio buttons', () => {
         expect(queryByText('Male')).not.toBeNull()
         expect(queryByText('Female')).not.toBeNull()
-        expect(queryByText('Unspecified')).not.toBeNull()
     })
 
     it('correct checked radio button', () => {
@@ -32,7 +31,7 @@ describe('GenderInput', () => {
         const clickedButton = getByTestId('gender-female')
         fireEvent.click(clickedButton)
 
-        expect(mokOnChange).toHaveBeenCalledTimes(1)
+        expect(mockOnChange).toHaveBeenCalledTimes(1)
     })
 
 

@@ -6,7 +6,7 @@
     z-index: 999;
 }
 
-@media screen and (max-width:925px) {
+@media screen and (max-width:1024px) {
     .logo {
         width: 2rem;
         position: absolute;

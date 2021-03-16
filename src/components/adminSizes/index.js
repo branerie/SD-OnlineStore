@@ -141,7 +141,8 @@ const AdminSizes = ({ sizes, productId }) => {
             </ModifyProductSection>
             <SubmitButton
                 text='SAVE SIZES'
-                disabled={Object.keys(modifiedSizes).length === 0}
+                disabled={Object.keys(modifiedSizes).length === 0 || 
+                          Object.keys(currentSizes).length === 0}
                 style={{ flexGrow: 2 }}
             />
         </form>

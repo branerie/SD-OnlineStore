@@ -14,12 +14,17 @@ const FavoritesPage = () => {
 
     const getFavorites = useCallback(async () => {
         const favoriteProducts = await getFullFavoriteProducts()
+
         setFavorites(Object.values(favoriteProducts))
     }, [getFullFavoriteProducts])
 
     useEffect(() => {
         getFavorites()
     }, [getFavorites, user.favorites])
+
+    if (!favorites) {
+        return null
+    }
 
     return (
         <>

@@ -75,14 +75,16 @@ const parseFullMongoProducts = (mongoProducts) => {
             price: p.price,
             brand: p.brand,
             description: p.description,
-            gender: p.gender || 'U',
+            gender: p.gender,
             categories: p.categories,
             ratingStars: p.ratingStars,
             ratingCount: p.rating ? (p.rating.counter || 0) : 0
         }
 
-        parsedProduct.sizes = Array.from(p.sizes).sort((sizeA, sizeB) => 
-                                        sortSizes(sizeA.sizeName, sizeB.sizeName))
+        parsedProduct.sizes = Array.from(p.sizes)
+                                //    .filter(s => s.count > 0)
+                                   .map(s => ({  sizeName: s.sizeName, count: s.count }))
+                                   .sort((sizeA, sizeB) => sortSizes(sizeA.sizeName, sizeB.sizeName))
 
         if (p.discount && p.discount.percent) {
             parsedProduct.discount = {
@@ -112,8 +114,9 @@ const parseCartMongoProducts = (mongoProducts) => {
         }
 
         productInfo.sizes = Array.from(p.sizes)
-                                 .map(s => s.sizeName)
-                                 .sort((sizeA, sizeB) => sortSizes(sizeA, sizeB))
+                                //  .filter(s => s.count > 0)
+                                 .map(s => ({ sizeName: s.sizeName, count: s.count}))
+                                 .sort((sizeA, sizeB) => sortSizes(sizeA.sizeName, sizeB.sizeName))
         
         if (p.discountPrice !== p.price) {
             productInfo.discountPrice = p.discountPrice
@@ -123,6 +126,49 @@ const parseCartMongoProducts = (mongoProducts) => {
     })
 }
 
+const getCartItemsInfo = (products, userCart) => {
+    const itemsInfo = products.reduce((acc, item) => {
+        const discountPrice = item.discount && item.discount.percent 
+                                ? item.price * (1 - item.discount.percent)
+                                : item.price
+
+        return { 
+            ...acc, 
+            [item._id]: { price: item.price, discountPrice } 
+        }
+    }, {})
+
+    const cartItems = userCart.map(c => { 
+        return { 
+            productId: c.productId, 
+            sizeName: c.sizeName, 
+            quantity: c.quantity, 
+            ...itemsInfo[c.productId] 
+        }
+    })
+
+    return Array.from(cartItems)
+}
+
+const getCartItemsByProductId = (cart) => {
+    return cart.reduce((acc, cartItem) => {
+        const productId = cartItem.productId 
+        return acc[productId] 
+        ? { 
+            ...acc, 
+            [productId]: [ 
+                ...acc[productId], 
+                [cartItem.sizeName, cartItem.quantity] 
+            ] 
+        } 
+        : {
+            ...acc, 
+            [productId]: [ [cartItem.sizeName, cartItem.quantity] ] 
+        }
+
+    }, {})  
+}
+
 module.exports = {
     getSizeRange,
     sortSizes,
@@ -130,5 +176,7 @@ module.exports = {
     getImagePublicIdFromPath,
     getAllCategories,
     parseFullMongoProducts,
-    parseCartMongoProducts
+    parseCartMongoProducts,
+    getCartItemsInfo,
+    getCartItemsByProductId
 }

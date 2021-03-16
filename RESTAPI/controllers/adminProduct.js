@@ -6,6 +6,8 @@ const router = require('express').Router()
 //     api_secret: process.env.CLOUDINARY_API_SECRET,
 // })
 
+const User = require('../models/user')
+const ArchivedProduct = require('../models/archivedProduct')
 const Product = require('../models/product')
 
 const { restrictToAdmin } = require('../utils/authenticate')
@@ -20,8 +22,7 @@ const preprocessDiscount = (discount) => {
         return null
     }
 
-    if ((!discount.percent || isNaN(Number(discount.percent))) ||
-            !discount.endDate) {
+    if ((!discount.percent || isNaN(Number(discount.percent))) || !discount.endDate) {
         throw new SyntaxError('Invalid input. Product discount must contain "percent" and "endDate" fields.')
     }
 
@@ -180,9 +181,31 @@ router.delete('/:id', async (req, res) => {
     const id = req.params.id
 
     try {
-        await Product.findByIdAndDelete(id)
+        const deletedProduct = await Product.findByIdAndDelete(id)
+        if (!deletedProduct) {
+            return res.status(400).send({ error: `Product with id ${id} does not exist.` })
+        }
+        
+        const archivedProduct = await ArchivedProduct.create({
+            brand: deletedProduct.brand,
+            description: deletedProduct.description
+        })
 
-        return res.send({ success: true, removedId: id })
+        await User.updateMany(
+            { purchaseHistory: { $exists: true } },
+            { 
+                $set: { 
+                    'purchaseHistory.$[].products.$[product].productId': archivedProduct._id,
+                    'purchaseHistory.$[].products.$[product].isArchived': true
+                } 
+            },
+            {
+                multi: true,
+                arrayFilters: [ { 'product.productId': deletedProduct._id } ]
+            }
+        )
+
+        return res.send({ removedId: id })
     } catch (error) {
         if (isMongoError(error)) {
             res.status(403).send({ error: error.message })

@@ -8,9 +8,16 @@ const {
 const { decode } = require('jsonwebtoken')
 const User = require('../models/user')
 const Product = require('../models/product')
+const ArchivedProduct = require('../models/archivedProduct')
 const TokenBlackList = require('../models/tokenBlackList')
 const { isMongoError } = require('../utils/general')
-const { sendConfirmationEmail, sendPasswordResetEmail } = require('../utils/user')
+const { 
+    sendConfirmationEmail, 
+    sendPasswordResetEmail, 
+    parsePurchaseHistory, 
+    checkPurchaseAvailability 
+} = require('../utils/user')
+const { getCartItemsInfo, getCartItemsByProductId } = require('../utils/product')
 const { restrictToUser } = require('../utils/authenticate')
 
 const AUTHORIZATION_HEADER_NAME = 'Authorization'
@@ -32,8 +39,7 @@ const getUserData = (user) => {
             email: user.email,
             favorites: user.favorites || [],
             ratedProducts: user.ratedProducts || [],
-            cart: user.cart || [],
-            purchaseHistory: user.purchaseHistory || [],
+            cart: user.cart || []
         }
         : {
             userId: null,
@@ -43,8 +49,7 @@ const getUserData = (user) => {
             lastName: '',
             favorites: [],
             ratedProducts: [],
-            cart: [],
-            purchaseHistory: [],
+            cart: []
         }
 }
 
@@ -66,6 +71,30 @@ router.get('/verify', async (req, res) => {
         return res.send(getUserData(user))
     } catch (error) {
         return res.status(403).send(getUserData())
+    }
+})
+
+router.get('/details/history', restrictToUser, async (req, res) => {
+    try {
+        const { purchaseHistory } = await User.findById(req.user.userId)
+
+        const { activeProductIds, archivedProductIds, purchaseInfo } = parsePurchaseHistory(purchaseHistory)
+
+        const activeProducts = await Product.find({ _id: { $in: activeProductIds } })
+        const archivedProducts = await ArchivedProduct.find({ _id: { $in: archivedProductIds } })
+
+        const detailsById = [...Array.from(activeProducts), ...Array.from(archivedProducts)].reduce((acc, product) => ({
+            ...acc,
+            [product._id]: {
+                brand: product.brand,
+                description: product.description,
+                productId: product._id
+            }
+        }), {})
+
+        return res.send({ productDetails: detailsById, purchaseDetails: purchaseInfo })
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
     }
 })
 
@@ -339,41 +368,39 @@ router.post('/purchase', restrictToUser, async (req, res) => {
             return res.status(400).send({ error: 'User doesn\'t have any products in cart' })
         }
 
-        const cartItems = []
-        const cartProductIds = new Set()
-        for (const cartItem of user.cart) {
-            cartItems.push({ 
-                productId: cartItem.productId, 
-                quantity: cartItem.quantity, 
-                sizeName: cartItem.sizeName 
-            })
-
-            cartProductIds.add(cartItem.productId)
-        }    
-
+        const cartItemsById = getCartItemsByProductId(user.cart) 
         const products = await Product.find({
-            '_id': {
-                '$in': Array.from(cartProductIds)
-            }
+            _id: { $in: Array.from(Object.keys(cartItemsById)) }
         })
-
-        const cartItemsInfo = Array.from(products).reduce((acc, item) => {
-            const discountPrice = item.discount && item.discount.percent 
-                                    ? item.price * (1 - item.discount.percent)
-                                    : item.price
-
-            return { 
-                ...acc, 
-                [item._id]: { price: item.price, discountPrice } 
-            }
-        }, {})
-
+        
+        const productsById = Array.from(products).reduce((acc, product) => ({ ...acc, [product._id]: product }), {})
+        const unavailablePurchases = checkPurchaseAvailability(cartItemsById, productsById)
+        if (unavailablePurchases.length > 0) {
+            return res.send({ error: 'Cannot fulfill user order', errorType: 'quantities', unavailablePurchases })
+        }
+        
+        const cartItemsInfo = getCartItemsInfo(products, user.cart)
         user.purchaseHistory.push({ 
-            products:  cartItems.map(ci => ({ ...ci, ...cartItemsInfo[ci.productId] })), 
+            products: cartItemsInfo, 
             dateAdded: new Date() 
         })
+        
+        // update counts of product sizes
+        Object.entries(cartItemsById).forEach(([productId, sizeQuantity]) => {
+            const product = productsById[productId]
+            
+            sizeQuantity.forEach(([sizeName, quantity]) => {
+                const productSize = product.sizes.find(s => s.sizeName === sizeName)
+                productSize.count = Math.max(productSize.count - quantity, 0)
+            })
+        })
+
         user.cart = []
         await user.save()
+
+        for (const product of products) {
+            await product.save()
+        }
 
         return res.send({ status: 'Success' })
     } catch (error) {

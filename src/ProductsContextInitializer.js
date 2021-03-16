@@ -26,7 +26,6 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
 
         window.history.replaceState({}, null, `${window.location.pathname}?${queryString}`)
 
-        
         const result = await getProductsPage(queryString, pageLength) 
         if (result.error) {
             throwInternalError()

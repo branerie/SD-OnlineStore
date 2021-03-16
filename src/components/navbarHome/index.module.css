@@ -32,7 +32,7 @@
     justify-content: space-around
 }
 
-@media screen and (max-width: 925px) {
+@media screen and (max-width: 1024px) {
     .site-nav {
         position: relative;
     }

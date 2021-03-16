@@ -10,6 +10,7 @@ const PageWrapper = ({ children, maxWidth }) => {
     return (
         <div className={styles.container}>
             <div className={styles['inner-container']} style={maxWidth && { maxWidth }}>
+                <main>
                 {children}
                 { messages.length > 0 
                     ? 
@@ -23,6 +24,7 @@ const PageWrapper = ({ children, maxWidth }) => {
                     </div>
                     : null
                 }
+                </main>
                 <Footer />
             </div>
         </div>

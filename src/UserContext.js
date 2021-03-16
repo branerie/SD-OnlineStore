@@ -5,7 +5,6 @@ const UserContext = React.createContext({
     setNewUser: () => {},
     editShoppingCart: () => {},
     getFullCartProducts: () => {}, 
-    getFullHistoryProducts: () => {}, 
     getFullFavoriteProducts: () => {} 
 })
 

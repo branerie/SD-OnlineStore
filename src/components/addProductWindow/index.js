@@ -1,9 +1,7 @@
 import React, { useState, useReducer, useEffect, useCallback, useContext } from 'react'
-import { useHistory } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import styles from './index.module.css'
 import ErrorContext from '../../ErrorContext'
-import Input from '../input'
 import DragAndDrop from '../dragAndDrop'
 import GenderInput from '../inputFields/genderInput'
 import TextInput from '../inputFields/textInput'
@@ -17,7 +15,6 @@ import { uploadImages } from '../../services/product'
 import { getValidationConstants } from '../../services/info'
 import ValidationErrorMessage from '../validationErrorMessage'
 import WindowContainer from '../windowContainer'
-import ClosePopUp from '../closePopUp'
 import SubmitButton from '../submitButton'
 import ProductsContext from '../../ProductsContext'
 import DateInput from '../inputFields/dateInput'
@@ -27,13 +24,13 @@ const AddProductWindow = ({ hideWindow }) => {
     const [sizeCount, setSizeCount] = useState(0)
     const [discountInPercent, setDiscountInPercent] = useState('')
     const [discountEndDate, setDiscountEndDate] = useState(null)
-    const [gender, setGender] = useState('U')
+    const [gender, setGender] = useState('M')
     const [validationConstants, setValidationConstants] = useState(null)
 
     const { addMessage } = useContext(ErrorContext)
     const { updateProductsPage, filtersDispatch } = useContext(ProductsContext)
 
-    const { register, errors, handleSubmit, setError } = useForm()
+    const { register, errors, handleSubmit, setError, clearErrors } = useForm()
     const [images, imagesDispatch] = useReducer(reducer, [])
 
     const getProductValidationConstants = useCallback(async () => {
@@ -72,8 +69,8 @@ const AddProductWindow = ({ hideWindow }) => {
         sizeCount
     }) => {
         if (categories.length === 0) {
-            setError('categories', { message: 'Product be part of at least one category' })
-            return
+            setError('categories', { message: 'Product must have at least one category set' })
+            return setTimeout(() => clearErrors('categories'), 5000)
         }
 
         const newProduct = {
@@ -137,7 +134,6 @@ const AddProductWindow = ({ hideWindow }) => {
 
     return (
         <WindowContainer hideWindow={hideWindow}>
-            <ClosePopUp hideWindow={hideWindow} />
             <main className={styles.container}>
                 <div className={styles['input-images']}>
                     <DragAndDrop
@@ -191,6 +187,7 @@ const AddProductWindow = ({ hideWindow }) => {
                                 reference={register(validationConstants.sizes.count)}
                                 setNewValue={setSizeCount}
                             />
+                            {errors.sizeName && <ValidationErrorMessage message={errors.sizeName.message} />}
                         </div>
                         <div className={styles['input-group']}>
                             <div className={styles['discount-container']}>

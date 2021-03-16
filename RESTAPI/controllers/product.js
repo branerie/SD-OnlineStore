@@ -1,15 +1,15 @@
 const router = require('express').Router()
 const User = require('../models/user')
 const Product = require('../models/product')
-const { 
-    getDbProductsFilter, 
-    getSortCriteria, 
-    getProductsAggregationObject 
+const {
+    getDbProductsFilter,
+    getSortCriteria,
+    getProductsAggregationObject
 } = require('../utils/filter')
-const { 
-    getSizeRange, 
-    sortSizes, 
-    getAllCategories, 
+const {
+    getSizeRange,
+    sortSizes,
+    getAllCategories,
     parseFullMongoProducts,
     parseCartMongoProducts
 } = require('../utils/product')
@@ -20,10 +20,18 @@ const { Types: { ObjectId } } = require('mongoose')
 router.get('/ranges', async (req, res) => {
     try {
         const dbRequestFilter = getDbProductsFilter(req.query)
-        
+
         let productRanges = await Product.aggregate([
             {
                 $match: dbRequestFilter
+            },
+            {
+                $unwind: '$sizes'
+            },
+            {
+                $match: {
+                    'sizes.count': { $gt: 0 }
+                }
             },
             {
                 $group: {
@@ -51,8 +59,8 @@ router.get('/ranges', async (req, res) => {
 
         productRanges.brand.sort((a, b) => a.localeCompare(b))
 
-        productRanges.minCount = Math.min(...productRanges.minCount)
-        productRanges.maxCount = Math.max(...productRanges.maxCount)
+        // productRanges.minCount = Math.min(...productRanges.minCount)
+        // productRanges.maxCount = Math.max(...productRanges.maxCount)
 
         const sizes = new Set()
         for (const size of productRanges.allSizes.flat()) {
@@ -60,9 +68,10 @@ router.get('/ranges', async (req, res) => {
 
             if (isNaN(sizeNumber)) {
                 sizes.add(size)
-            } else {
-                sizes.add(getSizeRange(sizeNumber))
+                continue
             }
+
+            sizes.add(getSizeRange(sizeNumber))
         }
 
         productRanges.sizes = Array.from(sizes)
@@ -122,8 +131,8 @@ router.get('/details/main', async (req, res) => {
 
         const productIds = productStringIds.split(',').map(id => new ObjectId(id))
 
-        const fullProductsInCart = await Product.find({ _id: { $in: productIds } })
-        const productDetailsMain = parseCartMongoProducts(fullProductsInCart)
+        const fullProducts = await Product.find({ _id: { $in: productIds } })
+        const productDetailsMain = parseCartMongoProducts(fullProducts)
 
         const detailsById = productDetailsMain.reduce((acc, productInfo) => {
             return { ...acc, [productInfo.productId]: productInfo }
@@ -140,12 +149,17 @@ router.get('/:id', async (req, res) => {
 
     try {
         const currentProduct = await Product.findById(id)
-        return res.send(parseFullMongoProducts([currentProduct])[0])
+        if (!currentProduct) {
+            return res.status(403).send({ error: `Product with id ${id} does not exist.` })
+        }
+
+        const fullProductInfo = parseFullMongoProducts([currentProduct])[0]
+        return res.send(fullProductInfo)
     } catch (error) {
         if (isMongoError(error)) {
             return res.status(403).send({ error: error.message })
         }
-        
+
         if (error.name === 'CastError') {
             return res.status(403).send({ error: `Product with id ${id} does not exist.` })
         }
@@ -156,13 +170,13 @@ router.get('/:id', async (req, res) => {
 
 router.patch('/rating', restrictToUser, async (req, res) => {
     try {
-        const { rating , productId } = req.body
+        const { rating, productId } = req.body
         const product = await Product.findById(productId)
         const numRating = Number(rating)
 
         if (isNaN(numRating) || !Number.isInteger(numRating) || numRating < 0) {
-            return res.status(400).send({ 
-                error: 'Product rating must be a non-negative integer number.' 
+            return res.status(400).send({
+                error: 'Product rating must be a non-negative integer number.'
             })
         }
 
@@ -173,8 +187,8 @@ router.patch('/rating', restrictToUser, async (req, res) => {
         const oldRating = product.rating.currentRating || 0
         const oldcount = product.rating.counter || 0
         const count = oldcount + 1
-        const newRating = { currentRating : oldRating + numRating, counter : count }
-        
+        const newRating = { currentRating: oldRating + numRating, counter: count }
+
         const user = await User.findById(req.user.userId)
         if (!user) {
             throw new Error()
@@ -182,13 +196,13 @@ router.patch('/rating', restrictToUser, async (req, res) => {
 
         user.ratedProducts.push(product)
 
-        await product.updateOne({ $set: { rating : newRating }})
+        await product.updateOne({ $set: { rating: newRating } })
         await user.save()
-        
+
         return res.send({
             productId,
-            currentRating: Math.round(newRating.currentRating / count), 
-            counter: count 
+            currentRating: Math.round(newRating.currentRating / count),
+            counter: count
         })
     } catch (error) {
         if (isMongoError(error)) {

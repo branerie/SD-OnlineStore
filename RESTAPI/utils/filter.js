@@ -129,13 +129,33 @@ function getProductsAggregationObject(productFilters, sortCriteria, page, pageLe
             }
         }
     }
-    
+
     // if (shouldFilterByText) {
     //     addFieldsPhase.$addFields.score =  { $meta: "textScore" }
     // }
 
     resultArray.push(addFieldsPhase)
+
     resultArray.push({ $match: productFilters })
+
+    // resultArray.push({ $unwind: '$sizes' })
+    // resultArray.push({ $match: { 'sizes.count': { $gt: 0 } } })
+    // resultArray.push({
+    //     $group: {
+    //         _id: '$_id',
+    //         sizes: { $push: '$sizes' },
+    //         price: { $first: '$price' },
+    //         brand: { $first: '$brand' },
+    //         description: { $first: '$description' },
+    //         gender: { $first: '$gender' },
+    //         categories: { $first: '$categories' },
+    //         ratingStars: { $first: '$ratingStars' },
+    //         rating: { $first: '$rating' },
+    //         discount: { $first: '$discount' },
+    //         discountPrice: { $first: '$discountPrice' },
+    //         images: { $first: '$images' }
+    //     }
+    // })
 
     resultArray.push({
         $facet: {
@@ -146,7 +166,7 @@ function getProductsAggregationObject(productFilters, sortCriteria, page, pageLe
             ],
             totalCount: [
                 { $group: { _id: null, count: { $sum: 1 } } },
-                { $project: {  _id: 0, count: '$count' } }
+                { $project: { _id: 0, count: '$count' } }
             ]
         }
     })
@@ -158,4 +178,4 @@ module.exports = {
     getDbProductsFilter,
     getSortCriteria,
     getProductsAggregationObject
-} 
+}

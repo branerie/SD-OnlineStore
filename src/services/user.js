@@ -254,6 +254,32 @@ const makePurchase = async () => {
     return await response.json()
 }
 
+const getPurchaseHistoryDetails = async () => {
+    const response = await fetch(`${USER_URL}/details/history`, {
+        method: 'GET',
+        headers: {
+            [HTTP_HEADERS.AUTHORIZATION]: getCookie(AUTH_COOKIE_NAME)
+        }
+    })
+
+    const result = await response.json()
+    if (result.error) {
+        return result
+    }
+
+    const { productDetails, purchaseDetails } = result
+    return purchaseDetails.reduce((acc, pd) => ([
+            ...acc,
+            { 
+                dateAdded: pd.dateAdded, 
+                products: pd.products.map(p => ({
+                    ...p,
+                    ...productDetails[p.productId]
+                }))
+            }
+    ]), [])
+}
+
 export {
     verifyUser,
     confirmUser,
@@ -270,4 +296,5 @@ export {
     changeShoppingCart,
     setShoppingCart,
     makePurchase,
+    getPurchaseHistoryDetails
 }

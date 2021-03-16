@@ -7,6 +7,8 @@ import removeIcon from '../../images/delete.png'
 import UserContext from '../../UserContext'
 import { Link } from 'react-router-dom'
 
+const QUANTITY_WARNING_THRESHOLD = 10
+
 const ShoppingCartItem = ({
     productId,
     brand,
@@ -15,6 +17,7 @@ const ShoppingCartItem = ({
     discountPrice,
     image,
     sizeName,
+    sizeQuantity,
     quantity
 }) => {
     const [itemQuantity, setItemQuantity] = useState(quantity)
@@ -26,7 +29,7 @@ const ShoppingCartItem = ({
     }
 
     useEffect(() => {
-        if (quantity === itemQuantity) {
+        if (itemQuantity > sizeQuantity) {
             return
         }
 
@@ -58,8 +61,13 @@ const ShoppingCartItem = ({
                         value={itemQuantity}
                         setNewValue={setItemQuantity}
                         min={1}
-                        max={99}
+                        max={sizeQuantity}
                     />
+                    { sizeQuantity < QUANTITY_WARNING_THRESHOLD &&  
+                        <div>
+                            Only <span className={styles.warning}>{sizeQuantity}</span> remaining!
+                        </div>
+                    }
                 </div>
                 <div className={styles.column}>
                     <div className={styles['btn-container']}>

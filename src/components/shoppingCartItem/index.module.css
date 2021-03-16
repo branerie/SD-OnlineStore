@@ -70,9 +70,13 @@
 }
 
 .price-original {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     opacity: 0.6;
     color: #735C74;
+}
+
+.warning {
+    color: #EF696E;
 }
 
 @media screen and (max-width:768px) {

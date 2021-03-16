@@ -20,14 +20,14 @@ describe('ProductCard', () => {
             }}>
                 <MemoryRouter>
                         <ProductCard
-                            id='1'
+                            productId='1'
                             brand='Armani'
                             price={50}
                             ratingStars={3}
                             ratingCount={2}
                         />
                         <ProductCard
-                            id='2'
+                            productId='2'
                             brand='Gucci'
                             price={60}
                             ratingStars={4}

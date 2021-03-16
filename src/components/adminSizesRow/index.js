@@ -8,7 +8,7 @@ const AdminSizesRow = ({ sizeName, count, handleDelete, handleChange }) => {
         <div className={styles.container}>
             <div className={styles['inner-container']}>
                 {sizeName}
-                <QuantityInput value={count} setNewValue={handleChange} min={1} />
+                <QuantityInput value={count} setNewValue={handleChange} min={0} />
             </div>
             <SubmitButton 
                 type='button'

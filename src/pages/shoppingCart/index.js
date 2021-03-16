@@ -12,24 +12,21 @@ import PageSecondaryTitle from '../../components/pageSecondaryTitle'
 const ShoppingCartPage = () => {
     const [productsInCart, setProductsInCart] = useState([])
 
-    const { user: { cart }, getFullCartProducts } = useContext(UserContext)
+    const { getFullCartProducts } = useContext(UserContext)
 
     const getItemsInCart = useCallback(async () => {
         const result = await getFullCartProducts()
-        
-        // filter cart by returned product ids in case a product which is in the cart
-        // has been deleted and is not available anymore 
-        const filteredProductsInCart = cart.filter(ci => result[ci.productId])
-        const newProductsInCart = filteredProductsInCart.map(p => { 
-            return { sizeName: p.sizeName, quantity: p.quantity, ...result[p.productId] } 
-        })
-
-        setProductsInCart(newProductsInCart)
-    }, [cart, getFullCartProducts])
+        setProductsInCart(result)
+    }, [getFullCartProducts])
 
     useEffect(() => {
         getItemsInCart()
     }, [getItemsInCart])
+
+    const getCartItemTotalQuantity = (cartItem) => {
+        const cartItemSizeInfo = cartItem.sizes.filter(s => s.sizeName === cartItem.sizeName)[0]
+        return cartItemSizeInfo.count
+    }
 
     return (
         <PageWrapper maxWidth='1680px'>
@@ -45,12 +42,24 @@ const ShoppingCartPage = () => {
                                 productsInCart.map(item =>
                                     <ShoppingCartItem
                                         key={`${item.productId}-${item.sizeName}`}
-                                        {...item}
+                                        productId={item.productId}
+                                        brand={item.brand}
+                                        description={item.description}
+                                        price={item.price}
+                                        discountPrice={item.discountPrice}
+                                        image={item.image}
+                                        sizeName={item.sizeName}
+                                        sizeQuantity={getCartItemTotalQuantity(item)}
+                                        quantity={item.quantity}
                                     />
                                 )
                             }
                         </div>
-                        <ShoppingCartReceipt productsInCart={productsInCart} isCheckout={true} />
+                        <ShoppingCartReceipt 
+                            productsInCart={productsInCart} 
+                            setProductsInCart={setProductsInCart}
+                            isCheckout={true} 
+                        />
                     </div>
                 </>
                 :

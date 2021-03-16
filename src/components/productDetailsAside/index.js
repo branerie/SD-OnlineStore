@@ -3,8 +3,17 @@ import styles from './index.module.css'
 import SizeButton from '../sizeButton'
 import AddToCartButton from '../addToCartButton'
 import FavoritesIcon from '../favoritesIcon'
+import ProductSizes from '../productSizes'
 
-const ProductDetailsAside = ({ id, brand, sizes, price, discount, discountPrice, description }) => {
+const ProductDetailsAside = ({ 
+    id, 
+    brand, 
+    sizes, 
+    price, 
+    discount, 
+    discountPrice, 
+    description 
+}) => {
     const [selectedSize, setSelectedSize] = useState(null)
 
     const finalPrice = discountPrice ? discountPrice : price
@@ -21,17 +30,7 @@ const ProductDetailsAside = ({ id, brand, sizes, price, discount, discountPrice,
             </div>
             <h3 className={styles['title-minor']}>Size:</h3>
             <div className={styles['sizes-container']}>
-                {
-                    sizes.map(s => {
-                        return (
-                            <SizeButton
-                                sizeName={s.sizeName}
-                                handleSelect={setSelectedSize}
-                                isSelected={s.sizeName === selectedSize}
-                            />
-                        )
-                    })
-                }
+                <ProductSizes sizes={sizes} selectedSize={selectedSize} setSelectedSize={setSelectedSize} />
             </div>
             <div className={styles.price}>
                 {discountPrice && `${price.toFixed(2)}$  -${discount.percent}% =`}

@@ -4,12 +4,11 @@ import AdminProductCard from '../adminProductCard'
 import ProductsContext from '../../ProductsContext'
 
 const AdminProductCardsList = () => {
-    const productsContext = useContext(ProductsContext)
-    const { productPage } = productsContext
+    const { productPage } = useContext(ProductsContext)
 
     function renderProduct() {
         if (!productPage) {
-            return <></>
+            return null
         }
 
         return productPage.map(product => {

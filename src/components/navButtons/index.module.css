@@ -1,7 +1,7 @@
 .navbar-buttons {
     margin-top: 0;
     margin-bottom: 0.6rem;
-    margin-left: 0.5vw; 
+    /* margin-left: 0.5vw;  */
     padding: 0.6rem 1vw;
     display: flex;
     justify-content: flex-end;

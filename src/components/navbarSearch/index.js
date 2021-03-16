@@ -36,10 +36,10 @@ const NavbarSearch = () => {
 
     const handleClick = () => {
         if (window.innerWidth < 768) {
-            setIsInputShown(true)
-        } else {
-            ref.current.click()
+            return setIsInputShown(true)
         }
+
+        ref.current.click()
     }
 
     return (
@@ -52,21 +52,20 @@ const NavbarSearch = () => {
                 placeholder='Search' required
                 onChange={e => setSearchTerm(e.target.value)}
             />
-            {isInputShown 
-                ?   <div className={styles['media-search']}>
-                        <input
-                            type='text'
-                            name='responsiveSearch'
-                            value={searchTerm}
-                            className={styles['media-input']}
-                            placeholder='Search' required
-                            onChange={e => setSearchTerm(e.target.value)}/>
-                        <div className={styles['close-mediaSearch']} onClick={() => setIsInputShown(false)}>
-                            <span className={styles['media-bar']} />
-                            <span className={styles['media-bar']} />
-                        </div>
+            {isInputShown &&
+                <div className={styles['media-search']}>
+                    <input
+                        type='text'
+                        name='responsiveSearch'
+                        value={searchTerm}
+                        className={styles['media-input']}
+                        placeholder='Search' required
+                        onChange={e => setSearchTerm(e.target.value)}/>
+                    <div className={styles['close-mediaSearch']} onClick={() => setIsInputShown(false)}>
+                        <span className={styles['media-bar']} />
+                        <span className={styles['media-bar']} />
                     </div>
-                : null
+                </div>
             }
             <SearchIconLink onClick={handleClick} />
             <input type='submit' ref={ref} className={styles['submit-btn']} />
