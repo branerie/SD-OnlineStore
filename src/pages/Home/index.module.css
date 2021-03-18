@@ -1,0 +1,28 @@
+.secondary-title {
+    color: #EF696E;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2rem;
+    text-align: center;
+    /* text-transform: uppercase; */
+    font-weight: normal;
+    width: 100%;
+    margin-bottom: 0.8rem;
+}
+
+.home-image {
+    width: 100%;
+}
+
+.img-container {
+    margin-bottom: 5rem;
+}
+
+.cards-container {
+    margin: 0 5rem 0 5rem;
+}
+
+@media (max-width: 550px) {
+    .cards-container {
+        margin: 0 2rem;
+    }
+}

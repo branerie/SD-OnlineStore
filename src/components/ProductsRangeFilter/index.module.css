@@ -1,0 +1,21 @@
+.container {
+    font-family: 'Lateef', cursive;
+    color: #735C74;
+    font-size: 1.3rem;
+    /* margin-left: 10%;
+    margin-top: 5%;
+    min-width: 50%;
+    max-height: 100%; */
+}
+
+.range-input {
+    display: block;
+}
+
+.title {
+    font-family: 'Lateef', cursive;
+    color: #735C74;
+    font-size: 2rem;
+    font-weight: normal;
+    margin: 0;
+}

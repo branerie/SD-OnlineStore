@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    flex-flow: wrap;
+    /* justify-content: space-around; */
+}
+
+@media screen and (max-width: 665px) {
+    .container {
+        justify-content: center;
+    }
+}
+
+@media(min-width: 1572px) {
+    .container {
+        justify-content: flex-start;
+    }
+}

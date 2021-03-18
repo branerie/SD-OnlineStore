@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.container {
+    display: flex;
+    align-items: flex-start;
+    font-family: 'Architects Daughter', cursive;
+    color: #735C74;
+    margin: 2rem 0;
+}
+
+.items {
+    width: 62%;
+}
+
+.page-title {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: #735C74;
+    margin: 4rem 0 0 2.5%;
+    text-align: center;
+}
+
+@media(max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .items {
+        width: 95%;
+        margin-bottom: 3rem;
+    }
+}

@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    /* align-items: stretch; */
+}
+
+.input {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 15px;
+    min-height: 2rem;
+    padding-left: 1rem;
+    background-color: white;
+    border: 1px solid lightgray;
+    box-sizing: border-box;
+}
+
+.input:placeholder-shown {
+    background-color: rgb(230, 227, 227);
+    border: 1px solid rgb(230, 227, 227);
+}
+
+.input:hover {
+    border: 1px solid black;
+}
+
+.input-label {
+    display: inline-block;
+    width: 36%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.login-btn {
+    font-family: 'Architects Daughter', cursive;
+    background-color: #3D5344;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 15px;
+    padding: 15px 0;
+}
+
+.paragraph {
+    font-family: 'Lateef', cursive;
+    font-size: 1.2rem;
+    margin-top: 1.2rem;
+    margin-bottom: 0;
+}
+
+.paragraph-two {
+    font-family: 'Lateef', cursive;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+.paragraph-three {
+    font-family: 'Lateef', cursive;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    width: 70%;
+}
+
+.container {
+    display: flex;
+    position: relative;
+}
+
+.checkbox-input {
+    position: relative;
+    opacity: 0;
+    height: 1.5rem;
+    width: 1.5rem;
+    top: 1.2rem;
+    right: 0rem;
+}
+
+.checkmark {
+    position: absolute;
+    height: 1.5rem;
+    width: 1.5rem;
+    right: 0rem;
+    top: 1.2rem;
+    background-color: white;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.label-checkbox:hover input ~ .checkmark {
+    background-color: #eee;
+    box-shadow: 0 0 0 0.15rem #fff, 0 0 0.25rem 0.25rem  #3D5344;
+}
+
+.container input:checked ~ .checkmark {
+    background-color: #3D5344;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.third-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pass-condition {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 1rem;
+    box-sizing: border-box;
+    border: 1px solid grey;
+    padding: 0 5px;
+    border-radius: 5px;
+    background-color: rgb(241, 234, 136);
+}

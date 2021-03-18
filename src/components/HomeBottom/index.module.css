@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.page-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    position: relative;
+    padding: 0 5rem 5rem 3rem;
+}
+
+.bottom-left {
+    flex-grow: 1;
+    max-width: 45%;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+}
+
+.bottom-right {
+    flex-grow: 5;
+    display: flex;
+    align-items: flex-start;
+    max-width: 56%;
+    z-index: 1;
+}
+
+.bottom-logo {
+    width: 11rem;
+}
+
+.bottom-img-container {
+    display: flex;
+    justify-content: center;
+    max-height: 131px;
+}
+
+.bottom-reasons {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.img-container {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-family: 'Lateef', cursive;
+    color: #735C74;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.bottom-text {
+    font-family: 'Architects Daughter', cursive;
+    text-transform: uppercase;
+    color: #EF696E;
+    text-align: center;
+    font-size: 2rem;
+    padding: 0 3rem;
+    margin-top: 2rem;
+    max-width: 70%;
+}
+
+.gray-text {
+    color: #272334;
+}
+
+.img-masks {
+    width: 100%;
+}
+
+.mask-container {
+    position: relative;
+    width: 100%;
+}
+
+.masks-text {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-20%);
+    left: 15%;
+    z-index: 2;
+    color: #EF696E;
+    font-size: 3rem;
+    font-family: 'Architects Daughter', cursive;
+}
+
+.gray-bg {
+    background-color: rgba(61, 83, 68, 0.31);
+    position: absolute;
+    width: 100%;
+    height: 14.5rem;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.bottom-left-container {
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 1100px) {
+    .page-bottom {
+        flex-direction: column;
+        align-items: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 3rem;
+    }
+
+    .bottom-left {
+        max-width: 100%;
+    }
+
+    .bottom-right {
+        margin-top: 3rem;
+        max-width: 80%;
+    }
+
+    .bottom-text {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .gray-bg {
+        display: none;
+    }
+}

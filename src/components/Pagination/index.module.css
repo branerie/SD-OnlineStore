@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.pagination {
+    text-align: center;
+    font-family: 'Architects Daughter', cursive;
+    text-transform: uppercase;
+    color: #707070;
+    font-size: 2rem;
+}
+
+.pagination-container {
+    margin-top: 4rem;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.page-nav {
+    cursor: pointer;
+}
+
+.page-nav:hover {
+    color:  #EF696E;
+}
+
+.arrow {
+    padding: 0 3px;
+}
+
+.current {
+    color: #EF696E;
+}
+
+.error-title {
+    font-size: 2rem;
+    text-align: center;
+    font-family: 'Architects Daughter', cursive;
+    text-transform: uppercase;
+    color: #707070;
+}
+
+@media screen and (max-width:768px) {
+
+    .pagination-text {
+        display: none;
+    }
+
+    .pagination-container {
+        margin-bottom: 25px;
+    }
+}

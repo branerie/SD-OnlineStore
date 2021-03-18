@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.container {
+    height: 29rem;
+    width: 20.8rem;
+    position: relative;
+  }
+
+.frame {
+    height: 100%;
+}
+
+.product-image {
+    /* position: absolute;
+    height: 60%;
+    top: 10%;
+    right: 28%; */
+    position: relative;
+    height: 60%;
+    top: 7%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70%;
+    width: 100%;
+    height: 10rem;
+}
+
+.brand-likeButton {
+    display: flex;
+    justify-content: center;
+
+}
+
+
+.brand {
+    font-size: 2rem;
+    font-family: 'Lateef', cursive;
+    /* width: 155px; */
+    text-align: center;
+    /* padding-right: 28px; */
+    margin-left: 50px;
+    display: inline;
+    color: #735C74;
+    flex-grow: 1;
+    /* transform: translateX(13%); */
+}
+
+.price-container {
+    display: flex;
+    position: relative;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 1.8rem;
+}
+
+.price {
+    padding-left: 1rem;
+    display: block;
+    color: #707070;
+    margin: auto;
+}
+.price-discount {
+    padding-left: 1rem;
+    display: block;
+    color: #707070;
+}
+
+.price-discount::before {
+    position: absolute;
+    content: "";
+    left: 0.5rem;
+    top: 40%;
+    right: 15rem;
+    border-top: 1px solid;
+    border-color: inherit;  
+    -webkit-transform:rotate(-15deg);
+    -moz-transform:rotate(-15deg);
+    -ms-transform:rotate(-15deg);
+    -o-transform:rotate(-15deg);
+    transform:rotate(-15deg);
+  
+}
+
+.discount-style {
+    color: #EF696E;
+    /* padding-right: 15%; */
+}
+
+.rating-view {
+    display: flex;
+    justify-content: center;
+}
+
+.link {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2.5rem;
+    color: #707070;
+    padding-right: 15%;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: #EF696E;
+}
+
+
+
