@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.container {
+    min-width: 14rem;
+    max-width: 20%;
+    background-color: rgba(61, 83, 68, 0.31);
+    padding: 0 0.6rem;
+    color: #735C74;
+    font-family: 'Lateef', cursive;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0px 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.brand {
+    font-size: 2rem;
+    font-weight: normal;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.description {
+    font-size: 1.25rem;
+    font-family: inherit;
+}
+
+.title-minor {
+    font-weight: normal;
+    margin: 0;
+}
+
+.sizes-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.price {
+    font-family: 'Architects Daughter', cursive;
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.price-final {
+    color: #EF696E;
+    font-size: 2rem;
+}
+
+.favorites {
+    width: 100%;
+    margin: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+@media screen and (max-width:768px) {
+    .container {
+        order: 2;
+        max-width: 100%;
+    }
+
+    .title {
+        margin: 0.5rem 0;
+    }
+
+    .description {
+        text-align: center;
+    }
+
+    .price {
+        width: 100%;
+    }
+
+    .price-final {
+        display: inline;
+        padding: 0.5rem;
+    }
+
+    .favorites {
+        justify-content: center;
+    }
+}

@@ -1,0 +1,7 @@
+.container {
+    margin: 0 10px 0 10px;
+    display: flex;
+    flex-wrap: wrap;
+    /* flex-direction: column; */
+    flex-grow: 10;
+}

@@ -1,0 +1,24 @@
+.container {
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.inner-container {
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    border: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+
+.legend-wrapper {
+    min-height: 1rem;
+}
+
+.legend {
+    font-size: 0.8rem;
+    margin: 0;
+    padding: 0;
+}

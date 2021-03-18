@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.container {
+    height: 2.3rem;
+    width: 2.3rem;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.num-item {
+    position: absolute;
+    right: 4.6rem;
+    top: 0;
+    color: #EF696E;
+    font-family: 'Architects Daughter', cursive;
+    font-weight: bold;
+}
+
+@media(max-width: 1024px) {
+    .num-item {
+        right: 4rem;
+    }
+}

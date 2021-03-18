@@ -1,0 +1,11 @@
+.container {
+    min-width: 30%;
+    height: auto;
+    border-radius: 4px;
+    flex: 1;
+    padding: 10px;
+  }
+
+  .title {
+    margin-right: 10px;
+  }

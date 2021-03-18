@@ -1,0 +1,25 @@
+.container {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+}
+
+.table {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.btn-add {
+	position: relative;
+	cursor: pointer;
+}
+
+.plus {
+	stroke: white;
+	fill: #3D5344;
+	width: 2rem;
+	position: absolute;
+	top: -50px;
+	right: 5px;
+}

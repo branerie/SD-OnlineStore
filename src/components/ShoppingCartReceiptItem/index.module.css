@@ -1,0 +1,38 @@
+.receipt-brand {
+    font-weight: bold;
+    /* color:  #EF696E; */
+}
+
+.receipt-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid lightgray;
+    padding: 3px 0;
+}
+
+.receipt-item-desc {
+    display: flex;
+    flex-direction: column;
+}
+
+.receipt-price {
+    color:#EF696E;
+    font-size: 1.5rem;
+}
+
+.receipt-price-orig {
+    color: #735C74;
+}
+
+.receipt-item-qty {
+    color: #735C74;
+    font-size: 1.5rem;
+}
+
+
+@media screen and (max-width:768px) {
+    .receipt-item-qty {
+        font-size: 1.2rem;
+        width: 50px;
+    }
+}

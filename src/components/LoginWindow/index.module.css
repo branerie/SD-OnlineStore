@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
+.error {
+    color: red;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 15px;
+    min-height: 2rem;
+    padding-left: 1rem;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 0.8rem;
+    box-sizing: border-box;
+}
+
+.input:placeholder-shown {
+    background-color: rgb(230, 227, 227);
+    border: 1px solid rgb(230, 227, 227);
+}
+
+.input:hover {
+    border: 1px solid black;
+}
+
+.input-label {
+    display: inline-block;
+    width: 36%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    align-items: stretch;
+}
+
+.btn {
+    min-height: 3rem;
+    margin-top: 1rem;
+    color: white;
+    font-size: 1.8rem;
+    text-decoration: none;
+    font-family: 'Architects Daughter', cursive;
+    cursor: pointer;
+    border: none;
+}
+
+.register-link {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 2rem;
+    color: #ef696e;
+    margin-bottom: 5px;
+    text-align: center;
+    font-weight: normal;
+    padding-bottom: 10px;
+}
+
+.register-link:hover {
+    cursor: pointer;
+}
+
+.icon {
+    height: 2rem;
+}
+
+.pass-reset-link {
+    color: #735C74;
+    font-family: 'Lateef', cursive;
+    text-align: right;
+    cursor: pointer;
+}
