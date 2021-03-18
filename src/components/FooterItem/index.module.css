@@ -1,8 +1,0 @@
-.column-item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-}
