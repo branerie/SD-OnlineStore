@@ -32,7 +32,7 @@ const AddToCartButton = ({ productId, selectedSize }) => {
                     {BUTTON_TEXT}
                 </div>
             :
-                <div className={[styles['bag-link'], styles['bag-link-deactivated']].join(' ')}>
+                <div className={`${styles['bag-link']} ${styles['bag-link-deactivated']}`}>
                     {BUTTON_TEXT}
                 </div>
             }
