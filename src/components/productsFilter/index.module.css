@@ -29,13 +29,19 @@
 
 }
 
-@media screen and (max-width:768px) {
+.media-aside > div {
+    margin-left: 10%;
+    margin-top: 5%;
+    min-width: 50%;
+    max-width: 100%;
+}
+
+@media screen and (max-width:1150px) {
     .container {
         display: flex;
         padding: 0;
         min-width: auto;
     }
-
 
     .menu-toggle {
         position: absolute;

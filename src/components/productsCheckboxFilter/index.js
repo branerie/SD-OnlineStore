@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import ProductsContext from '../../ProductsContext'
 import styles from './index.module.css'
+import ProductsCheckboxFilterRow from '../productsCheckboxFilterRow'
 
 const ProductsCheckboxFilter = ({ propName, title, values }) => {
     const { filters, filtersDispatch } = useContext(ProductsContext)
@@ -17,26 +18,20 @@ const ProductsCheckboxFilter = ({ propName, title, values }) => {
         filtersDispatch({ type: 'cat', propName: propName, values: newValues })
         setCurrValues(newValues)
     }
-    
-    console.log(1)
 
     return (
         <div className={styles['check-box']}>
             <h3 className={styles.title}>{title}</h3>
             {values.map(value => {
                 return (
-                    <label key={value} className={styles.container}>
-                        <span className={styles['box-name']}>{value}</span>
-                        <input
-                            type="checkbox"
-                            value={value}
-                            name={propName}
-                            checked={currValues.includes(value)}
-                            onChange={handleChange}
-                            data-testid={`${title.toLowerCase()}-${value.replace(' ', '_').toLowerCase()}`}
+                    <ProductsCheckboxFilterRow
+                        key={`${propName}_${value}`}
+                        value={value}
+                        propName={propName}
+                        checked={currValues.includes(value)}
+                        onChange={handleChange}
+                        testId={`${title.toLowerCase()}-${value.replace(' ', '_').toLowerCase()}`}
                     />
-                        <span className={styles.checkmark}></span>
-                    </label>
                 )
             })}
         </div>

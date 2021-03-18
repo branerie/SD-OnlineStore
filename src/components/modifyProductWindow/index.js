@@ -43,7 +43,7 @@ const ModifyProductWindow = ({
             description: description,
             gender: gender
         }
-    }, [])
+    }, [brand, discount, description, gender, price])
 
     const [state, stateDispatch] = useReducer(productReducer, initialProduct)
 

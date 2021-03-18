@@ -1,9 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
-
 .container {
+    justify-content: space-between;
     display: flex;
+    font-family: 'Lateef', cursive;
+    color: #735C74;
+    font-size: 1.3rem;
     width: 100%;
-    margin: 6% 0;
+    margin: 2% 0;
     align-items: center;
     position: relative;
     cursor: pointer;
@@ -16,8 +18,8 @@
     height: 1.5rem;
     width: 1.5rem;
     right: 0rem;
-}
-
+  }
+  
 .checkmark {
     position: absolute;
     height: 1.5rem;
@@ -25,21 +27,15 @@
     right: 0rem;
     background-color: white;
     border-radius: 7px;
+    cursor: pointer;
 }
 
-/* .check-box {
-    margin-left: 10%;
-    margin-top: 5%;
-    min-width: 50%;
-    max-width: 100%;
-} */
-
-.container:hover input~.checkmark {
+.container:hover input ~ .checkmark {
     background-color: #eee;
-    box-shadow: 0 0 0 0.15rem #fff, 0 0 0.25rem 0.25rem #3D5344;
+    box-shadow: 0 0 0 0.15rem #fff, 0 0 0.25rem 0.25rem  #3D5344;
 }
 
-.container input:checked~.checkmark {
+.container input:checked ~ .checkmark {
     background-color: #3D5344;
 }
 
@@ -49,7 +45,7 @@
     display: none;
 }
 
-.container input:checked~.checkmark:after {
+.container input:checked ~ .checkmark:after {
     display: block;
 }
 
@@ -63,4 +59,8 @@
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+
+.box-name {
+    font-family: 'Lateef', cursive;
 }

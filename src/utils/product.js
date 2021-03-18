@@ -17,8 +17,8 @@ const getRangeFilterQueries = (rangeFilters) => {
 }
 
 const getBoolFilterQueries = (boolFilters) => {
-    const queryStrings = boolFilters.map(propName => {
-        return `bool_${propName}=${true}`
+    const queryStrings = boolFilters.map(({ name, value }) => {
+        return `bool_${name}=${value}`
     })
 
     return queryStrings
@@ -50,7 +50,7 @@ const getImagePublicId = (url) => {
     return imageName.split('.')[0]
 }
 
-function parseQueryString(queryString) {
+const parseQueryString = (queryString) => {
     if (!queryString) {
         return {}
     }
@@ -88,17 +88,38 @@ function parseQueryString(queryString) {
 
                     break
                 case 'bool':
-                    result[[filterType]].push(filterProp)
+                    result[[filterType]].push({ name: filterProp, value: value === 'true' })
                     break
                 default:
                     continue
             }
-        } else {
-            result[[key]] = value
+
+            continue
         }
+
+        result[[key]] = value
     }
 
     return result
+}
+
+const getInitialFilterValues = () => {
+    const incomingQuery = parseQueryString(window.location.search)
+    const { bool, cat, rng: range, searchTerm, sort, page } = incomingQuery
+    
+    const initialBool = bool ? [...bool] : []
+    if (!initialBool.some(b => b.name === 'inStock')) {
+        initialBool.push({ name: 'inStock', value: true })
+    }
+
+    return {
+        bool: initialBool,
+        cat: cat || {},
+        range: range || {},
+        search: searchTerm || '',
+        page: Math.max(0, parseInt(page)) || 0,
+        sort: (sort && sort.split(',')) || ['addDate', 'desc']
+    }
 }
 
 const filtersReducer = (state, action) => {
@@ -121,12 +142,10 @@ const filtersReducer = (state, action) => {
 
             return { ...state, range: newRangeFilters, page: 0 }
         case 'bool':
-            let newBoolFilters = [...state.bool]
+            const newBoolFilters = state.bool.filter(prop => prop.name !== propName)
 
-            if (action.isActivated) {
-                newBoolFilters.push(propName)
-            } else {
-                newBoolFilters = newBoolFilters.filter(pn => pn !== propName)
+            if (action.hasOwnProperty('value')) {
+                newBoolFilters.push({ name: propName, value: action.value })
             }
 
             return { ...state, bool: newBoolFilters, page: 0 }
@@ -148,5 +167,6 @@ export {
     getImagePublicId,
     getProductsQueryString,
     parseQueryString,
+    getInitialFilterValues,
     filtersReducer
 }

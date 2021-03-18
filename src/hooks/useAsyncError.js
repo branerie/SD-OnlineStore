@@ -1,14 +1,13 @@
 import { useCallback, useState } from 'react'
-import { InternalError } from '../utils/info';
+import { InternalError } from '../utils/info'
 
 const useAsyncError = () => {
-    const [, setError] = useState();
-    return useCallback(
-        error => {
-            setError(() => {
-                throw error ? error : new InternalError(500)
-            })
-        }, [setError])
+    const [, setError] = useState()
+    return useCallback(error => {
+        setError(() => {
+            throw error ? error : new InternalError(500)
+        })
+    }, [setError])
 }
 
 export default useAsyncError

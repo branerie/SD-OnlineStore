@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useState } from 'react'
-import styles from './index.module.css'
 import ProductsContext from '../../ProductsContext'
 import ErrorContext from '../../ErrorContext'
 
@@ -10,7 +9,7 @@ import SubmitButton from '../submitButton'
 const AdminCategories = ({ initialCategories, productId }) => {
     const [categories, setCategories] = useState(initialCategories)
     const [categoryChanges, setCategoryChanges] = useState([])
-    const { updateFilters } = useContext(ProductsContext)
+    const { updateFilters, updateProductsPage } = useContext(ProductsContext)
     const { addMessage } = useContext(ErrorContext)
 
     const handleAdd = useCallback(category => {
@@ -61,7 +60,8 @@ const AdminCategories = ({ initialCategories, productId }) => {
 
         setCategoryChanges([])
         updateFilters()
-    }, [updateFilters, categoryChanges, categories])
+        updateProductsPage()
+    }, [updateFilters, updateProductsPage, categoryChanges, categories, addMessage, productId])
 
     return (
         <>
@@ -70,7 +70,11 @@ const AdminCategories = ({ initialCategories, productId }) => {
             handleAdd={handleAdd}
             handleRemove={handleRemove}
         />
-        <SubmitButton text='SAVE SIZES' onClick={handleSubmit} disabled={categoryChanges.length === 0} />
+        <SubmitButton 
+            text='SAVE SIZES' 
+            onClick={handleSubmit} 
+            disabled={categoryChanges.length === 0 || categories.length === 0}
+        />
         </>
     )
 }

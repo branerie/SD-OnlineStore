@@ -51,9 +51,9 @@ const AdminProductCard = ({
         handleProductDelete(productId)
         updateFilters()
         updateProductsPage()
-    })
+    }, [addMessage, updateFilters, updateProductsPage, handleProductDelete, productId])
 
-    const handleImageAdd = async (imageUrl) => {
+    const handleImageAdd = useCallback(async (imageUrl) => {
         const imagePath = getImagePath(imageUrl)
 
         const addResult = await addImagesToProduct(productId, imagePath)
@@ -67,7 +67,7 @@ const AdminProductCard = ({
         }
 
         setImageCards([...imageCards, imageUrl])
-    }
+    }, [addMessage, imageCards, productId])
 
     const showWidget = useCallback(() => {
         const widget = window.cloudinary.createUploadWidget({
@@ -91,7 +91,7 @@ const AdminProductCard = ({
         })
 
         widget.open()
-    })
+    }, [handleImageAdd, addMessage])
 
     return (
         <div className={styles.container}>

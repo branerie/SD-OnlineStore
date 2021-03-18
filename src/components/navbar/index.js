@@ -84,7 +84,7 @@ const Navbar = ({ clickedName }) => {
                 {isAdmin &&
                     <div 
                         style={{ order: 10 }} 
-                        className={window.location.pathname.startsWith('/admin') && styles.selected}
+                        className={window.location.pathname.startsWith('/admin') ? styles.selected : null}
                     >
                         <NavbarLink name='Admin' path='/admin/products' />
                     </div>

@@ -23,7 +23,7 @@ const ProfileHistory = () => {
         
         setPurchaseInfo(fullProducts)
         setShownIndex(fullProducts.length - 1)
-    }, [addMessage])
+    }, [addMessage, history])
 
     useEffect(() => {
         fetchProductInfo()

@@ -18,6 +18,7 @@ const ProductCard = ({
     return (
         <div className={styles.container}>
             <Link to={`/product/details/${productId}`}>
+                {/* eslint-disable-next-line */}
                 <img
                     src={images && images[0]}
                     alt='No image'

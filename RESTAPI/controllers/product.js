@@ -22,12 +22,8 @@ router.get('/ranges', async (req, res) => {
         const dbRequestFilter = getDbProductsFilter(req.query)
 
         let productRanges = await Product.aggregate([
-            {
-                $match: dbRequestFilter
-            },
-            {
-                $unwind: '$sizes'
-            },
+            { $match: dbRequestFilter },
+            { $unwind: '$sizes' },
             {
                 $match: {
                     'sizes.count': { $gt: 0 }

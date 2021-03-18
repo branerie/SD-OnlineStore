@@ -1,11 +1,10 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
 import ProductsContext from '../../ProductsContext'
 import { updateProductSizes } from '../../services/adminProduct'
 import AdminSizesRow from '../adminSizesRow'
 import AdminSizesAdd from '../adminSizesAdd'
 import ErrorContext from '../../ErrorContext'
-import PageSecondaryTitle from '../pageSecondaryTitle'
 import ModifyProductSection from '../modifyProductSection'
 import SubmitButton from '../submitButton'
 

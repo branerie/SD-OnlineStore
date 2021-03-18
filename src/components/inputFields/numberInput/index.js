@@ -15,7 +15,7 @@ const NumberInput = ({
     unitsPlaceholder,
     step = 0.01
 }) => {
-    const [isVisible, setIsVisible] = useState(value != undefined)
+    const [isVisible, setIsVisible] = useState(value !== undefined)
 
     const handleChange = (event) => {
         if (event.target.value.length > 0) {

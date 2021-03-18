@@ -52,6 +52,7 @@ const ProductDetailsBody = () => {
                 </div>
                 <div className={styles['img-container']}>
                     <div className={styles['img-selected']}>
+                        {/* eslint-disable-next-line */}
                         <img
                             src={selectedImg}
                             alt={'No Image'}

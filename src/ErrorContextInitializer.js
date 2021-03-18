@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import ErrorContext from './ErrorContext'
 
 const ErrorContextInitializer = ({ children }) => {
@@ -6,13 +6,13 @@ const ErrorContextInitializer = ({ children }) => {
 
     const closeMessage = (msgName) => setMessages(messages.filter(msg => msg.name !== msgName))
 
-    const addMessage = (name, text) => {
+    const addMessage = useCallback((name, text) => {
         if (messages.some(msg => msg.name === name)) {
             return
         }
 
         setMessages([...messages, { name, text }])
-    }
+    }, [messages])
 
     return (
         <ErrorContext.Provider value={{ messages, addMessage, closeMessage }}>

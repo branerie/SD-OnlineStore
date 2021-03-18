@@ -46,6 +46,12 @@ function getDbProductsFilter(query) {
             continue
         }
 
+        if (propValue === 'inStock' && isBoolean(query[property])) {
+            filter['sizes.count'] = (query[property] === 'true') ? { $gt: 0 } : 0
+
+            continue            
+        }
+
         // database schema does not contain this property
         // therefore, we don't try to filter by it
         if (!propValue || !isProductSchemaField(propValue)) {
@@ -55,16 +61,25 @@ function getDbProductsFilter(query) {
         if (propType === 'cat') {
             if (propValue === 'sizes') {
                 filter['sizes.sizeName'] = parseSizeFilters(query[property])
-            } else if (propValue === 'rating') {
+                continue
+            }
+            
+            if (propValue === 'rating') {
                 filter['ratingStars'] = {
                     $in: query[property].split(',').map(Number)
                 }
-            } else {
-                filter[propValue] = {
-                    $in: query[property].split(',')
-                }
+
+                continue
             }
-        } else if (propType === 'rng') {
+
+            filter[propValue] = {
+                $in: query[property].split(',')
+            }
+            
+            continue
+        }
+        
+        if (propType === 'rng') {
             let [minValue, maxValue] = query[property].split(',')
                 .map(Number)
 
@@ -79,7 +94,11 @@ function getDbProductsFilter(query) {
                 $gte: minValue,
                 $lte: maxValue
             }
-        } else if (propType === 'bool' && isBoolean(query[property])) {
+
+            continue
+        }
+        
+        if (propType === 'bool' && isBoolean(query[property])) {
             filter[propValue] = {
                 $exists: query[property] === 'true'
             }
@@ -137,25 +156,6 @@ function getProductsAggregationObject(productFilters, sortCriteria, page, pageLe
     resultArray.push(addFieldsPhase)
 
     resultArray.push({ $match: productFilters })
-
-    // resultArray.push({ $unwind: '$sizes' })
-    // resultArray.push({ $match: { 'sizes.count': { $gt: 0 } } })
-    // resultArray.push({
-    //     $group: {
-    //         _id: '$_id',
-    //         sizes: { $push: '$sizes' },
-    //         price: { $first: '$price' },
-    //         brand: { $first: '$brand' },
-    //         description: { $first: '$description' },
-    //         gender: { $first: '$gender' },
-    //         categories: { $first: '$categories' },
-    //         ratingStars: { $first: '$ratingStars' },
-    //         rating: { $first: '$rating' },
-    //         discount: { $first: '$discount' },
-    //         discountPrice: { $first: '$discountPrice' },
-    //         images: { $first: '$images' }
-    //     }
-    // })
 
     resultArray.push({
         $facet: {

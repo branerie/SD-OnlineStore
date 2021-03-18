@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import UserContext from '../../UserContext'
 import ErrorContext from '../../ErrorContext'
 import styles from './index.module.css'
@@ -7,28 +7,40 @@ import favoritesImageEmpty from '../../images/favoritesLink.svg'
 import favoritesImageFilled from '../../images/favoritesLinkFilled.svg'
 
 const FavoritesIcon = ({ productId }) => {
+    const [changeTimeout, setChangeTimeout] = useState(null)
     const { user, setNewUser } = useContext(UserContext)
     const { addMessage } = useContext(ErrorContext)
 
     const changeFavorites = async () => {
-        const response = await setFavorites(productId)
-
-        if (response.error) {
-            addMessage(
-                'Change User Favorites',
-                'An error occurred while trying to update your favorite products. We apologize for the inconvenience!'
-            )   
-
-            return
+        // avoids sending a request if user just pressed add to favorites and then quickly unpressed it
+        if (changeTimeout) {
+            clearTimeout(changeTimeout)
+            return setChangeTimeout(null)
         }
 
-        setNewUser({ ...user, favorites: response.favorites })
+        const newTimeout = setTimeout(async () => {
+            const response = await setFavorites(productId)
+
+            if (response.error) {
+                addMessage(
+                    'Change User Favorites',
+                    'An error occurred while trying to update your favorite products. We apologize for the inconvenience!'
+                )
+
+                return
+            }
+
+            setNewUser({ ...user, favorites: response.favorites })
+            setChangeTimeout(null)
+        }, 500)
+
+        setChangeTimeout(newTimeout)
     }
 
     const imgSrc = useMemo(() => {
         return user.favorites.includes(productId)
-                                ? favoritesImageFilled
-                                : favoritesImageEmpty
+            ? favoritesImageFilled
+            : favoritesImageEmpty
     }, [user, productId])
 
     return (

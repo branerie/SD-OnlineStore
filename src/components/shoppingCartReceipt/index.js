@@ -24,20 +24,7 @@ const ShoppingCartReceipt = ({ productsInCart, setProductsInCart, isCheckout }) 
         return [totalDiscountedPrice, totalOriginalPrice]
     }, [productsInCart])
 
-    const handleConfirm = useCallback(async () => {
-        const unavailablePurchases = await handlePurchase()
-        if (unavailablePurchases) {
-            adjustQuantities(unavailablePurchases)
-            addMessage(
-                'Product Quantities Adjusted', 
-                'Your purchase could not be fulfilled. Some of the products are not available anymore.'
-            )
-        }
-
-        setIsConfirmActive(false)
-    }, [handlePurchase])
-
-    function adjustQuantities(unavailablePurchases) {
+    const adjustQuantities = useCallback((unavailablePurchases) => {
         const newProductsInCart = [...productsInCart]
         let productsRemoved = []
         for (const { productId, sizeName, availableQuantity } of unavailablePurchases) {
@@ -64,7 +51,20 @@ const ShoppingCartReceipt = ({ productsInCart, setProductsInCart, isCheckout }) 
                                                         productRemoved.sizeName === cartItem.sizeName))
             })
         }
-    }
+    }, [productsInCart, setNewUser, setProductsInCart, user])
+
+    const handleConfirm = useCallback(async () => {
+        const unavailablePurchases = await handlePurchase()
+        if (unavailablePurchases) {
+            adjustQuantities(unavailablePurchases)
+            addMessage(
+                'Product Quantities Adjusted', 
+                'Your purchase could not be fulfilled. Some of the products are not available anymore.'
+            )
+        }
+
+        setIsConfirmActive(false)
+    }, [handlePurchase, addMessage, adjustQuantities])
 
     if (!productsInCart) {
         return null

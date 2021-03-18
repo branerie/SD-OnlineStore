@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styles from './index.module.css'
-import SizeButton from '../sizeButton'
 import AddToCartButton from '../addToCartButton'
 import FavoritesIcon from '../favoritesIcon'
 import ProductSizes from '../productSizes'

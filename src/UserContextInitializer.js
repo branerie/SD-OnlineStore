@@ -5,7 +5,6 @@ import { useAsyncError } from './hooks'
 import { 
     changeShoppingCart, 
     makePurchase, 
-    getPurchaseHistoryDetails, 
     setFavorites,
     setShoppingCart, 
     verifyUser, 
@@ -194,7 +193,7 @@ const UserContextInitializer = ({ children }) => {
         })
 
         return newProductsInCart
-    }, [user, getFullCollectionProducts])
+    }, [user, getFullCollectionProducts, addMessage, setNewUser])
 
     const getFullFavoriteProducts = useCallback(async () => {
         if (user.favorites.length === 0) {
@@ -225,7 +224,7 @@ const UserContextInitializer = ({ children }) => {
 
         setNewUser({ ...user, favorites: Object.keys(favoriteProducts) })
         return favoriteProducts
-    }, [user, getFullCollectionProducts])
+    }, [user, getFullCollectionProducts, addMessage, setNewUser])
 
     if (!user) {
         return null

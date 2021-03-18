@@ -17,7 +17,7 @@ const RatingStars = (props) => {
 
     const isDisabled = useMemo(() => {
         return user && (!user.userId || user.ratedProducts.includes(productId))
-    }, [user.ratedProducts])
+    }, [productId, user])
 
     const onMouseEnter = (indexOfStar) => {
         setOnHover(indexOfStar)

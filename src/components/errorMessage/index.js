@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
 import styles from './index.module.css'
 
 const ErrorMessage = ({ text, handleClose }) => {
-    const timeout = useMemo(() => window.setTimeout(handleClose, 10000), [])
+    const [timeout] = useState(window.setTimeout(handleClose, 10000))
 
     const handleWindowClose = () => {
         window.clearTimeout(timeout)

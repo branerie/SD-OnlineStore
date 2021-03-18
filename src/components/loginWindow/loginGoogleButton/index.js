@@ -10,7 +10,7 @@ import ErrorContext from '../../../ErrorContext'
 const LoginGoogle = ({ setUserState, text = 'google' }) => {
     const { addMessage } = useContext(ErrorContext)
 
-    const { signIn: googleSignIn, loaded } = useGoogleLogin({
+    const { signIn: googleSignIn } = useGoogleLogin({
         onSuccess: async (res) => {
             const loginResult = await loginWithGoogle(res.tokenId, res.profileObj.email)
             if (loginResult.error) {

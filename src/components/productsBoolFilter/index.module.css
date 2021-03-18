@@ -1,3 +1,7 @@
+.container {
+    margin-bottom: 2rem;
+}
+
 .title {
     font-family: 'Lateef', cursive;
     color: #735C74;

@@ -16,9 +16,9 @@ const ImageGrid = ({ imgCollection, setCurrentImage }) => {
         }
 
         setInitialImgIndex(changedIndex)
-    }, [initialImgIndex])
+    }, [initialImgIndex, imgCollection.length])
 
-    const hasMoreUp = useMemo(() => initialImgIndex < imgCollection.length - 2, [initialImgIndex])
+    const hasMoreUp = useMemo(() => initialImgIndex < imgCollection.length - 2, [initialImgIndex, imgCollection.length])
     const hasMoreDown = useMemo(() => initialImgIndex > 0, [initialImgIndex])
 
     return (

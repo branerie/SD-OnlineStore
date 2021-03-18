@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import ProductsContext from './ProductsContext'
 import { getProductRanges, getProductsPage } from './services/product'
-import { parseQueryString, getProductsQueryString, filtersReducer } from './utils/product'
+import { getProductsQueryString, filtersReducer, getInitialFilterValues } from './utils/product'
 import { useAsyncError } from './hooks'
 
 const ProductsContextInitializer = ({ children, pageLength }) => {
@@ -10,7 +10,7 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
     const [totalCount, setTotalCount] = useState(0)
     const throwInternalError = useAsyncError()
 
-    const [filters, filtersDispatch] = useReducer(filtersReducer, getFiltersFromQuery())
+    const [filters, filtersDispatch] = useReducer(filtersReducer, getInitialFilterValues())
 
     const getProductPropsRange = useCallback(async () => {
         const productPropRanges = await getProductRanges()
@@ -19,7 +19,7 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
         }
 
 		setProductProps(productPropRanges)
-	}, [setProductProps])
+	}, [setProductProps, throwInternalError])
 
 	const getCurrentProductsPage = useCallback(async () => {
         const queryString = getProductsQueryString(filters)
@@ -35,7 +35,7 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
         
 		setProductPage(productInfo)
         setTotalCount(total)
-    }, [setProductPage, setTotalCount, pageLength, filters])
+    }, [setProductPage, setTotalCount, pageLength, filters, throwInternalError])
 
     useEffect(() => {
 		getProductPropsRange()
@@ -43,21 +43,7 @@ const ProductsContextInitializer = ({ children, pageLength }) => {
 
 	useEffect(() => {
 		getCurrentProductsPage()
-    }, [getCurrentProductsPage, filters])
-
-    function getFiltersFromQuery() {
-        const parsedQuery = parseQueryString(window.location.search)
-        const { bool, cat, rng: range, searchTerm, sort, page } = parsedQuery
-
-        return {
-            bool: bool || [],
-            cat: cat || {},
-            range: range || {},
-            search: searchTerm || '',
-            page: Math.max(0, parseInt(page)) || 0,
-            sort: (sort && sort.split(',')) || ['addDate', 'desc']
-        }
-    }
+    }, [getCurrentProductsPage])
 
     const handleProductDelete = (productId) => {
         const newProductsList = productPage.filter(p => p.id !== productId)

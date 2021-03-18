@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styles from './index.module.css'
 import QuantityInput from '../inputFields/quantityInput'
 import FavoritesIcon from '../favoritesIcon'
@@ -28,24 +28,26 @@ const ShoppingCartItem = ({
         editShoppingCart(productId, sizeName, -quantity)
     }
 
-    useEffect(() => {
-        if (itemQuantity > sizeQuantity) {
+    const changeItemQuantity = useCallback((newQuantity) => {
+        if (newQuantity > sizeQuantity) {
             return
         }
 
+        setItemQuantity(newQuantity)
+    
         window.clearTimeout(editTimeout)
-
         const newEditTimeout = window.setTimeout(() => {
-            editShoppingCart(productId, sizeName, itemQuantity - quantity)
-        }, 1000)
-
+            editShoppingCart(productId, sizeName, newQuantity - quantity)
+        }, 500)
+    
         setEditTimeout(newEditTimeout)
-    }, [itemQuantity])
+    }, [editTimeout, sizeQuantity, quantity, productId, sizeName, editShoppingCart])
 
     return (
         <div className={styles.container}>
             <div className={styles['img-container']}>
                 <Link to={`/product/details/${productId}`}>
+                {/* eslint-disable-next-line */}
                     <img className={styles.image} src={image} alt='No image' />
                 </Link>
             </div>
@@ -59,7 +61,7 @@ const ShoppingCartItem = ({
                     Quantity:
                     <QuantityInput
                         value={itemQuantity}
-                        setNewValue={setItemQuantity}
+                        setNewValue={changeItemQuantity}
                         min={1}
                         max={sizeQuantity}
                     />
