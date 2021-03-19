@@ -107,7 +107,7 @@ const getProductDetailsMain = async (productIds) => {
 const getProductDetails = async (id) => {
     const response = await fetch(`${PRODUCT_URL}/${id}`, {
         method: 'GET',
-        headers:{
+        headers: {
             [HTTP_HEADERS.CONTENT_TYPE]: JSON_CONTENT_TYPE
         }
     })

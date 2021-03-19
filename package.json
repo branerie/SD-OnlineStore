@@ -18,10 +18,10 @@
   },
   "scripts": {
     "start-client": "set PORT=3000 && react-scripts start",
-    "build": "react-scripts build && (cd RESTAPI && npm install)",
+    "build": "react-scripts build && (cd server && npm install)",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "cd RESTAPI && node index.js"
+    "start": "cd server && node index.js"
   },
   "eslintConfig": {
     "extends": [

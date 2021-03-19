@@ -1,9 +1,9 @@
 import React from 'react'
 import './App.css'
 import ErrorBoundary from './ErrorBoundary'
-import ErrorContextInitializer from './ErrorContextInitializer'
+import ErrorContextInitializer from './contexts/ErrorContextInitializer'
 import Navigation from './navigation'
-import UserContextInitializer from './UserContextInitializer'
+import UserContextInitializer from './contexts/UserContextInitializer'
 
 function App() {
 	return (
