@@ -23,7 +23,7 @@
     "googleapis": "^67.1.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb-memory-server-global-4.4": "^6.9.2",
-    "mongoose": "^5.10.11",
+    "mongoose": "^5.12.0",
     "nodemailer": "^6.4.17"
   },
   "devDependencies": {

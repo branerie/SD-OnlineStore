@@ -71,7 +71,7 @@ const AdminCategories = ({ initialCategories, productId }) => {
             handleRemove={handleRemove}
         />
         <SubmitButton 
-            text='SAVE SIZES' 
+            text='SAVE CATEGORIES' 
             onClick={handleSubmit} 
             disabled={categoryChanges.length === 0 || categories.length === 0}
         />
