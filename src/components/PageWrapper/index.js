@@ -17,6 +17,7 @@ const PageWrapper = ({ children, maxWidth }) => {
                     <div className={styles['error-container']}>
                         { messages.slice(0, 2).map(msg => 
                             <ErrorMessage 
+                                key={`${msg.text}_${msg.name}`}
                                 text={msg.text} 
                                 handleClose={() => closeMessage(msg.name)} 
                             />)

@@ -1,6 +1,5 @@
 import { getCookie } from './cookie'
 import { AUTH_COOKIE_NAME } from './constants'
-import { FACEBOOK_APP_ID } from './constants'
 
 const isUserLoggedIn = () => {
     if (getCookie(AUTH_COOKIE_NAME)) {
@@ -15,7 +14,7 @@ const loadFacebookSDK = () => {
     initScript.textContent = `
         window.fbAsyncInit = function() {
             FB.init({
-                appId               : ${FACEBOOK_APP_ID},
+                appId               : ${process.env.REACT_APP_FACEBOOK_APP_ID},
                 autoLogAppEvents    : true,
                 xfbml               : true,
                 version             : 'v9.0'
