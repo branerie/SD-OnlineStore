@@ -4,7 +4,6 @@ import commonStyles from '../index.module.css'
 
 import { useGoogleLogin } from 'react-google-login'
 import { loginWithGoogle } from '../../../services/user'
-import { GOOGLE_CLIENT_ID } from '../../../utils/constants'
 import ErrorContext from '../../../contexts/ErrorContext'
 
 const LoginGoogle = ({ setUserState, text = 'google' }) => {
@@ -21,9 +20,10 @@ const LoginGoogle = ({ setUserState, text = 'google' }) => {
             setUserState(loginResult)
         },
         onFailure: (res) => {
+            console.log(res)
             addMessage('Google Login', 'Google authentication failed to load correctly')
         },
-        clientId: GOOGLE_CLIENT_ID
+        clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID
     })
 
     return (
