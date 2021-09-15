@@ -11,7 +11,7 @@ const ImageCard = ({ src, handleImageRemove }) => {
     return (
         <div key={src} className={styles['image-card']}>
             <button
-                type="button"
+                type='button'
                 className={styles['remove-btn']}
                 onClick={handleRemove}
             >
@@ -19,7 +19,7 @@ const ImageCard = ({ src, handleImageRemove }) => {
             </button>
             <img
                 src={src}
-                alt=""
+                alt=''
                 className={styles.image}
             />
         </div>
