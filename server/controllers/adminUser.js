@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const { restrictToAdmin } = require('../utils/authenticate')
 const { verifyToken } = require('../utils/jwt')
+const { isMongoError } = require('../utils/general')
 const User = require('../models/user')
 
 const USER_NOT_EXIST_ERROR = 'User with id {userId} does not exist.'

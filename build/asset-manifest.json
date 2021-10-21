@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.48907d5b.chunk.css",
-    "main.js": "/static/js/main.0aaa48d1.chunk.js",
-    "main.js.map": "/static/js/main.0aaa48d1.chunk.js.map",
+    "main.css": "/static/css/main.8614f2a9.chunk.css",
+    "main.js": "/static/js/main.d75fc307.chunk.js",
+    "main.js.map": "/static/js/main.d75fc307.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.1a3ff4a8.js",
     "runtime-main.js.map": "/static/js/runtime-main.1a3ff4a8.js.map",
-    "static/js/2.ae2497c3.chunk.js": "/static/js/2.ae2497c3.chunk.js",
-    "static/js/2.ae2497c3.chunk.js.map": "/static/js/2.ae2497c3.chunk.js.map",
+    "static/js/2.712ba029.chunk.js": "/static/js/2.712ba029.chunk.js",
+    "static/js/2.712ba029.chunk.js.map": "/static/js/2.712ba029.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.48907d5b.chunk.css.map": "/static/css/main.48907d5b.chunk.css.map",
-    "static/js/2.ae2497c3.chunk.js.LICENSE.txt": "/static/js/2.ae2497c3.chunk.js.LICENSE.txt",
+    "static/css/main.8614f2a9.chunk.css.map": "/static/css/main.8614f2a9.chunk.css.map",
+    "static/js/2.712ba029.chunk.js.LICENSE.txt": "/static/js/2.712ba029.chunk.js.LICENSE.txt",
     "static/media/dressesCategory.125a843d.jpg": "/static/media/dressesCategory.125a843d.jpg",
     "static/media/facebookIcon.0d49c195.svg": "/static/media/facebookIcon.0d49c195.svg",
     "static/media/fallingPrices.5c6f5d6f.svg": "/static/media/fallingPrices.5c6f5d6f.svg",
@@ -25,6 +25,7 @@
     "static/media/masks.67b29574.jpg": "/static/media/masks.67b29574.jpg",
     "static/media/phoneIcon.342a95e1.svg": "/static/media/phoneIcon.342a95e1.svg",
     "static/media/pinterestIcon.1e65ebb0.svg": "/static/media/pinterestIcon.1e65ebb0.svg",
+    "static/media/plus.55b5aed2.svg": "/static/media/plus.55b5aed2.svg",
     "static/media/shirtsCategory.fd508214.jpg": "/static/media/shirtsCategory.fd508214.jpg",
     "static/media/sortByArrow.962e93e1.svg": "/static/media/sortByArrow.962e93e1.svg",
     "static/media/tshirtsCategory.ec4b9194.jpg": "/static/media/tshirtsCategory.ec4b9194.jpg",
@@ -34,8 +35,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.1a3ff4a8.js",
-    "static/js/2.ae2497c3.chunk.js",
-    "static/css/main.48907d5b.chunk.css",
-    "static/js/main.0aaa48d1.chunk.js"
+    "static/js/2.712ba029.chunk.js",
+    "static/css/main.8614f2a9.chunk.css",
+    "static/js/main.d75fc307.chunk.js"
   ]
 }

@@ -206,7 +206,7 @@ router.patch('/rating', restrictToUser, async (req, res) => {
         }
 
         if (error.name === 'CastError') {
-            return res.status(403).send({ error: `Product with id ${id} does not exist.` })
+            return res.status(403).send({ error: `Product does not exist.` })
         }
 
         return res.status(500).send({ error: error.message })
