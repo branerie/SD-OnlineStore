@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, cleanup } from '@testing-library/react'
 
-import ProductsContext from '../../ProductsContext'
+import ProductsContext from '../../contexts/ProductsContext'
 import ProductsRangeFilter from './index'
 
 describe('ProductsRangeFilter',  () => {

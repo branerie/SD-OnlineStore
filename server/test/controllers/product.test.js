@@ -129,7 +129,7 @@ const makeSuite = (name, tests) => {
 // afterEach(async () => await dbHandler.clearDatabase())
 
 describe('controllers/product', () => {
-    describe('GET', async () => {
+    describe('GET', () => {
         makeSuite('/ranges', () => {
             it('should return correct product ranges', () => {
                 chai.request(app)
@@ -449,7 +449,7 @@ describe('controllers/product', () => {
                     })
             })
 
-            it('should return empty array if db is empty', () => {
+            it('should return empty products array if db is empty', () => {
                 dbHandler.clearDatabase().then(() => {
                     chai.request(app)
                         .get('/products?pageLength=100')
